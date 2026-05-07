@@ -1,5 +1,6 @@
 <!doctype html>
 <html lang="fr">
+<<<<<<< HEAD
   <head>
     <meta charset="UTF-8" />
     <link rel="shortcut icon" type="image/png" href="./Logo/logo.png" />
@@ -12,6 +13,29 @@
   </head>
   <body>
     <h1>À propos</h1>
+=======
+<head>
+  <meta charset="UTF-8" />
+   <link rel="shortcut icon" type="image/png" href="./Logo/logo.png" />
+  <title>À propos - Waifu Games</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&display=swap" rel="stylesheet" />
+  <style>
+    body {
+  font-family: 'Orbitron', sans-serif;
+  background: radial-gradient(circle at center, #0a0a0a, #000000 80%);
+  color: #00f0ff;
+  text-align: center;
+  margin: 0;
+  padding: 40px 20px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  position: relative;
+}
+>>>>>>> 92940cd137f5818e1a6a4b1f538fca3a8441ded3
 
     <p>
       <strong>Rio's Games</strong> est un ensemble de petit jeu inspiré des
@@ -51,6 +75,114 @@
 
     <button onclick="goToMenu()">⬅ Retour au menu</button>
 
+<<<<<<< HEAD
     <script src="./js/apropos.js"></script>
   </body>
+=======
+p {
+  font-size: 1.2rem;
+  line-height: 1.8;
+  max-width: 600px;
+  margin-bottom: 30px;
+  color: #ccf9ff;
+}
+
+.info {
+  margin-top: 20px;
+  font-size: 1rem;
+  opacity: 0.8;
+  user-select: none;
+}
+
+button {
+  margin-top: 30px;
+  padding: 15px 40px;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #00f0ff;
+  background: linear-gradient(145deg, #0a2a5f, #003080);
+  border: 2px solid #00f0ff;
+  border-radius: 12px;
+  cursor: pointer;
+  box-shadow:
+    0 0 6px #00bfff,
+    inset 0 0 8px #0077cc;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  user-select: none;
+  outline: none;
+  min-width: 220px;
+}
+
+button:hover {
+  background: linear-gradient(145deg, #005eff, #00ffff);
+  color: white;
+  box-shadow:
+    0 0 12px #00ffff,
+    0 0 30px #00ffff,
+    inset 0 0 20px #00ffff;
+  transform: translateY(-3px);
+}
+
+button:active {
+  transform: translateY(1px);
+  box-shadow:
+    0 0 6px #00c6ff,
+    inset 0 0 10px #00c6ff;
+}
+
+img {
+  vertical-align: middle;
+  margin-left: 8px;
+  width: 45px;
+  height: auto;
+}
+
+  </style>
+</head>
+<body>
+  <h1>À propos</h1>
+
+  <p>
+    <strong>Waifu Games</strong> est un ensemble de petit jeu inspiré des classiques,
+    avec une touche graphique futuriste et de système de Points commun a tout les jeux.<br>
+    Je suis un petit dev qui s'amuse sur son temps libre !
+    <br>
+    J'espère sincèrement que cela vous plaira.<img src="./Logo/happy.gif" style="width: 45px; height: auto;">
+    <br>
+    Je vous souhaite un Bon jeu.<img src="./Logo/Love.gif" style="width: 45px; height: auto;">
+  </p>
+  <br>
+	<p>
+    <strong>Roadmap : <img src="./Logo/!.gif" style="width: 45px; height: auto;"></strong>
+	<br> 
+	-Préparation grosses amélioration:
+		<br>
+		-refonte complète du shop et de la boutique
+		<br>
+		-ajout d'autre personnage que Rio
+		<br>
+		-ajout d'un menu avec des succès
+		<br>
+		-mis a jour du lien vers serveur discord
+		<br> 
+		-carte améliorer style Pokémon avec des elements (ajout plus tard d'un tcg)
+  </p>
+  
+  <div class="info">
+    Version : 5.71<br />
+    Créé avec ❤️ par <strong>Puce37</strong><br />
+    Technologies : HTML, CSS, JavaScript
+  </div>
+
+  <button onclick="goToMenu()">⬅ Retour au menu</button>
+
+  <script>
+    function goToMenu() {
+      window.location.href = 'index.html';
+    }
+  </script>
+</body>
+>>>>>>> 92940cd137f5818e1a6a4b1f538fca3a8441ded3
 </html>
