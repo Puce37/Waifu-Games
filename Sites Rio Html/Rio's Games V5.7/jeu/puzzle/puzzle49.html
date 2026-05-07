@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <link rel="shortcut icon" type="image/png" href="../../Logo/logo.png" />
+  <title>Puzzle - Rio Games</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&display=swap" rel="stylesheet" />
+  <style>
+    body {
+      font-family: 'Orbitron', sans-serif;
+      background: radial-gradient(circle at center, #0a0a0a, #000000 80%);
+      color: #00f0ff;
+      margin: 0;
+      padding: 40px 20px;
+      text-align: center;
+      position: relative;
+      overflow-x: hidden;
+      min-height: 100vh;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background:
+        repeating-linear-gradient(
+          45deg,
+          rgba(0, 240, 255, 0.05),
+          rgba(0, 240, 255, 0.05) 2px,
+          transparent 2px,
+          transparent 10px
+        ),
+        repeating-linear-gradient(
+          -45deg,
+          rgba(0, 240, 255, 0.05),
+          rgba(0, 240, 255, 0.05) 2px,
+          transparent 2px,
+          transparent 10px
+        );
+      z-index: 0;
+      pointer-events: none;
+      mix-blend-mode: screen;
+    }
+
+    body > * {
+      position: relative;
+      z-index: 1;
+    }
+
+    h1 {
+      font-weight: 900;
+      font-size: 4rem;
+      letter-spacing: 0.15em;
+      color: #00f0ff;
+      text-transform: uppercase;
+      text-shadow:
+        0 0 5px #00f0ff,
+        0 0 10px #00f0ff,
+        0 0 20px #00e0ff,
+        0 0 30px #00d0ff,
+        0 0 40px #00c0ff;
+      margin-bottom: 20px;
+    }
+
+    /* Conteneur puzzle + menu sélection */
+    #container {
+      display: flex;
+      gap: 30px;
+      align-items: flex-start;
+    }
+
+    #puzzle {
+      width: 600px;
+      height: 600px;
+      display: flex;
+      flex-wrap: wrap;
+      border: 2px solid #00f0ff;
+      box-shadow: 0 0 10px #00f0ff, inset 0 0 20px #0055aa;
+      user-select: none;
+    }
+
+    .piece {
+      border: 1px solid #00aaff;
+      box-sizing: border-box;
+      cursor: grab;
+      transition: box-shadow 0.2s ease;
+      background-size: 600px 600px;
+      background-repeat: no-repeat;
+      background-position: center center;
+    }
+    .piece:hover {
+      box-shadow: 0 0 10px #00ffff, 0 0 20px #00ffff;
+    }
+    .piece.dragging {
+      opacity: 0.5;
+    }
+
+    #victory {
+      margin-top: 30px;
+      font-size: 2rem;
+      color: #00ffee;
+      display: none;
+      text-shadow: 0 0 8px #00f0ff;
+    }
+
+    button {
+      margin-top: 25px;
+      padding: 15px 25px;
+      font-size: 1.3rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: #00f0ff;
+      background: linear-gradient(145deg, #0a2a5f, #003080);
+      border: 2px solid #00f0ff;
+      border-radius: 12px;
+      cursor: pointer;
+      box-shadow: 0 0 6px #00bfff, inset 0 0 8px #0077cc;
+      letter-spacing: 0.12em;
+      transition: all 0.3s ease;
+      user-select: none;
+      outline: none;
+    }
+
+    button:hover {
+      color: #ffffff;
+      background: linear-gradient(145deg, #005eff, #00ffff);
+      box-shadow: 0 0 12px #00ffff, 0 0 30px #00ffff, inset 0 0 20px #00ffff;
+      transform: translateY(-3px);
+    }
+
+    button:active {
+      transform: translateY(1px);
+      box-shadow: 0 0 6px #00c6ff, inset 0 0 10px #00c6ff;
+    }
+
+    #btn-return {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      padding: 10px 18px;
+      font-size: 14px;
+      border-radius: 8px;
+      background: linear-gradient(145deg, #0a2a5f, #003080);
+      border: 2px solid #00f0ff;
+      box-shadow: 0 0 6px #00bfff, inset 0 0 8px #0077cc;
+      user-select: none;
+      z-index: 1000;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #00f0ff;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    #btn-return:hover {
+      color: #fff;
+      background: linear-gradient(145deg, #005eff, #00ffff);
+      box-shadow: 0 0 12px #00ffff, 0 0 30px #00ffff, inset 0 0 20px #00ffff;
+      transform: translateY(-2px);
+    }
+
+    #btn-return:active {
+      transform: translateY(1px);
+      box-shadow: 0 0 6px #00c6ff, inset 0 0 10px #00c6ff;
+    }
+
+    /* Style select futuriste */
+    #image-select {
+      font-family: 'Orbitron', sans-serif;
+      background: linear-gradient(145deg, #0a2a5f, #003080);
+      border: 2px solid #00f0ff;
+      border-radius: 12px;
+      color: #00f0ff;
+      font-weight: 700;
+      padding: 10px 15px;
+      font-size: 1.3rem;
+      cursor: pointer;
+      box-shadow: 0 0 6px #00bfff, inset 0 0 8px #0077cc;
+      letter-spacing: 0.12em;
+      outline: none;
+      transition: all 0.3s ease;
+      user-select: none;
+      width: 160px;
+      text-transform: uppercase;
+    }
+    #image-select:hover {
+      background: linear-gradient(145deg, #005eff, #00ffff);
+      color: #fff;
+      box-shadow: 0 0 12px #00ffff, 0 0 30px #00ffff, inset 0 0 20px #00ffff;
+    }
+    #image-select:focus {
+      outline: none;
+      box-shadow: 0 0 20px #00ffff, inset 0 0 30px #00ffff;
+    }
+  </style>
+</head>
+<body>
+
+  <button id="btn-return" onclick="goToMenu()">⬅️ Retour</button>
+
+  <h1 id="title">49 Pièces</h1>
+
+  <div id="container">
+    <div id="puzzle"></div>
+
+    <!-- Menu déroulant images -->
+    <select id="image-select" title="Choisir une image">
+      <option value="./image/1.png">1</option>
+      <option value="./image/2.png">2</option>
+      <option value="./image/3.png">3</option>
+      <option value="./image/4.png">4</option>
+      <option value="./image/5.png">5</option>
+      <option value="./image/Bonus.png">Bonus</option>
+    </select>
+  </div>
+
+  <div id="victory">🎉 Bravo ! Puzzle terminé +25 points !</div>
+  <button onclick="startGame()">🔄 Rejouer</button>
+
+  <script src="../../point.js"></script>
+  <script>
+    const puzzle = document.getElementById("puzzle");
+    const victory = document.getElementById("victory");
+    const title = document.getElementById("title");
+    const imageSelect = document.getElementById("image-select");
+
+    const N = 7; // Nombre de pièces par ligne/colonne
+    let currentImage = imageSelect.value;
+
+    // Recharge le puzzle à chaque changement d'image sélectionnée
+    imageSelect.addEventListener('change', () => {
+      currentImage = imageSelect.value;
+      startGame();
+    });
+
+    function startGame() {
+      puzzle.innerHTML = "";
+      title.textContent = `${N * N} Pièces`;
+      const positions = [];
+      const pieceSize = 600 / N;
+
+      puzzle.style.width = "600px";
+      puzzle.style.height = "600px";
+
+      for (let i = 0; i < N * N; i++) positions.push(i);
+      shuffle(positions);
+
+      positions.forEach(pos => {
+        const x = pos % N;
+        const y = Math.floor(pos / N);
+        const piece = document.createElement("div");
+        piece.className = "piece";
+        piece.draggable = true;
+        piece.dataset.correct = pos;
+        piece.style.width = pieceSize + "px";
+        piece.style.height = pieceSize + "px";
+        piece.style.backgroundImage = `url('${currentImage}')`;
+        piece.style.backgroundSize = `600px 600px`;
+        piece.style.backgroundPosition = `-${x * pieceSize}px -${y * pieceSize}px`;
+        puzzle.appendChild(piece);
+      });
+
+      initDragAndDrop();
+      victory.style.display = "none";
+    }
+
+    function shuffle(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+      }
+    }
+
+    function initDragAndDrop() {
+      let dragged = null;
+
+      puzzle.querySelectorAll(".piece").forEach(piece => {
+        piece.addEventListener("dragstart", () => {
+          dragged = piece;
+          piece.classList.add("dragging");
+        });
+
+        piece.addEventListener("dragend", () => {
+          piece.classList.remove("dragging");
+        });
+
+        piece.addEventListener("dragover", e => {
+          e.preventDefault();
+        });
+
+        piece.addEventListener("drop", e => {
+          e.preventDefault();
+          const target = e.target;
+          if (target.classList.contains("piece") && target !== dragged) {
+            const draggedNext = dragged.nextSibling;
+            const targetNext = target.nextSibling;
+
+            const parent = puzzle;
+            parent.insertBefore(dragged, targetNext);
+            parent.insertBefore(target, draggedNext);
+
+            checkWin();
+          }
+        });
+      });
+    }
+
+    function checkWin() {
+  const pieces = Array.from(puzzle.children);
+  const isCorrect = pieces.every((piece, index) =>
+    parseInt(piece.dataset.correct) === index
+  );
+  if (isCorrect) {
+    victory.style.display = "block";
+    addPoints(25);
+  }
+}
+
+    function goToMenu() {
+      window.location.href = "pièces.html";
+    }
+
+    window.onload = startGame;
+  </script>
+</body>
+</html>

@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Mini TCG Rio - Amélioration V15 (Pop-ups & Bannières)</title>
+    <link rel="stylesheet" href="style.css"> 
+</head>
+<body>
+
+<div id="player-status">
+    <div style="color: #ff5555; font-weight: bold; font-size: 14px;">PV Joueur:</div>
+    <div class="hp-bar-container">
+        <div id="player-hp-text" class="bar-text"></div>
+        <div id="player-hp-fill" class="hp-bar-fill"></div>
+    </div>
+    
+    <div style="color: #33ccff; font-weight: bold; font-size: 14px;">Bouclier:</div>
+    <div class="shield-bar-container">
+        <div id="player-shield-text" class="bar-text"></div>
+        <div id="player-shield-fill" class="shield-bar-fill"></div>
+    </div>
+
+    <div style="color: #00ff00; font-weight: bold; font-size: 14px;">Énergie:</div>
+    <div class="energy-bar-container">
+        <div id="player-energy-text" class="bar-text"></div>
+        <div id="player-energy-fill" class="energy-bar-fill"></div>
+    </div>
+</div>
+
+<div id="boss-container">
+    <div id="boss-img"></div>
+    <div id="boss-hp-bar">
+        <div id="boss-hp-fill"></div>
+        <div id="boss-hp-text"></div>
+    </div>
+</div>
+
+<button id="end-turn-btn">Fin de Tour</button>
+
+
+<div id="deck">
+    <img src="card-back.png" alt="Deck">
+</div>
+
+<div id="discard-pile">
+    <span id="discard-count">Défausse (0)</span>
+</div>
+
+
+<div id="field">
+    <div class="slot"></div>
+    <div class="slot"></div>
+    <div class="slot"></div>
+    <div class="slot"></div>
+    <div class="slot"></div>
+</div>
+
+<div id="hand"></div>
+
+<div id="modal-overlay">
+    <div id="modal-content">
+        <div id="modal-title">Notification</div>
+        <div id="modal-message">Ceci est un message.</div>
+        <button id="modal-close-btn">OK</button>
+    </div>
+</div>
+
+<div id="turn-banner">Votre Tour</div>
+
+<script src="script.js"></script>
+
+</body>
+</html>

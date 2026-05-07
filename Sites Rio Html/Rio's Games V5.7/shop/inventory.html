@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <title>Inventaire - Rio Games</title>
+  <link rel="stylesheet" href="../point.css" />
+  <link rel="stylesheet" href="./css/inventory.css" />
+  <link rel="shortcut icon" type="image/png" href="../Logo/logo.png" />
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&display=swap" rel="stylesheet" />
+</head>
+<!-- Modal de vente par rareté -->
+<div id="sellModal" class="modal hidden">
+  <div class="modal-content">
+    <h2>Vente par rareté</h2>
+    <form id="rarityForm">
+      <label><input type="checkbox" name="rarity" value="commun"> Commun</label><br>
+      <label><input type="checkbox" name="rarity" value="peucommun"> Peu Commun</label><br>
+      <label><input type="checkbox" name="rarity" value="rare"> Rare</label><br>
+      <label><input type="checkbox" name="rarity" value="epique"> Épique</label><br>
+      <label><input type="checkbox" name="rarity" value="legendary"> Légendaire</label><br>
+      <label><input type="checkbox" name="rarity" value="exotique"> Exotique</label><br>
+    </form>
+    <div class="modal-buttons">
+      <button class="sell-confirm" onclick="confirmSellSelected()">✅ Vendre</button>
+      <button class="sell-cancel" onclick="closeSellModal()">❌ Annuler</button>
+    </div>
+  </div>
+</div>
+
+<body>
+  <div class="points-display">💠 Points : <span id="points">0</span></div>
+  <h1>🎒 Inventaire</h1>
+  <div id="bonusDisplay">Bonus actuel : x1</div>
+  <div id="inventory" class="inventory-grid"></div>
+  <button class="sell-all-btn" onclick="openSellModal()">🪙 Tout vendre (choix)</button>
+  <button class="back-btn" onclick="window.location.href='../menu.html'">⬅ Retour</button>
+
+  <script src="../point.js"></script>
+  <script>
+    const rarityColors = {
+      commun: 'gray',
+      peucommun: '#00ff88',
+      rare: 'deepskyblue',
+      epique: '#a85fff',
+      legendary: '#ffd700',
+      exotique: '#ff3399',
+    };
+
+    let equipped = JSON.parse(localStorage.getItem("equipped")) || [];
+    let inventory = JSON.parse(localStorage.getItem("inventory")) || [];
+
+    function updateInventoryDisplay() {
+      const container = document.getElementById("inventory");
+      container.innerHTML = "";
+
+      if (inventory.length === 0) {
+        container.innerHTML = "<p>Ton inventaire est vide !</p>";
+        return;
+      }
+      
+      inventory.forEach((item, index) => {
+        const isEquipped = equipped.includes(index);
+        const div = document.createElement("div");
+        div.className = "item";
+        div.style.border = `3px solid ${rarityColors[item.rarity] || '#00f0ff'}`;
+        div.style.boxShadow = `0 0 10px 2px ${rarityColors[item.rarity] || '#00f0ff'}`;
+        div.innerHTML = `
+          <img src="${item.image}" alt="${item.name}" />
+          <p style="color:${rarityColors[item.rarity] || '#00f0ff'}">${item.name}</p>
+          <button onclick="toggleEquip(${index})">
+            ${isEquipped ? "✅ Équipé" : "Équiper"}
+          </button>
+          <button onclick="sellItem(${index})">🪙 Vendre</button>
+        `;
+        container.appendChild(div);
+      });
+
+      const bonus = equipped.reduce((sum, i) => sum + (inventory[i]?.bonus || 0), 0);
+      document.getElementById("bonusDisplay").textContent = `Bonus actuel : x${1 + bonus}`;
+    }
+
+    function toggleEquip(index) {
+      const pos = equipped.indexOf(index);
+      if (pos !== -1) {
+        equipped.splice(pos, 1);
+      } else {
+        if (equipped.length >= 3) {
+          alert("Tu ne peux équiper que 3 objets !");
+          return;
+        }
+        equipped.push(index);
+      }
+      localStorage.setItem("equipped", JSON.stringify(equipped));
+      updateInventoryDisplay();
+    }
+
+    const rarityPrices = {
+      commun: 100,
+      peucommun: 200,
+      rare: 300,
+      epique: 500,
+      legendary: 1000,
+      exotique: 1500
+    };
+
+    function sellItem(index) {
+      if (equipped.includes(index)) {
+        alert("Tu dois déséquiper l'objet avant de le vendre.");
+        return;
+      }
+      const item = inventory[index];
+      const value = rarityPrices[item.rarity] || 100;
+      inventory.splice(index, 1);
+      equipped = equipped.filter(i => i !== index).map(i => (i > index ? i - 1 : i));
+      localStorage.setItem("inventory", JSON.stringify(inventory));
+      localStorage.setItem("equipped", JSON.stringify(equipped));
+      addPoints(value);
+      updateInventoryDisplay();
+    }
+
+function openSellModal() {
+  document.getElementById("sellModal").classList.remove("hidden");
+}
+
+function closeSellModal() {
+  document.getElementById("sellModal").classList.add("hidden");
+}
+
+function confirmSellSelected() {
+  const checkboxes = document.querySelectorAll('input[name="rarity"]:checked');
+  const selectedRarities = Array.from(checkboxes).map(cb => cb.value);
+
+  if (selectedRarities.length === 0) {
+    alert("Sélectionne au moins une rareté !");
+    return;
+  }
+
+  let soldCount = 0;
+
+  inventory = inventory.filter((item, index) => {
+    if (equipped.includes(index)) return true; // ne pas vendre si équipé
+    if (selectedRarities.includes(item.rarity)) {
+      const value = rarityPrices[item.rarity] || 100;
+      addPoints(value);
+      soldCount++;
+      return false; // retirer de l'inventaire
+    }
+    return true;
+  });
+
+  equipped = equipped.filter(i => !selectedRarities.includes(inventory[i]?.rarity));
+  localStorage.setItem("inventory", JSON.stringify(inventory));
+  localStorage.setItem("equipped", JSON.stringify(equipped));
+
+  closeSellModal();
+  updateInventoryDisplay();
+
+  if (soldCount > 0) {
+    alert(`✅ ${soldCount} carte(s) vendue(s) avec succès !`);
+  } else {
+    alert("Aucune carte vendue.");
+  }
+}
+
+
+    window.addEventListener("load", () => {
+      updatePointsDisplay?.();
+      updateInventoryDisplay();
+    });
+  </script>
+</body>
+</html>

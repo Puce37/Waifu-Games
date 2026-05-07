@@ -1,0 +1,214 @@
+/* Variables de couleurs - Thème Tournesols au Coucher de Soleil */
+:root {
+    --accent-color: #e67e22; /* Orange carotte / Crépuscule */
+    --glow-color: rgba(230, 126, 34, 0.4);
+    --sunflower-yellow: #f1c40f; /* Jaune pétale de tournesol */
+    --deep-orange: #d35400; /* Orange brûlé pour les contrastes */
+}
+
+body {
+    background-color: #2c1a05; /* Brun terre très sombre pour le contraste du soir */
+    /* Dégradé simulant la lueur orangée du soleil couchant */
+    background-image: 
+        radial-gradient(circle at 50% 20%, rgba(230, 126, 34, 0.2), rgba(44, 26, 5, 0.9)),
+        url('./image/background-cow.jpg');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    color: #fdf6e3; /* Texte clair pour fond de soirée */
+    font-family: 'Cinzel', serif;
+}
+
+/* --- LE BOUTON RETOUR PORTAIL --- */
+header {
+    padding: 20px;
+}
+
+.portal-back {
+    display: inline-flex;
+    align-items: center;
+    text-decoration: none;
+    color: #f1c40f; /* Jaune tournesol */
+    gap: 15px;
+    transition: 0.3s;
+    margin: 20px;
+    font-weight: bold;
+}
+
+.mini-portail {
+    width: 65px;
+    height: 65px;
+    border-radius: 50%;
+    background: #1a0f00; /* Fond très sombre */
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid var(--accent-color);
+    box-shadow: 0 4px 15px var(--glow-color);
+}
+
+.exit-img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    z-index: 1;
+    opacity: 0.9;
+    /* Filtre orangé intense pour le soleil couchant */
+    filter: sepia(1) saturate(3) hue-rotate(-20deg) brightness(0.9);
+    transition: 0.3s;
+}
+
+.mini-portail::before {
+    content: "";
+    position: absolute;
+    top: -15%; 
+    left: -15%; 
+    width: 130%; 
+    height: 130%;
+    background-image: url('../../image/Teleport.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    z-index: 2;
+    /* Même filtre chaud pour l'anneau */
+    filter: sepia(1) saturate(3) hue-rotate(-20deg) brightness(0.9);
+    animation: spinPortal 15s linear infinite reverse;
+    pointer-events: none;
+}
+
+@keyframes spinPortal {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+/* Accélération de la rotation au survol */
+.portal-back:hover .mini-portail::before {
+    animation-duration: 2s;
+}
+
+/* --- PRÉSENTATION DU PERSONNAGE --- */
+.container {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.profile-section {
+    display: flex;
+    max-width: 1000px;
+    gap: 50px;
+    align-items: center;
+    /* Fond sombre semi-transparent pour l'effet soirée */
+    background: rgba(44, 26, 5, 0.6);
+    padding: 40px;
+    border-radius: 20px;
+    border: 1px solid rgba(230, 126, 34, 0.3);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.main-img {
+    width: 350px;
+    border-radius: 15px;
+    box-shadow: 0 0 30px var(--glow-color);
+    border: 3px solid var(--sunflower-yellow);
+    /* Léger effet sepia sur Lucie pour l'intégrer au coucher de soleil */
+    filter: sepia(0.2) contrast(1.1);
+}
+
+.info-card h1 {
+    font-size: 2.5rem;
+    margin-top: 0;
+    color: var(--sunflower-yellow);
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+}
+
+.description {
+    line-height: 1.6;
+    font-size: 1.1rem;
+    color: #eee;
+    font-family: sans-serif;
+}
+
+.stats-box {
+    margin-top: 30px;
+    padding: 20px;
+    background: rgba(230, 126, 34, 0.15);
+    border-left: 4px solid var(--sunflower-yellow);
+    border-radius: 0 10px 10px 0;
+}
+
+.stats-box h3 { 
+    margin-top: 0; 
+    color: var(--sunflower-yellow); 
+    text-transform: uppercase;
+    font-size: 1rem;
+}
+
+.stats-box li { 
+    margin: 12px 0; 
+    color: #fff; 
+    font-size: 0.9rem;
+    transition: 0.3s;
+}
+
+.stats-box li:hover {
+    transform: translateX(10px);
+    color: var(--sunflower-yellow);
+    text-shadow: 0 0 8px var(--glow-color);
+}
+
+/* --- SYSTÈME DE PÉTALES EN VAGUE --- */
+
+.petal {
+    position: fixed;
+    left: -50px; /* Départ hors écran à gauche */
+    width: 15px;
+    height: 10px;
+    background: #f1c40f; /* Jaune tournesol */
+    border-radius: 0 80% 0 80%; /* Forme de pétale */
+    z-index: 1;
+    pointer-events: none;
+    opacity: 0;
+    /* On combine deux animations : la traversée et la vague */
+    animation: 
+        petalTraverse 12s linear infinite, 
+        petalWave 3s ease-in-out infinite alternate;
+    box-shadow: 0 0 5px rgba(241, 196, 15, 0.3);
+}
+
+/* Tailles et délais pour varier */
+.petal-1 { top: 20%; animation-delay: 0s; width: 18px; }
+.petal-2 { top: 45%; animation-delay: 2s; width: 12px; height: 8px; }
+.petal-3 { top: 70%; animation-delay: 5s; width: 15px; }
+.petal-4 { top: 30%; animation-delay: 8s; width: 14px; }
+.petal-5 { top: 85%; animation-delay: 3s; width: 16px; }
+
+/* Animation 1 : La traversée de gauche à droite */
+@keyframes petalTraverse {
+    0% {
+        left: -50px;
+        opacity: 0;
+        transform: rotate(0deg);
+    }
+    10% { opacity: 0.8; }
+    90% { opacity: 0.8; }
+    100% {
+        left: 110vw;
+        opacity: 0;
+        transform: rotate(360deg); /* Le pétale tournoie sur lui-même */
+    }
+}
+
+/* Animation 2 : Le mouvement de vague (monte et descend) */
+@keyframes petalWave {
+    from {
+        margin-top: -30px; /* Monte */
+    }
+    to {
+        margin-top: 30px; /* Descend */
+    }
+}

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Rio TCG - Combat</title>
+    <link rel="stylesheet" href="game.css">
+</head>
+<body>
+
+<!-- Bouton Retour Menu -->
+<button onclick="window.location.href='index.html'" style="position:absolute; top:10px; left:10px; z-index:200; background:#000; color:white; border:1px solid #444; padding:5px;">⬅ QG</button>
+
+<div id="player-status">
+    <div style="color: #ff5555; font-weight: bold; font-size: 14px;">PV Joueur:</div>
+    <div class="hp-bar-container">
+        <div id="player-hp-text" class="bar-text"></div>
+        <div id="player-hp-fill" class="hp-bar-fill"></div>
+    </div>
+    
+    <div style="color: #33ccff; font-weight: bold; font-size: 14px;">Bouclier:</div>
+    <div class="shield-bar-container">
+        <div id="player-shield-text" class="bar-text"></div>
+        <div id="player-shield-fill" class="shield-bar-fill"></div>
+    </div>
+
+    <div style="color: #00ff00; font-weight: bold; font-size: 14px;">Énergie:</div>
+    <div class="energy-bar-container">
+        <div id="player-energy-text" class="bar-text"></div>
+        <div id="player-energy-fill" class="energy-bar-fill"></div>
+    </div>
+</div>
+
+<div id="boss-container">
+    <div id="boss-img"></div>
+    <div id="boss-hp-bar">
+        <div id="boss-hp-fill"></div>
+        <div id="boss-hp-text"></div>
+    </div>
+</div>
+
+<button id="end-turn-btn">Fin de Tour</button>
+
+<div id="deck">
+    <img src="card-back.png" alt="Deck">
+</div>
+
+<div id="discard-pile">
+    <span id="discard-count">Défausse (0)</span>
+</div>
+
+<div id="field">
+    <div class="slot"></div>
+    <div class="slot"></div>
+    <div class="slot"></div>
+    <div class="slot"></div>
+    <div class="slot"></div>
+</div>
+
+<div id="hand"></div>
+
+<!-- MODALE -->
+<div id="modal-overlay">
+    <div id="modal-content">
+        <div id="modal-title">Notification</div>
+        <div id="modal-message">Ceci est un message.</div>
+        <button id="modal-close-btn" class="btn-primary">OK</button>
+    </div>
+</div>
+
+<div id="turn-banner">Votre Tour</div>
+
+<!-- SCRIPTS : Ordre important -->
+<script src="data.js"></script>
+<script src="game.js"></script>
+
+</body>
+</html>

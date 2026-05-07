@@ -1,0 +1,160 @@
+/* Variables de couleurs - Change-les selon le monde ! */
+:root {
+    --accent-color: #a29bfe; /* Violet par défaut */
+    --glow-color: rgba(162, 155, 254, 0.6);
+}
+
+body {
+    background-color: #05010d;
+	/* On utilise un dégradé vert transparent pour lier l'image au thème */
+    background-image: 
+        radial-gradient(circle, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0)),
+        url('./image/background-test.jpg');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    color: #e0ffe0;
+    font-family: 'Cinzel', serif;
+}
+
+/* --- LE BOUTON RETOUR PORTAIL --- */
+header {
+    padding: 20px;
+}
+
+/* --- LE BOUTON RETOUR PORTAIL --- */
+.portal-back {
+    display: inline-flex;
+    align-items: center;
+    text-decoration: none;
+    color: #fff;
+    gap: 15px;
+    transition: 0.3s;
+    margin: 20px;
+}
+
+.mini-portail {
+    width: 65px;
+    height: 65px;
+    border-radius: 50%;
+    background: #000;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--accent-color);
+    box-shadow: 0 0 15px var(--glow-color);
+    overflow: visible; /* Pour laisser le portail déborder légèrement */
+}
+
+/* L'image de sortie fixe au centre */
+.exit-img {
+    width: 100%;  /* Un peu plus petite pour ne pas toucher les bords */
+    height: 100%;
+    object-fit: contain;
+    z-index: 1;
+    opacity: 0.8;
+    transition: 0.3s;
+}
+
+/* L'anneau du portail qui tourne PAR-DESSUS */
+.mini-portail::before {
+    content: "";
+    position: absolute;
+    /* On garde tes réglages de proportion (environ 130%) */
+    top: -15%; 
+    left: -15%; 
+    width: 130%; 
+    height: 130%;
+    background-image: url('../../image/Teleport.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    z-index: 2; /* Devant l'image exit */
+    animation: spinPortal 15s linear infinite reverse;
+    pointer-events: none;
+}
+
+@keyframes spinPortal {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+/* Accélération de la rotation au survol */
+.portal-back:hover .mini-portail::before {
+    animation-duration: 2s;
+}
+
+/* --- PRÉSENTATION DU PERSONNAGE --- */
+.container {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.profile-section {
+    display: flex;
+    max-width: 1000px;
+    gap: 50px;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.03);
+    padding: 40px;
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+}
+
+.character-display {
+    position: relative;
+}
+
+.main-img {
+    width: 350px;
+    border-radius: 15px;
+    box-shadow: 0 0 30px var(--glow-color);
+    border: 2px solid var(--accent-color);
+}
+
+.info-card h1 {
+    font-size: 2.5rem;
+    margin-top: 0;
+    color: var(--accent-color);
+    text-shadow: 0 0 10px var(--glow-color);
+}
+
+.description {
+    line-height: 1.6;
+    font-size: 1.1rem;
+    color: #ccc;
+    font-family: sans-serif; /* Plus lisible pour les longs textes */
+}
+
+.stats-box {
+    margin-top: 30px;
+    padding: 20px;
+    background: rgba(0, 0, 0, 0.4);
+    border-left: 4px solid var(--accent-color);
+}
+
+.stats-box h3 { 
+    margin-top: 0; 
+    color: var(--accent-color); 
+    text-transform: uppercase;
+    font-size: 1rem;
+}
+
+.stats-box ul { list-style: none; padding: 0; }
+.stats-box li { 
+    margin: 12px 0; 
+    color: #eee; 
+    font-size: 0.9rem;
+    transition: 0.3s;
+}
+
+.stats-box li:hover {
+    transform: translateX(10px);
+    color: var(--accent-color);
+    text-shadow: 0 0 8px var(--glow-color);
+}

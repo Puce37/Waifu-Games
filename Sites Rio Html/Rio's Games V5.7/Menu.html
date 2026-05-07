@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <link rel="stylesheet" href="./point.css" />
+   <link rel="shortcut icon" type="image/png" href="./Logo/logo.png" />
+  <title>Menu - Rio Games</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&display=swap" rel="stylesheet" />
+  <style>
+    /* Fond noir futuriste avec grille légère */
+    body {
+      font-family: 'Orbitron', sans-serif;
+      background: radial-gradient(circle at center, #0a0a0a, #000000 80%);
+      color: #00f0ff;
+      margin: 0;
+      padding: 40px 20px;
+      text-align: center;
+      position: relative;
+      overflow-x: hidden;
+      min-height: 100vh;
+		overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background:
+        repeating-linear-gradient(
+          45deg,
+          rgba(0, 240, 255, 0.05),
+          rgba(0, 240, 255, 0.05) 2px,
+          transparent 2px,
+          transparent 10px
+        ),
+        repeating-linear-gradient(
+          -45deg,
+          rgba(0, 240, 255, 0.05),
+          rgba(0, 240, 255, 0.05) 2px,
+          transparent 2px,
+          transparent 10px
+        );
+      z-index: 0;
+      pointer-events: none;
+      mix-blend-mode: screen;
+    }
+    /* Contenu au-dessus */
+    body > * {
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Titre futuriste */
+    h1 {
+      font-weight: 900;
+      font-size: 4rem;
+      letter-spacing: 0.15em;
+      color: #00f0ff;
+      text-transform: uppercase;
+      text-shadow:
+        0 0 5px #00f0ff,
+        0 0 10px #00f0ff,
+        0 0 20px #00e0ff,
+        0 0 30px #00d0ff,
+        0 0 40px #00c0ff;
+      margin-bottom: 60px;
+    }
+
+    /* Menu container */
+    .menu {
+      display: flex;
+      flex-direction: column;
+      gap: 25px;
+      width: 300px;
+    }
+
+    /* Boutons futuristes */
+    .menu button {
+      padding: 15px 0;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #00f0ff;
+      background: linear-gradient(145deg, #0a2a5f, #003080);
+      border: 2px solid #00f0ff;
+      border-radius: 12px;
+      cursor: pointer;
+      box-shadow:
+        0 0 6px #00bfff,
+        inset 0 0 8px #0077cc;
+      transition: all 0.3s ease;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      user-select: none;
+      outline: none;
+    }
+    .menu button:hover {
+      color: #ffffff;
+      background: linear-gradient(145deg, #005eff, #00ffff);
+      box-shadow:
+        0 0 12px #00ffff,
+        0 0 30px #00ffff,
+        inset 0 0 20px #00ffff;
+      transform: translateY(-3px);
+    }
+    .menu button:active {
+      transform: translateY(1px);
+      box-shadow:
+        0 0 6px #00c6ff,
+        inset 0 0 10px #00c6ff;
+    }
+
+.discord-btn {
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  z-index: 10;
+  display: inline-block;
+  width: 50px;
+  height: 50px;
+  border-radius: 12px;
+  background: linear-gradient(145deg, #0a2a5f, #003080);
+  border: 2px solid #00f0ff;
+  box-shadow:
+    0 0 6px #00bfff,
+    inset 0 0 8px #0077cc;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.discord-btn img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+  pointer-events: none; /* évite de bloquer le clic */
+}
+
+.discord-btn:hover {
+  background: linear-gradient(145deg, #005eff, #00ffff);
+  box-shadow:
+    0 0 12px #00ffff,
+    0 0 30px #00ffff,
+    inset 0 0 20px #00ffff;
+  transform: translateY(-3px);
+}
+
+#fullscreen-warning {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0, 0, 0, 0.95);
+  color: #00f0ff;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 2.5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  z-index: 9999;
+  opacity: 1;
+  transition: opacity 1s ease;
+  user-select: none;
+}
+
+#fullscreen-warning .message {
+  text-shadow:
+    0 0 5px #00f0ff,
+    0 0 10px #00f0ff,
+    0 0 20px #00e0ff,
+    0 0 30px #00d0ff,
+    0 0 40px #00c0ff;
+}
+  </style>
+</head>
+<body>
+<div id="fullscreen-warning">
+  <div class="message">
+    📺 Plein écran recommandé [Appuyer sur F11]
+  </div>
+</div>
+
+  <div class="points-display">💠 Points : <span id="points">0</span></div>
+
+  <h1>Rio Games</h1>
+  <div class="menu">
+    <button onclick="startGame()">▶ Jouer</button>
+    <button onclick="inv()">🎒 Inventaire</button>
+    <button onclick="shop()">🛒 Magasin</button>
+    <button onclick="openOptions()">⚙️ Options</button>
+    <button onclick="showAbout()">ℹ️ À propos</button>
+  </div>
+
+  <script src="./point.js"></script>
+  <script>
+    function startGame() {
+      window.location.href = './jeu/choix_jeu.html';
+    }
+
+    function inv() {
+      window.location.href = './shop/inventory.html';
+    }
+
+    function shop() {
+      window.location.href = './shop/magasin.html';
+    }
+
+    function openOptions() {
+      window.location.href = './Option.html';
+    }
+
+    function showAbout() {
+  window.location.href = './apropos.html';
+}
+
+  </script>
+  <a href="https://puce37.github.io/N-o-Rio-s-Games-Community/" target="_blank" class="discord-btn" title="Rejoindre Discord">
+  <img src="./Logo/discord.png" alt="Discord" />
+</a>
+<script>
+  window.addEventListener('load', () => {
+  if (!sessionStorage.getItem('messageShown')) {
+    const message = document.getElementById('fullscreen-warning');
+    sessionStorage.setItem('messageShown', 'true');
+
+    setTimeout(() => {
+      // Faire disparaître le message en douceur
+      message.style.opacity = '0';
+      setTimeout(() => {
+        message.style.display = 'none';
+      }, 1000); // correspond à la durée de transition CSS (1s)
+    }, 2000); // affiche 2 secondes
+  } else {
+    // Ne pas afficher si déjà montré dans cet onglet
+    const message = document.getElementById('fullscreen-warning');
+    if (message) {
+      message.style.display = 'none';
+    }
+  }
+});
+
+</script>
+</body>
+</html>

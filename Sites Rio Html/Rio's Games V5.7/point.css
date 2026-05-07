@@ -1,0 +1,17 @@
+.points-display {
+  position: fixed;
+  top: 15px;
+  left: 15px;
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #00f0ff;
+  background: rgba(0, 0, 32, 0.6);
+  border: 2px solid #00f0ff;
+  border-radius: 10px;
+  padding: 8px 14px;
+  text-shadow: 0 0 5px #00f0ff;
+  box-shadow: 0 0 10px #00c0ff;
+  z-index: 9999;
+  font-family: 'Orbitron', sans-serif;
+  letter-spacing: 0.08em;
+}

@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <title>Labyrinthe</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&display=swap" rel="stylesheet" />
+  <style>
+    body {
+      margin: 0;
+      background: radial-gradient(circle at center, #0a0a0a, #000000);
+      font-family: 'Orbitron', sans-serif;
+      color: #00f0ff;
+      text-align: center;
+      overflow-x: hidden;
+    }
+    h1 {
+      margin-top: 70px;
+      font-size: 2.5rem;
+      text-shadow: 0 0 10px #00f0ff, 0 0 20px #00d0ff;
+    }
+    canvas {
+      margin-top: 20px;
+      background: #111;
+      border: 3px solid #00f0ff;
+      box-shadow: 0 0 20px #00f0ff;
+    }
+    button {
+      margin: 20px;
+      padding: 12px 30px;
+      font-size: 18px;
+      font-weight: 700;
+      color: #00f0ff;
+      background: linear-gradient(145deg, #0a2a5f, #003080);
+      border: 2px solid #00f0ff;
+      border-radius: 12px;
+      cursor: pointer;
+      box-shadow: 0 0 6px #00bfff, inset 0 0 8px #0077cc;
+      transition: all 0.3s ease;
+      text-transform: uppercase;
+      letter-spacing: 1.2px;
+    }
+    button:hover {
+      background: linear-gradient(145deg, #005eff, #00ffff);
+      box-shadow: 0 0 12px #00ffff, 0 0 30px #00ffff, inset 0 0 20px #00ffff;
+      transform: translateY(-3px);
+    }
+    button:active {
+      transform: translateY(1px);
+    }
+    #btn-return {
+      position: fixed;
+      top: 15px;
+      left: 15px;
+      padding: 8px 15px;
+      font-size: 14px;
+      border-radius: 8px;
+      background: linear-gradient(145deg, #0a2a5f, #003080);
+      border: 2px solid #00f0ff;
+      box-shadow: 0 0 6px #00bfff, inset 0 0 8px #0077cc;
+      user-select: none;
+      z-index: 1000;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      cursor: pointer;
+    }
+    #btn-return:hover {
+      color: #fff;
+      background: linear-gradient(145deg, #005eff, #00ffff);
+      box-shadow: 0 0 12px #00ffff, 0 0 30px #00ffff, inset 0 0 20px #00ffff;
+      transform: translateY(-2px);
+    }
+    #btn-return:active {
+      transform: translateY(1px);
+      box-shadow: 0 0 6px #00c6ff, inset 0 0 10px #00c6ff;
+    }
+
+    /* Animation victoire */
+    #victory-message {
+      font-weight: 800;
+      font-size: 2.5rem;
+      color: #00f0ff;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      text-shadow: 0 0 5px #00f0ff, 0 0 10px #00f0ff, 0 0 20px #00e0ff,
+        0 0 30px #00d0ff;
+      animation: glow 2.5s ease-in-out infinite alternate;
+      margin-top: 30px;
+      display: none;
+    }
+    @keyframes glow {
+      from {
+        text-shadow: 0 0 5px #00f0ff, 0 0 10px #00f0ff, 0 0 20px #00e0ff,
+          0 0 30px #00d0ff;
+      }
+      to {
+        text-shadow: 0 0 15px #00ffff, 0 0 25px #00ffff, 0 0 35px #00c0ff,
+          0 0 45px #00c0ff;
+      }
+    }
+  </style>
+</head>
+<body>
+  <button id="btn-return" onclick="window.location.href='../choix_jeu.html'">⬅️ Retour</button>
+  <h1>Labyrinthe</h1>
+  <canvas id="maze" width="600" height="600"></canvas>
+  <br />
+  <div id="victory-message">🎉 Bien joué ! Tu as terminé le labyrinthe +10 points ! 🎉</div>
+  <button onclick="generateMaze()">🔁 Rejouer</button>
+  
+  <script src="../../point.js"></script>
+  <script>
+  const canvas = document.getElementById("maze");
+  const ctx = canvas.getContext("2d");
+
+  const cols = 20;
+  const rows = 20;
+  const size = canvas.width / cols;
+
+  let grid = [];
+  let current;
+  let stack = [];
+  let player = { x: 0, y: 0 };
+
+  const playerImg = new Image();
+  playerImg.src = './image/rio.png'; // chemin vers ton image
+
+  class Cell {
+    constructor(x, y) {
+      this.x = x;
+      this.y = y;
+      this.walls = [true, true, true, true]; // top, right, bottom, left
+      this.visited = false;
+    }
+
+    draw() {
+      const x = this.x * size;
+      const y = this.y * size;
+      ctx.strokeStyle = "#00f0ff";
+      ctx.lineWidth = 2;
+
+      if (this.walls[0]) drawLine(x, y, x + size, y); // top
+      if (this.walls[1]) drawLine(x + size, y, x + size, y + size); // right
+      if (this.walls[2]) drawLine(x + size, y + size, x, y + size); // bottom
+      if (this.walls[3]) drawLine(x, y + size, x, y); // left
+    }
+
+    highlight(color = "#00ff00") {
+      const x = this.x * size;
+      const y = this.y * size;
+      ctx.fillStyle = color;
+      ctx.fillRect(x + 2, y + 2, size - 4, size - 4);
+    }
+
+    getUnvisitedNeighbors() {
+      const neighbors = [];
+
+      const top = grid[index(this.x, this.y - 1)];
+      const right = grid[index(this.x + 1, this.y)];
+      const bottom = grid[index(this.x, this.y + 1)];
+      const left = grid[index(this.x - 1, this.y)];
+
+      if (top && !top.visited) neighbors.push(top);
+      if (right && !right.visited) neighbors.push(right);
+      if (bottom && !bottom.visited) neighbors.push(bottom);
+      if (left && !left.visited) neighbors.push(left);
+
+      if (neighbors.length > 0) {
+        const r = Math.floor(Math.random() * neighbors.length);
+        return neighbors[r];
+      } else {
+        return undefined;
+      }
+    }
+  }
+
+  function drawLine(x1, y1, x2, y2) {
+    ctx.beginPath();
+    ctx.moveTo(x1, y1);
+    ctx.lineTo(x2, y2);
+    ctx.stroke();
+  }
+
+  function index(x, y) {
+    if (x < 0 || y < 0 || x >= cols || y >= rows) return -1;
+    return x + y * cols;
+  }
+
+  function removeWalls(a, b) {
+    const dx = a.x - b.x;
+    const dy = a.y - b.y;
+
+    if (dx === 1) {
+      a.walls[3] = false;
+      b.walls[1] = false;
+    } else if (dx === -1) {
+      a.walls[1] = false;
+      b.walls[3] = false;
+    }
+
+    if (dy === 1) {
+      a.walls[0] = false;
+      b.walls[2] = false;
+    } else if (dy === -1) {
+      a.walls[2] = false;
+      b.walls[0] = false;
+    }
+  }
+
+  function generateMaze() {
+    grid = [];
+    stack = [];
+    player = { x: 0, y: 0 };
+    document.getElementById("victory-message").style.display = "none";
+
+    for (let y = 0; y < rows; y++) {
+      for (let x = 0; x < cols; x++) {
+        grid.push(new Cell(x, y));
+      }
+    }
+
+    current = grid[0];
+    current.visited = true;
+
+    function step() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      grid.forEach(cell => cell.draw());
+
+      current.highlight("#2222ff");
+
+      const next = current.getUnvisitedNeighbors();
+      if (next) {
+        next.visited = true;
+        stack.push(current);
+        removeWalls(current, next);
+        current = next;
+        requestAnimationFrame(step);
+      } else if (stack.length > 0) {
+        current = stack.pop();
+        requestAnimationFrame(step);
+      } else {
+        drawPlayer();
+      }
+    }
+
+    step();
+  }
+
+  function drawPlayer() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height); // Efface tout
+    grid.forEach(cell => cell.draw());               // Redessine le labyrinthe
+
+    const endCell = grid[index(cols - 1, rows - 1)];
+    endCell.highlight("#ff0000");                     // Surligne la case finale
+
+    // Dessine le joueur seulement sur sa position
+    const cell = grid[index(player.x, player.y)];
+    const x = cell.x * size;
+    const y = cell.y * size;
+    const imgSize = size * 0.8;
+    const imgX = x + (size - imgSize) / 2;
+    const imgY = y + (size - imgSize) / 2;
+
+    if (playerImg.complete && playerImg.naturalWidth !== 0) {
+      ctx.drawImage(playerImg, imgX, imgY, imgSize, imgSize);
+    } else {
+      // Si image pas chargée, carré vert provisoire
+      ctx.fillStyle = "#00ff00";
+      ctx.fillRect(x + 2, y + 2, size - 4, size - 4);
+    }
+  }
+
+  let hasWon = false;
+
+function showVictory() {
+  if (!hasWon) {
+    hasWon = true; // Empêche d'ajouter les points plusieurs fois
+    addPoints(10); // Ajoute 10 points à la victoire
+    const message = document.getElementById("victory-message");
+    message.style.display = "block";
+  }
+}
+
+
+  document.addEventListener("keydown", e => {
+    const currentCell = grid[index(player.x, player.y)];
+    if (e.key === "ArrowUp" && !currentCell.walls[0]) player.y--;
+    else if (e.key === "ArrowRight" && !currentCell.walls[1]) player.x++;
+    else if (e.key === "ArrowDown" && !currentCell.walls[2]) player.y++;
+    else if (e.key === "ArrowLeft" && !currentCell.walls[3]) player.x--;
+
+    if (player.x < 0) player.x = 0;
+    if (player.y < 0) player.y = 0;
+    if (player.x >= cols) player.x = cols - 1;
+    if (player.y >= rows) player.y = rows - 1;
+
+    drawPlayer();
+
+    if (player.x === cols - 1 && player.y === rows - 1) {
+      showVictory();
+    }
+  });
+
+  generateMaze();
+</script>
+
+</body>
+</html>

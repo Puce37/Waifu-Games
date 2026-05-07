@@ -1,0 +1,49 @@
+1️⃣ Devant des cartes (front)
+
+Format : PNG ou JPG
+
+Taille : 240×360 px
+
+Nommage : card1-front.png, card2-front.png, card3-front.png, …
+
+Exemple :
+
+card1-front.png
+card2-front.png
+card3-front.png
+card4-front.png
+
+2️⃣ Dos des cartes (back)
+
+Format : PNG ou JPG
+
+Taille : 240×360 px
+
+Nommage : card-back.png (un seul fichier pour tout le deck)
+
+3️⃣ Bandeau sous les icônes (stats background)
+
+Format : PNG (transparence recommandée)
+
+Taille : 240×70 px
+
+Nommage : stats-bg1.png, stats-bg2.png, … (un pour chaque carte si tu veux différent)
+
+Exemple :
+
+stats-bg1.png
+stats-bg2.png
+stats-bg3.png
+stats-bg4.png
+
+4️⃣ Icônes des stats
+
+Format : PNG (transparence)
+
+Taille : 56×56 px
+
+Nommage :
+
+heart.png   -> pour vie ❤️
+energy.png  -> pour énergie ⚡
+special.png -> pour spécial ⭐

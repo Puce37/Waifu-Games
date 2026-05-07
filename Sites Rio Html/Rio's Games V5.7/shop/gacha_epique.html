@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <title>Epique</title>
+  <link rel="stylesheet" href="./css/epique.css" />
+</head>
+<body>
+  <h1>🎲 Epique</h1>
+  <div id="pointsDisplay">Points : <span id="points">1000</span></div>
+
+  <button id="buyPackBtn">🎁 Acheter un pack (500 points)</button>
+  <button id="goBackBtn">🔙 Retour</button>
+
+  <div id="packContainer"></div>
+  <div id="result"></div>
+
+  <script>
+    // --- Gestion des points (intégration de point.js) ---
+    let points = localStorage.getItem('points') ? parseInt(localStorage.getItem('points')) : 1000;
+
+    function savePoints() {
+      localStorage.setItem('points', points);
+    }
+
+    function getPoints() {
+      return points;
+    }
+
+    function spendPoints(cost) {
+      if (points < cost) {
+        alert("Pas assez de points !");
+        return false;
+      }
+      points -= cost;
+      savePoints();
+      updatePointsDisplay();
+      return true;
+    }
+
+    function addPoints(amount) {
+      points += amount;
+      savePoints();
+      updatePointsDisplay();
+    }
+
+    function updatePointsDisplay() {
+      document.getElementById('points').textContent = points;
+    }
+
+    // --- Ton script principal ---
+    document.addEventListener('DOMContentLoaded', () => {
+      const epiqueItems = [
+  {
+    name: "Peu Commun",
+    chance: 55,
+    bonus: 2,
+    rarity: "peucommun",
+    variants: [
+      { name: "Peu Commun A", image: "./card/peucommun_a.png" },
+      { name: "Peu Commun B", image: "./card/peucommun_b.png" },
+      { name: "Peu Commun C", image: "./card/peucommun_c.png" }
+    ]
+  },
+  {
+    name: "Rare",
+    chance: 25,
+    bonus: 3,
+    rarity: "rare",
+    variants: [
+      { name: "Rare A", image: "./card/rare_a.png" },
+      { name: "Rare B", image: "./card/rare_b.png" },
+      { name: "Rare C", image: "./card/rare_c.png" }
+    ]
+  },
+  {
+    name: "Épique",
+    chance: 15,
+    bonus: 4,
+    rarity: "epique",
+    variants: [
+      { name: "Épique A", image: "./card/epique_a.png" },
+      { name: "Épique B", image: "./card/epique_b.png" },
+      { name: "Épique C", image: "./card/epique_c.png" }
+    ]
+  },
+  {
+    name: "Légendaire",
+    chance: 5,
+    bonus: 5,
+    rarity: "legendary",
+    variants: [
+      { name: "Légendaire A", image: "./card/legendaire_a.png" },
+      { name: "Légendaire B", image: "./card/legendaire_b.png" },
+      { name: "Légendaire C", image: "./card/legendaire_c.png" }
+    ]
+  }
+];
+
+
+      const packCost = 500;
+      const packContainer = document.getElementById('packContainer');
+      const buyPackBtn = document.getElementById('buyPackBtn');
+      const goBackBtn = document.getElementById('goBackBtn');
+      const resultDiv = document.getElementById('result');
+
+      let cardsStack = [];
+      let currentCardIndex = 0;
+
+      function chooseItem() {
+  const roll = Math.random() * 100;
+  let sum = 0;
+  for (const item of epiqueItems) {
+    sum += item.chance;
+    if (roll < sum) {
+      const variant = item.variants[Math.floor(Math.random() * item.variants.length)];
+      return {
+        name: variant.name,
+        image: variant.image,
+        bonus: item.bonus,
+        rarity: item.rarity
+      };
+    }
+  }
+  // Par défaut
+  const defaultItem = epiqueItems[0];
+  const defaultVariant = defaultItem.variants[0];
+  return {
+    name: defaultVariant.name,
+    image: defaultVariant.image,
+    bonus: defaultItem.bonus,
+    rarity: defaultItem.rarity
+  };
+}
+
+
+      function addToInventory(card) {
+  console.log("Ajout à l'inventaire :", card.name);
+
+  // Récupérer l'inventaire existant depuis localStorage
+  let inventory = JSON.parse(localStorage.getItem('inventory')) || [];
+
+  // Ajouter la carte au tableau
+  inventory.push(card);
+
+  // Sauvegarder à nouveau dans localStorage
+  localStorage.setItem('inventory', JSON.stringify(inventory));
+}
+
+
+      function showCardsStack() {
+        cardsStack.forEach((card, index) => {
+          const cardEl = document.createElement('div');
+          cardEl.classList.add('card', `rarity-${card.rarity}`);
+          cardEl.style.zIndex = 40 - index;
+          cardEl.style.top = '20px';
+          cardEl.style.left = '10px';
+          cardEl.style.transform = `translate(${index * 8}px, ${-index * 15}px)`;
+          cardEl.dataset.index = index;
+
+          const img = document.createElement('img');
+          img.src = card.image;
+          img.alt = card.name;
+          cardEl.appendChild(img);
+
+          packContainer.appendChild(cardEl);
+        });
+      }
+
+      function enableTopCardClick() {
+        const topCard = packContainer.querySelector(`.card[data-index="${currentCardIndex}"]`);
+        if (!topCard) {
+          resultDiv.textContent = "🎉 Toutes les cartes ont été révélées et ajoutées à ton inventaire !";
+          return;
+        }
+        topCard.style.pointerEvents = 'auto';
+        topCard.addEventListener('click', onCardClick);
+      }
+
+      function onCardClick(event) {
+        const cardEl = event.currentTarget;
+
+        cardEl.removeEventListener('click', onCardClick);
+        cardEl.style.transition = 'transform 0.7s ease, opacity 0.7s ease';
+        cardEl.style.transform += ' translateX(200px) translateY(20px)';
+        cardEl.style.opacity = '0';
+
+        addToInventory(cardsStack[currentCardIndex]);
+        currentCardIndex++;
+
+        setTimeout(() => {
+          cardEl.remove();
+          enableTopCardClick();
+        }, 100);
+      }
+
+      buyPackBtn.addEventListener('click', () => {
+        if (!spendPoints(packCost)) return;
+
+        resultDiv.textContent = '';
+        packContainer.innerHTML = '';
+
+        cardsStack = [];
+        currentCardIndex = 0;
+
+        for (let i = 0; i < 5; i++) {
+          cardsStack.push(chooseItem());
+        }
+
+        // Créer le pack
+        const pack = document.createElement('div');
+        pack.id = 'cardPack';
+        pack.title = "Clique pour ouvrir le pack";
+        pack.style.zIndex = 50;
+        packContainer.appendChild(pack);
+
+        function onPackClick() {
+          pack.removeEventListener('click', onPackClick);
+
+          // Créer les deux parties de la déchirure
+          const splitTop = document.createElement('div');
+          splitTop.classList.add('splitTop');
+          const splitBottom = document.createElement('div');
+          splitBottom.classList.add('splitBottom');
+
+          packContainer.insertBefore(splitBottom, pack);
+          packContainer.insertBefore(splitTop, pack);
+
+          // Cacher le pack original (pack)
+          pack.style.display = 'none';
+
+          // Créer cartes IMMÉDIATEMENT, mais invisibles (opacity 0)
+          cardsStack.forEach((card, index) => {
+            const cardEl = document.createElement('div');
+            cardEl.classList.add('card', `rarity-${card.rarity}`);
+            cardEl.style.zIndex = 40 - index;
+            cardEl.style.top = '20px';
+            cardEl.style.left = '10px';
+            cardEl.style.opacity = '0';  // invisible au départ
+            cardEl.style.transform = 'translate(0, 0)'; // au départ au même endroit
+            cardEl.dataset.index = index;
+
+            const img = document.createElement('img');
+            img.src = card.image;
+            img.alt = card.name;
+            cardEl.appendChild(img);
+
+            packContainer.appendChild(cardEl);
+
+            // Animation progressive sortie des cartes, décalée dans le temps
+            setTimeout(() => {
+              cardEl.style.transition = 'transform 0.7s ease, opacity 0.7s ease';
+              cardEl.style.opacity = '1';
+              cardEl.style.transform = `translate(${index * 8}px, ${-index * 15}px)`;
+            }, index * 200);  // chaque carte sort avec 0.2s d'écart
+          });
+
+          // Lancer animation déchirure
+          splitTop.classList.add('slideTop');
+          setTimeout(() => {
+            splitBottom.classList.add('slideBottom');
+          }, 500);
+
+          // Nettoyage après fin animation + sortie cartes
+          setTimeout(() => {
+            splitBottom.style.transition = 'opacity 0.5s ease';
+            splitBottom.style.opacity = '0';
+          }, 1300);
+
+          setTimeout(() => {
+            splitTop.remove();
+            splitBottom.remove();
+            enableTopCardClick();
+          }, 1800);  // un peu plus long pour finir la sortie des cartes
+        }
+
+        pack.addEventListener('click', onPackClick);
+      });
+
+      goBackBtn.addEventListener('click', () => {
+        window.location.href = './gacha.html';
+      });
+
+      // Affiche points au chargement
+      updatePointsDisplay();
+    });
+  </script>
+</body>
+</html>

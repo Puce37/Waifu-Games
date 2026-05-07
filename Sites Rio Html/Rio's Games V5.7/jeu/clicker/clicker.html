@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <title>Clicker</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap" rel="stylesheet" />
+  <style>
+    body {
+  font-family: 'Orbitron', sans-serif;
+  background: radial-gradient(circle at center, #0a0a0a, #000000 80%);
+  color: #00f0ff;
+  margin: 0;
+  padding: 0 20px;
+  text-align: center;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background:
+        repeating-linear-gradient(
+          45deg,
+          rgba(0, 240, 255, 0.05),
+          rgba(0, 240, 255, 0.05) 2px,
+          transparent 2px,
+          transparent 10px
+        ),
+        repeating-linear-gradient(
+          -45deg,
+          rgba(0, 240, 255, 0.05),
+          rgba(0, 240, 255, 0.05) 2px,
+          transparent 2px,
+          transparent 10px
+        );
+      z-index: 0;
+      pointer-events: none;
+      mix-blend-mode: screen;
+    }
+    h1 {
+      font-weight: 900;
+      font-size: 4rem;
+      letter-spacing: 0.15em;
+      color: #00f0ff;
+      text-transform: uppercase;
+      text-shadow:
+        0 0 5px #00f0ff,
+        0 0 10px #00f0ff,
+        0 0 20px #00e0ff,
+        0 0 30px #00d0ff,
+        0 0 40px #00c0ff;
+      margin-bottom: 60px;
+    }
+    #clicks {
+      font-size: 2rem;
+      margin: 20px;
+    }
+    button {
+      padding: 15px 30px;
+      font-size: 18px;
+      font-weight: bold;
+      color: #00f0ff;
+      background: linear-gradient(145deg, #0a2a5f, #003080);
+      border: 2px solid #00f0ff;
+      border-radius: 12px;
+      cursor: pointer;
+      box-shadow: 0 0 6px #00bfff, inset 0 0 8px #0077cc;
+      margin: 10px;
+      transition: all 0.2s ease-in-out;
+    }
+
+    button:hover {
+      background: linear-gradient(145deg, #005eff, #00ffff);
+      transform: scale(1.05);
+	  box-shadow:
+        0 0 5px #00f0ff,
+        0 0 10px #00f0ff,
+        0 0 20px #00e0ff,
+        0 0 30px #00d0ff,
+        0 0 40px #00c0ff;
+    }
+
+    #clicker-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 30px 0;
+}
+
+#clicker-img {
+  width: 256px;
+  height: 256px;
+  cursor: pointer;
+  transition: transform 0.1s;
+}
+
+#clicker-img:active {
+  transform: scale(0.95);
+}
+
+  </style>
+</head>
+<body>
+  <h1>Clicker</h1>
+  <div id="clicks">Clicks : 0</div>
+  
+  <div id="clicker-container">
+  <img id="clicker-img" src="./img/click1.png" alt="Clicker" onclick="handleClick()" />
+</div>
+
+  <div>
+    <button onclick="window.location.href='clicker-shop.html'">🛒 Boutique</button>
+    <button onclick="window.location.href='../choix_jeu.html'">⬅ Retour</button>
+  </div>
+
+  <script>
+  let clicks = parseInt(localStorage.getItem("clicks")) || 0;
+  let multiplier = parseInt(localStorage.getItem("clickMultiplier")) || 1;
+
+  function updateClicksDisplay() {
+    document.getElementById("clicks").textContent = "Clicks : " + clicks;
+  }
+
+  function handleClick() {
+    clicks += multiplier; // Utilise le multiplicateur ici
+    localStorage.setItem("clicks", clicks);
+    updateClicksDisplay();
+  }
+
+  function loadClickerImage() {
+    const selectedImage = localStorage.getItem("selectedClickerImage") || "./img/click1.png";
+    document.getElementById("clicker-img").src = selectedImage;
+  }
+
+  window.addEventListener("load", () => {
+    updateClicksDisplay();
+    loadClickerImage();
+  });
+</script>
+
+</body>
+</html>

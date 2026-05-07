@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+   <link rel="shortcut icon" type="image/png" href="./Logo/logo.png" />
+  <title>À propos - Rio Games</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&display=swap" rel="stylesheet" />
+  <style>
+    body {
+  font-family: 'Orbitron', sans-serif;
+  background: radial-gradient(circle at center, #0a0a0a, #000000 80%);
+  color: #00f0ff;
+  text-align: center;
+  margin: 0;
+  padding: 40px 20px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  position: relative;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background:
+    repeating-linear-gradient(
+      45deg,
+      rgba(0, 240, 255, 0.05),
+      rgba(0, 240, 255, 0.05) 2px,
+      transparent 2px,
+      transparent 10px
+    ),
+    repeating-linear-gradient(
+      -45deg,
+      rgba(0, 240, 255, 0.05),
+      rgba(0, 240, 255, 0.05) 2px,
+      transparent 2px,
+      transparent 10px
+    );
+  z-index: 0;
+  pointer-events: none;
+  mix-blend-mode: screen;
+}
+
+/* Contenu au-dessus */
+body > * {
+  position: relative;
+  z-index: 1;
+}
+
+h1 {
+  font-weight: 900;
+  font-size: 4rem;
+  letter-spacing: 0.15em;
+  color: #00f0ff;
+  text-transform: uppercase;
+  text-shadow:
+    0 0 5px #00f0ff,
+    0 0 10px #00f0ff,
+    0 0 20px #00e0ff,
+    0 0 30px #00d0ff,
+    0 0 40px #00c0ff;
+  margin-bottom: 60px;
+}
+
+p {
+  font-size: 1.2rem;
+  line-height: 1.8;
+  max-width: 600px;
+  margin-bottom: 30px;
+  color: #ccf9ff;
+}
+
+.info {
+  margin-top: 20px;
+  font-size: 1rem;
+  opacity: 0.8;
+  user-select: none;
+}
+
+button {
+  margin-top: 30px;
+  padding: 15px 40px;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #00f0ff;
+  background: linear-gradient(145deg, #0a2a5f, #003080);
+  border: 2px solid #00f0ff;
+  border-radius: 12px;
+  cursor: pointer;
+  box-shadow:
+    0 0 6px #00bfff,
+    inset 0 0 8px #0077cc;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  user-select: none;
+  outline: none;
+  min-width: 220px;
+}
+
+button:hover {
+  background: linear-gradient(145deg, #005eff, #00ffff);
+  color: white;
+  box-shadow:
+    0 0 12px #00ffff,
+    0 0 30px #00ffff,
+    inset 0 0 20px #00ffff;
+  transform: translateY(-3px);
+}
+
+button:active {
+  transform: translateY(1px);
+  box-shadow:
+    0 0 6px #00c6ff,
+    inset 0 0 10px #00c6ff;
+}
+
+img {
+  vertical-align: middle;
+  margin-left: 8px;
+  width: 45px;
+  height: auto;
+}
+
+  </style>
+</head>
+<body>
+  <h1>À propos</h1>
+
+  <p>
+    <strong>Rio's Games</strong> est un ensemble de petit jeu inspiré des classiques,
+    avec une touche graphique futuriste et de système de Points commun a tout les jeux.<br>
+    Je suis un petit dev qui s'amuse sur son temps libre !
+    <br>
+    J'espère sincèrement que cela vous plaira.<img src="./Logo/happy.gif" style="width: 45px; height: auto;">
+    <br>
+    Je vous souhaite un Bon jeu.<img src="./Logo/Love.gif" style="width: 45px; height: auto;">
+  </p>
+  <br>
+	<p>
+    <strong>Notes de Maj : <img src="./Logo/!.gif" style="width: 45px; height: auto;"></strong>
+	<br> 
+	-Ajout de plus de Variante de chaque cartes
+	<br>
+    -Interface de l'inventaire modifier légèrement
+	<br>
+	-Ajout d'un bouton et d'un petit menu tout vendre avec tri par rareter
+  </p>
+  
+  <div class="info">
+    Version : 5.7<br />
+    Créé avec ❤️ par <strong>Puce37</strong><br />
+    Technologies : HTML, CSS, JavaScript
+  </div>
+
+  <button onclick="goToMenu()">⬅ Retour au menu</button>
+
+  <script>
+    function goToMenu() {
+      window.location.href = 'menu.html';
+    }
+  </script>
+</body>
+</html>

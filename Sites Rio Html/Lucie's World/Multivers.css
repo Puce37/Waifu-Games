@@ -1,0 +1,239 @@
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&display=swap');
+
+/* --- BASE SPATIALE --- */
+body {
+    background: radial-gradient(circle at center, #1b1b2f 0%, #050505 100%);
+    color: white;
+    font-family: 'Orbitron', sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 40px;
+    margin: 0;
+    overflow-x: hidden; /* Important pour ne pas avoir de scroll horizontal avec les animations */
+    min-height: 100vh;
+}
+
+/* --- LE TITRE FLOTTANT (Plus lent) --- */
+.floating-title {
+    font-size: 3rem;
+    text-transform: uppercase;
+    letter-spacing: 4px;
+    margin-bottom: 60px;
+    position: relative;
+    z-index: 10;
+    text-shadow: 
+        0 0 10px rgba(0, 255, 255, 0.5),
+        0 0 20px rgba(0, 255, 255, 0.3),
+        0 0 40px rgba(138, 43, 226, 0.5);
+    /* Ralenti à 10s pour plus de majesté */
+    animation: titleFloat 10s ease-in-out infinite;
+}
+
+@keyframes titleFloat {
+    0%, 100% { transform: translateY(0); letter-spacing: 4px; }
+    50% { transform: translateY(-10px); letter-spacing: 6px; }
+}
+
+/* --- SYSTÈME DE FOND (L'espace) --- */
+.space-background {
+    position: fixed; /* Reste fixe quand on scroll */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0; /* Tout au fond */
+    pointer-events: none; /* On peut cliquer au travers */
+    overflow: hidden;
+}
+
+/* --- LES NÉBULEUSES (Plus petites et plus en fond) --- */
+.nebula {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(100px); /* Flou augmenté pour fondre les couleurs */
+    opacity: 0.25; /* Opacité réduite pour ne pas gêner la lecture */
+    animation: drift 30s infinite alternate linear;
+    z-index: 0;
+}
+
+.n1 {
+    top: -15%; left: -10%;
+    width: 350px; height: 350px; /* Plus petit */
+    background: #8a2be2;
+}
+
+.n2 {
+    bottom: -10%; right: -10%;
+    width: 300px; height: 300px; /* Plus petit */
+    background: #00ffff;
+    animation-delay: -5s;
+}
+
+.n3 {
+    top: 30%; left: 40%;
+    width: 250px; height: 250px; /* Plus petit et central */
+    background: #ff0055;
+    opacity: 0.15; /* Très discret au centre */
+}
+
+/* --- LES ÉTOILES (Système dense) --- */
+.star {
+    position: absolute;
+    background: white;
+    border-radius: 50%;
+    box-shadow: 0 0 5px rgba(255, 255, 255, 0.8);
+    opacity: 0;
+    animation: twinkle 5s infinite ease-in-out;
+}
+
+/* Tailles variées pour la profondeur */
+.star:nth-child(odd) { width: 2px; height: 2px; } /* Étoiles lointaines */
+.star:nth-child(even) { width: 3px; height: 3px; } /* Étoiles proches */
+
+/* Positions aléatoires et délais (C'est long mais ça fait tout le charme) */
+.s1 { top: 10%; left: 5%; animation-delay: 0s; }
+.s2 { top: 20%; left: 25%; animation-delay: 2s; }
+.s3 { top: 15%; left: 50%; animation-delay: 4s; }
+.s4 { top: 5%; left: 85%; animation-delay: 1s; }
+.s5 { top: 30%; left: 10%; animation-delay: 3s; }
+.s6 { top: 40%; left: 90%; animation-delay: 0.5s; }
+.s7 { top: 50%; left: 5%; animation-delay: 2.5s; }
+.s8 { top: 60%; left: 20%; animation-delay: 1.5s; }
+.s9 { top: 55%; left: 60%; animation-delay: 3.5s; }
+.s10 { top: 75%; left: 80%; animation-delay: 0.2s; }
+.s11 { top: 80%; left: 15%; animation-delay: 4.5s; }
+.s12 { top: 90%; left: 40%; animation-delay: 1.2s; }
+.s13 { top: 85%; left: 70%; animation-delay: 2.8s; }
+.s14 { top: 95%; left: 95%; animation-delay: 0.8s; }
+.s15 { top: 25%; left: 65%; animation-delay: 3.2s; }
+.s16 { top: 35%; left: 35%; animation-delay: 1.8s; }
+.s17 { top: 45%; left: 75%; animation-delay: 4.2s; }
+.s18 { top: 65%; left: 45%; animation-delay: 2.2s; }
+.s19 { top: 10%; left: 30%; animation-delay: 0.9s; }
+.s20 { top: 70%; left: 95%; animation-delay: 3.8s; }
+
+/* Animation de dérive des nébuleuses */
+@keyframes drift {
+    from { transform: translate(0, 0); }
+    to { transform: translate(30px, -20px); }
+}
+
+/* Scintillement des étoiles */
+@keyframes twinkle {
+    0%, 100% { opacity: 0.1; transform: scale(0.8); }
+    50% { opacity: 1; transform: scale(1.2); box-shadow: 0 0 15px white; }
+}
+
+.menu-grid {
+	position: relative;
+    z-index: 1; 
+    display: grid;
+    /* On force 4 colonnes égales au lieu de laisser le navigateur décider avec auto-fill */
+    grid-template-columns: repeat(4, 1fr); 
+    gap: 30px; /* J'ai réduit un peu le gap pour aérer les 4 colonnes */
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto; /* Pour bien centrer le menu */
+}
+
+/* --- CONFIGURATION DU PORTAIL --- */
+.card {
+    position: relative;
+    width: 220px;
+    height: 220px;
+    margin: 40px auto;
+    background: rgba(0, 0, 0, 0.3); /* Un fond sombre discret au repos */
+    border-radius: 50%;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.5s ease;
+    overflow: visible; /* On laisse déborder le portail */
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* --- L'IMAGE DU PORTAIL (Cachée par défaut) --- */
+.card::before {
+    content: "";
+    position: absolute;
+    top: -17.5%; 
+    left: -17.5%; 
+    width: 135%; 
+    height: 135%;
+    background-image: url('./image/Portail.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    z-index: 3;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.4s ease, transform 0.6s ease, filter 0.4s ease;
+    
+    /* On utilise la variable --portal-filter, avec une valeur par défaut */
+    filter: var(--portal-filter, none);
+    transform: rotate(0deg) scale(0.8);
+}
+
+/* --- ANIMATION DE ROTATION INFINIE --- */
+@keyframes infiniteRotate {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+/* --- SURVOL : ACTIVATION DU PORTAIL --- */
+.card:hover {
+    background: #000;
+    border-color: transparent;
+    box-shadow: 0 0 30px rgba(0, 212, 255, 0.4);
+}
+
+.card:hover::before {
+    opacity: 1; /* Il apparaît */
+    /* Il tourne en permanence tant qu'on survole */
+    animation: infiniteRotate 5s linear infinite; 
+}
+
+/* --- IMAGE DE LUCIE (À L'INTÉRIEUR) --- */
+.img-container {
+    position: absolute;
+    width: 90%;
+    height: 90%;
+    border-radius: 50%;
+    overflow: hidden;
+    z-index: 2;
+    opacity: 0.2; /* Très sombre au repos */
+    transition: all 0.5s ease;
+}
+
+.card:hover .img-container {
+    opacity: 1; /* Lucie s'éclaire quand le portail s'ouvre */
+}
+
+.preview-pic {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transform: scale(1.2);
+    transition: transform 0.6s ease;
+}
+
+.card:hover .preview-pic {
+    transform: scale(1); /* Effet de zoom arrière quand on regarde dedans */
+}
+
+/* --- TEXTE (S'affiche seulement au repos) --- */
+.card span {
+    position: relative;
+    z-index: 10;
+    color: #fff;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 0.8rem;
+    letter-spacing: 2px;
+    transition: opacity 0.3s;
+}
+
+.card:hover span {
+    opacity: 0; /* Disparaît pour laisser place à la vision */
+}

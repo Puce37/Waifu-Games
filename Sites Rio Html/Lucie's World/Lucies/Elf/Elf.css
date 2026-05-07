@@ -1,0 +1,220 @@
+/* Variables de couleurs - Thème Forêt Enchantée */
+:root {
+    --accent-color: #71cf71; /* Vert mousse et feuillage */
+    --glow-color: rgba(113, 207, 113, 0.4);
+    --dark-forest: #0a1a0a;
+}
+
+body {
+    background-color: #0a1a0a;
+    /* On utilise un dégradé vert transparent pour lier l'image au thème */
+    background-image: 
+        radial-gradient(circle, rgba(113, 207, 113, 0.1), rgba(10, 26, 10, 0.9)),
+        url('./image/background-elf.jpg');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    color: #e0ffe0;
+	font-family: 'Cinzel', serif;
+}
+
+/* Effet de lumière diffuse ou de pollen magique en arrière-plan */
+body::before {
+    content: "";
+    position: fixed;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle at center, rgba(113, 207, 113, 0.05) 0%, transparent 60%);
+    animation: gentlePulse 15s ease-in-out infinite alternate;
+    z-index: -1;
+    pointer-events: none;
+}
+
+@keyframes gentlePulse {
+    0% { transform: scale(1) translate(0, 0); opacity: 0.8; }
+    100% { transform: scale(1.1) translate(5%, 5%); opacity: 1; }
+}
+
+
+/* --- BOUTON RETOUR PORTAIL (VERSION NATURELLE) --- */
+header {
+    padding: 20px;
+    z-index: 10;
+}
+
+.portal-back {
+    display: inline-flex;
+    align-items: center;
+    text-decoration: none;
+    color: #e0ffe0;
+    gap: 15px;
+    transition: 0.3s;
+    margin: 20px;
+}
+
+.mini-portail {
+    width: 65px;
+    height: 65px;
+    border-radius: 50%;
+    background: linear-gradient(45deg, #0f2027, #203a43, #2c5364); /* Dégradé de forêt */
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--accent-color);
+    box-shadow: 0 0 15px var(--glow-color);
+    overflow: visible;
+}
+
+.exit-img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    z-index: 1;
+    opacity: 0.7;
+    filter: sepia(0.3) hue-rotate(90deg); /* Légèrement vieilli et vert */
+    transition: 0.3s;
+}
+
+.mini-portail::before {
+    content: "";
+    position: absolute;
+    top: -15%; left: -15%; width: 130%; height: 130%;
+    background-image: url('../../image/Teleport.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    z-index: 2;
+    animation: spinPortal 15s linear infinite reverse; /* Tourne doucement et à l'envers */
+    filter: hue-rotate(90deg) brightness(1.2) saturate(0.8); /* Portail verdoyant */
+}
+
+@keyframes spinPortal {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+/* Accélération de la rotation au survol */
+.portal-back:hover .mini-portail::before {
+    animation-duration: 2s;
+}
+
+/* --- PRÉSENTATION DU PERSONNAGE --- */
+.container {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.profile-section {
+    display: flex;
+    max-width: 1000px;
+    gap: 50px;
+    align-items: center;
+    background: rgba(0, 0, 0, 0.2); /* Moins opaque, plus de lumière */
+    padding: 40px;
+    border-radius: 20px;
+    border: 1px solid var(--accent-color);
+    backdrop-filter: blur(5px);
+    box-shadow: 0 0 30px rgba(113, 207, 113, 0.2);
+}
+
+/* --- IMAGE DE LUCIE ELF (Lumière filtrée) --- */
+.main-img {
+    width: 350px;
+    border-radius: 15px;
+    box-shadow: 0 0 40px var(--glow-color);
+    border: 2px solid var(--accent-color);
+    filter: sepia(0.2) saturate(1.5) brightness(1.1); /* Teintes douces et lumineuses */
+    transform: scale(1.02);
+    transition: transform 0.5s ease;
+}
+
+/* --- TEXTES ET TITRES --- */
+.info-card h1 {
+    font-size: 3rem;
+    margin-top: 0;
+    color: var(--accent-color);
+    text-shadow: 0 0 15px var(--glow-color);
+    letter-spacing: 2px;
+}
+
+.description {
+    line-height: 1.8;
+    font-size: 1.1rem;
+    color: #d1ffe0;
+    font-family: sans-serif; /* Plus classique et lisible pour l'histoire */
+    font-weight: 300;
+}
+
+.stats-box {
+    margin-top: 30px;
+    padding: 20px;
+    background: rgba(0, 50, 0, 0.4);
+    border-left: 3px solid var(--accent-color);
+    box-shadow: -10px 0 20px rgba(113, 207, 113, 0.1);
+}
+
+.stats-box h3 { 
+    margin-top: 0; 
+    color: var(--accent-color); 
+    text-transform: uppercase;
+    font-size: 1rem;
+}
+
+.stats-box ul { list-style: none; padding: 0; }
+.stats-box li { 
+    margin: 12px 0; 
+    color: #eee; 
+    font-size: 0.9rem;
+    transition: 0.3s;
+}
+
+.stats-box li:hover {
+    transform: translateX(5px); /* Petite poussée au survol */
+    color: var(--accent-color);
+    text-shadow: 0 0 8px var(--glow-color);
+}
+
+/* --- SYSTÈME DE CHUTE DE FEUILLES VERTES --- */
+.leaf {
+    position: fixed;
+    top: -20px; /* Partent du haut, hors écran */
+    background: #71cf71; /* Vert Elf */
+    border-radius: 50% 0 50% 0;
+    z-index: 1; /* Derrière le cadre de texte mais devant le fond */
+    pointer-events: none;
+    opacity: 0;
+    animation: leafFall 12s linear infinite;
+}
+
+/* Tailles progressives demandées */
+.leaf-1 { width: 12px;  height: 12px;  left: 15%; animation-delay: 0s; }
+.leaf-2 { width: 14px;  height: 13px;  left: 35%; animation-delay: 2s; }
+.leaf-3 { width: 16px;  height: 14px;  left: 55%; animation-delay: 5s; }
+.leaf-4 { width: 18px;  height: 15px;  left: 75%; animation-delay: 1s; }
+.leaf-5 { width: 20px; height: 17px;  left: 90%; animation-delay: 7s; }
+
+@keyframes leafFall {
+    0% {
+        top: -20px;
+        transform: translateX(0) rotate(0deg);
+        opacity: 0;
+    }
+    10% {
+        opacity: 0.8;
+    }
+    /* Effet de balancement pendant la chute */
+    25% { transform: translateX(30px) rotate(45deg); }
+    50% { transform: translateX(-30px) rotate(90deg); }
+    75% { transform: translateX(30px) rotate(135deg); }
+    100% {
+        top: 110vh; /* Arrivent en bas de l'écran */
+        transform: translateX(-30px) rotate(180deg);
+        opacity: 0;
+    }
+}

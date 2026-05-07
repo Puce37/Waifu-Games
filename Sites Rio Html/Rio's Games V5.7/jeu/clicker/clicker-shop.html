@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <title>Clicker Boutique</title>
+  <link rel="stylesheet" href="../point.css" />
+  <style>
+    body {
+      font-family: 'Orbitron', sans-serif;
+      background: radial-gradient(circle at center, #0a0a0a, #000000 80%);
+      color: #00f0ff;
+      margin: 0;
+      padding: 0 20px;
+      text-align: center;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: center;
+      overflow: hidden;
+      box-sizing: border-box;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background:
+        repeating-linear-gradient(45deg, rgba(0, 240, 255, 0.05) 2px, transparent 10px),
+        repeating-linear-gradient(-45deg, rgba(0, 240, 255, 0.05) 2px, transparent 10px);
+      z-index: 0;
+      pointer-events: none;
+      mix-blend-mode: screen;
+    }
+
+    h1 {
+      font-weight: 900;
+      font-size: 3rem;
+      letter-spacing: 0.15em;
+      color: #00f0ff;
+      text-transform: uppercase;
+      text-shadow: 0 0 5px #00f0ff, 0 0 10px #00f0ff, 0 0 20px #00e0ff, 0 0 30px #00d0ff, 0 0 40px #00c0ff;
+      margin: 40px 0 20px;
+    }
+
+    #clicksDisplay {
+      font-size: 1.8rem;
+      margin-bottom: 30px;
+    }
+
+    .skin-container,
+    .shop-container,
+    .multiplier-container {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 20px;
+      margin-bottom: 40px;
+    }
+
+    .shop-item {
+      background-color: #0d0d0d;
+      padding: 20px;
+      border: 2px solid #00f0ff;
+      border-radius: 12px;
+      width: 260px;
+      box-shadow: 0 0 10px #00f0ff55;
+    }
+
+    .shop-item p {
+      margin: 10px 0;
+      font-size: 1.2rem;
+    }
+
+    .shop-item button {
+      padding: 10px 20px;
+      font-size: 1.1rem;
+      background: transparent;
+      border: 2px solid #00f0ff;
+      color: #00f0ff;
+      border-radius: 10px;
+      cursor: pointer;
+      box-shadow: 0 0 12px #00f0ff;
+      transition: 0.2s ease;
+    }
+
+    .shop-item button:hover {
+      background: #00f0ff;
+      color: black;
+    }
+
+    button {
+      padding: 15px 30px;
+      font-size: 18px;
+      font-weight: bold;
+      color: #00f0ff;
+      background: linear-gradient(145deg, #0a2a5f, #003080);
+      border: 2px solid #00f0ff;
+      border-radius: 12px;
+      cursor: pointer;
+      box-shadow: 0 0 6px #00bfff, inset 0 0 8px #0077cc;
+      margin: 10px;
+      transition: all 0.2s ease-in-out;
+    }
+
+    button:hover {
+      background: linear-gradient(145deg, #005eff, #00ffff);
+      transform: scale(1.05);
+      box-shadow: 0 0 5px #00f0ff, 0 0 10px #00f0ff, 0 0 20px #00e0ff, 0 0 30px #00d0ff, 0 0 40px #00c0ff;
+    }
+  </style>
+</head>
+<body>
+  <h1>🛒 Boutique Clicker</h1>
+  <div id="clicksDisplay">Clicks : 0</div>
+
+  <!-- SKINS SECTION -->
+  <div class="skin-container">
+    <div class="shop-item">
+      <p>Maid (10000 clicks)</p>
+      <img src="./img/click2.png" width="100" /><br/>
+      <button onclick="buyImage('./img/click2.png', 10000)">Acheter & Équiper</button>
+    </div>
+    <div class="shop-item">
+      <p>Bunny (50000 clicks)</p>
+      <img src="./img/click3.png" width="100" /><br/>
+      <button onclick="buyImage('./img/click3.png', 50000)">Acheter & Équiper</button>
+    </div>
+    <div class="shop-item">
+      <p>Bunny hot (100000 clicks)</p>
+      <img src="./img/click4.png" width="100" /><br/>
+      <button onclick="buyImage('./img/click4.png', 100000)">Acheter & Équiper</button>
+    </div>
+  </div>
+
+  <!-- EXCHANGE SECTION -->
+  <div class="shop-container">
+    <div class="shop-item">
+      <p>20 clicks → 10 points</p>
+      <button onclick="exchange(20, 10)">Échanger</button>
+    </div>
+    <div class="shop-item">
+      <p>100 clicks → 50 points</p>
+      <button onclick="exchange(100, 50)">Échanger</button>
+    </div>
+    <div class="shop-item">
+      <p>500 clicks → 250 points</p>
+      <button onclick="exchange(500, 250)">Échanger</button>
+    </div>
+    <div class="shop-item">
+      <p>1000 clicks → 500 points</p>
+      <button onclick="exchange(1000, 500)">Échanger</button>
+    </div>
+  </div>
+
+  <!-- MULTIPLIER SECTION -->
+  <div class="multiplier-container">
+    <div class="shop-item">
+      <p>Multiplicateur x2 (1000 clicks)</p>
+      <button onclick="buyMultiplier(2, 1000)">Acheter</button>
+    </div>
+    <div class="shop-item">
+      <p>Multiplicateur x5 (5000 clicks)</p>
+      <button onclick="buyMultiplier(5, 5000)">Acheter</button>
+    </div>
+    <div class="shop-item">
+      <p>Multiplicateur x10 (15000 clicks)</p>
+      <button onclick="buyMultiplier(10, 15000)">Acheter</button>
+    </div>
+  </div>
+
+  <!-- NAVIGATION -->
+  <div>
+    <button onclick="window.location.href='clicker.html'">⬅ Retour au Clicker</button>
+    <button onclick="window.location.href='../choix_jeu.html'">🏠 Menu</button>
+  </div>
+
+  <script src="../point.js"></script>
+  <script>
+  function addPoints(amount) {
+    let currentPoints = parseInt(localStorage.getItem("points")) || 0;
+    currentPoints += amount;
+    localStorage.setItem("points", currentPoints);
+  }
+</script>
+
+  <script>
+    let clicks = parseInt(localStorage.getItem("clicks")) || 0;
+    let multiplier = parseInt(localStorage.getItem("clickMultiplier")) || 1;
+
+    function updateClicksDisplay() {
+      document.getElementById("clicksDisplay").textContent = `Clicks : ${clicks} (x${multiplier})`;
+    }
+
+    function exchange(clickCost, pointGain) {
+      if (clicks >= clickCost) {
+        clicks -= clickCost;
+        localStorage.setItem("clicks", clicks);
+        addPoints(pointGain);
+        updateClicksDisplay();
+      } else {
+        alert("Tu n'as pas assez de clicks !");
+      }
+    }
+
+    function buyImage(path, cost) {
+      if (clicks >= cost) {
+        clicks -= cost;
+        localStorage.setItem("clicks", clicks);
+        localStorage.setItem("selectedClickerImage", path);
+        alert("Image achetée et équipée !");
+        updateClicksDisplay();
+      } else {
+        alert("Pas assez de clicks !");
+      }
+    }
+
+    function buyMultiplier(mult, cost) {
+      if (clicks >= cost) {
+        clicks -= cost;
+        multiplier += mult;
+        localStorage.setItem("clicks", clicks);
+        localStorage.setItem("clickMultiplier", multiplier);
+        alert(`Multiplicateur x${mult} activé !`);
+        updateClicksDisplay();
+      } else {
+        alert("Pas assez de clicks !");
+      }
+    }
+
+    window.addEventListener("load", updateClicksDisplay);
+  </script>
+</body>
+</html>

@@ -1,0 +1,1146 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Mini TCG Rio - Amélioration V15 (Pop-ups & Bannières)</title>
+<style>
+/* --- ESTHÉTIQUE GÉNÉRALE (Inchangé) --- */
+body {
+    margin:0;
+    font-family: 'Segoe UI', sans-serif;
+    background: #001020;
+    color:#cce8ff;
+    overflow:hidden;
+    user-select: none;
+	touch-action: none;
+}
+
+/* --- Barre d'état du joueur (VIE + BOUCLIER + ÉNERGIE) (Inchangé) --- */
+#player-status {
+    position: absolute;
+    top: 30px;
+    left: 30px;
+    padding: 10px 15px;
+    border: 2px solid #34baff;
+    border-radius: 8px;
+    background: rgba(0, 0, 0, 0.6);
+    box-shadow: 0 0 15px rgba(52, 186, 255, 0.8);
+    z-index: 100;
+}
+
+/* Conteneurs pour PV, Bouclier, Énergie (Styles unifiés) */
+.hp-bar-container, .shield-bar-container, .energy-bar-container {
+    width: 150px;
+    height: 15px;
+    border-radius: 3px;
+    margin-bottom: 5px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    overflow: hidden;
+    position: relative;
+}
+
+/* Remplissage des barres (Vie, Bouclier, Énergie) */
+.hp-bar-fill, .shield-bar-fill, .energy-bar-fill {
+    height: 100%;
+    transition: width 0.5s ease-out;
+}
+/* Vie du joueur en ROUGE */
+.hp-bar-fill {
+    background: linear-gradient(to right, #cc0000, #ff5555);
+    width: 100%; 
+}
+/* Bouclier du joueur en BLEU */
+.shield-bar-fill {
+    background: linear-gradient(to right, #0044ff, #33ccff);
+    width: 0%; 
+}
+/* Énergie du joueur en VERT */
+.energy-bar-fill {
+    background: linear-gradient(to right, #009900, #00ff00);
+    width: 100%; 
+}
+
+/* Texte des barres (chiffres) */
+.bar-text {
+    position: absolute;
+    width: 100%;
+    text-align: center;
+    line-height: 15px;
+    font-size: 10px;
+    color: white;
+    font-weight: bold;
+    text-shadow: 0 0 3px black;
+    z-index: 2; /* LE TEXTE DOIT ÊTRE AU-DESSUS DE TOUT DANS SON CONTENEUR */
+}
+
+
+/* --- BOUTON TOUR (Inchangé) --- */
+#end-turn-btn {
+    position: absolute;
+    top: 30px;
+    right: 30px;
+    padding: 10px 20px;
+    background: linear-gradient(to bottom, #ff5757, #cc0000);
+    color: white;
+    border: 2px solid #ffcccc;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    z-index: 100;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+#end-turn-btn:hover {
+    background: linear-gradient(to bottom, #ff7070, #ee1111);
+    transform: scale(1.05);
+    box-shadow: 0 0 15px rgba(255, 0, 0, 0.7);
+}
+
+/* --- BOSS & BARRE DE VIE (Inchangé) --- */
+#boss-container {
+    position: absolute;
+    top: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 300px;
+    text-align: center;
+    z-index: 90;
+}
+#boss-img {
+    width: 80px;
+    height: 80px;
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+    margin: 0 auto 10px;
+    border-radius: 50%;
+    border: 3px solid gold;
+    box-shadow: 0 0 15px gold;
+}
+#boss-hp-bar {
+    width: 100%;
+    height: 25px;
+    background: #000; 
+    border: 2px solid #9933ff;
+    border-radius: 5px;
+    overflow: hidden;
+    position: relative;
+    box-shadow: 0 0 10px rgba(153, 51, 255, 0.7);
+}
+#boss-hp-fill {
+    height: 100%;
+    width: 100%;
+    background: linear-gradient(to right, #9933ff, #cc66ff); 
+    transition: width 0.5s ease-out;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+#boss-hp-text {
+    position: absolute;
+    width: 100%;
+    text-align: center;
+    line-height: 25px;
+    color: white;
+    font-weight: bold;
+    text-shadow: 0 0 3px black;
+    z-index: 2;
+}
+/* --- FIN BOSS --- */
+
+/* --- DECK ET DÉFAUSSE --- */
+#deck {
+    position:absolute;
+    bottom:30px;
+    right:30px;
+    width:120px;
+    height:170px;
+    perspective: 800px;
+    z-index: 50;
+    border-radius:10px;
+    border: 2px solid #34baff;
+    cursor:pointer;
+}
+
+#discard-pile {
+    position: absolute;
+    bottom: 30px;
+    left: 30px; 
+    width: 180px; 
+    height: 250px; 
+    background: rgba(180, 0, 0, 0.7);
+    border: 3px solid #ff7777;
+    border-radius: 15px;
+    box-shadow: 0 0 20px rgba(255, 0, 0, 0.9);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 14px;
+    font-weight: bold;
+    color: white;
+    overflow: visible; 
+    z-index: 40; 
+}
+
+#discard-pile > span {
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    font-size: 12px;
+    background: rgba(0,0,0,0.5);
+    padding: 2px 5px;
+    border-radius: 5px;
+    z-index: 100;
+}
+
+#deck img {
+    width:100%; height:100%;
+    border-radius:10px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+    transition:0.3s;
+    border: 2px solid #fff;
+}
+#deck:hover img { transform:scale(1.05) rotateY(-10deg); }
+
+/* --- LE RESTE EST INCHANGÉ --- */
+#field {
+    position:absolute;
+    top:200px; 
+    left:50%;
+    transform:translateX(-50%);
+    display:flex;
+    gap:15px;
+}
+.slot {
+    width:130px;
+    height:190px;
+    border-radius:12px;
+    border:2px dashed #34baff;
+    background:rgba(0,60,120,0.2);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    transition: background 0.3s, box-shadow 0.3s;
+}
+.slot.highlight { 
+    background:rgba(52, 186, 255, 0.3); 
+    box-shadow: 0 0 15px #34baff; 
+    border-style: solid;
+}
+
+#hand {
+    position:absolute;
+    bottom:0px;
+    left:50%;
+    transform:translateX(-50%);
+    width:800px;
+    height:250px;
+    pointer-events:none; 
+}
+
+.card {
+    width:120px;
+    height:170px;
+    border-radius:10px;
+    position:absolute;
+    cursor:grab;
+    transform-style: preserve-3d;
+    transition: transform 0.4s, left 0.4s, top 0.4s, opacity 0.4s; 
+    pointer-events: auto;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+	touch-action: none;
+}
+.card:active { cursor: grabbing; }
+.card .front, .card .back {
+    position:absolute;
+    width:100%; height:100%;
+    border-radius:10px;
+    backface-visibility: hidden;
+    overflow: hidden;
+    background-color: #0d1b2a;
+}
+.card .front {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background-size: cover;
+    background-position: center;
+    border: 2px solid #4bd3ff;
+}
+.card .back {
+    transform: rotateY(180deg);
+    background: url('card-back.png') center/cover no-repeat;
+    border: 2px solid #fff;
+}
+.card.flipped { transform: rotateY(180deg); }
+.card-title {
+    text-align:center;
+    padding-top: 8px;
+    color:#fff;
+    font-weight:bold;
+    text-shadow: 0 0 4px #000, 0 0 2px #000;
+    background: linear-gradient(to bottom, rgba(0,0,0,0.7), transparent);
+    padding-bottom: 10px;
+}
+.card-stats {
+    display:flex;
+    justify-content:space-around;
+    align-items: center;
+    padding:5px 0;
+    height: 35px;
+    border-top: 1px solid rgba(255,255,255,0.3);
+    background-size: cover;
+    background-color: rgba(0,0,0,0.6);
+}
+.stat { 
+    width:30px; height:30px; 
+    position:relative; 
+    display: flex; 
+    justify-content: center; 
+    align-items: center;
+}
+.stat img { width:100%; height:100%; position: absolute; left: 0; top: 0; }
+.stat span {
+    z-index: 2;
+    color:white;
+    font-weight:bold;
+    font-size: 14px;
+    text-shadow:0 0 3px black, 0 0 5px black;
+}
+
+/* --- NOUVEAU: STYLES DES POP-UPS MODAUX --- */
+#modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(5px);
+    display: none; /* Caché par défaut */
+    justify-content: center;
+    align-items: center;
+    z-index: 10000;
+}
+
+#modal-content {
+    background: #0d1b2a;
+    border: 3px solid #34baff;
+    border-radius: 15px;
+    padding: 30px;
+    width: 400px;
+    text-align: center;
+    box-shadow: 0 0 30px rgba(52, 186, 255, 0.7);
+    animation: fadeIn 0.3s ease-out;
+}
+
+#modal-title {
+    font-size: 24px;
+    font-weight: bold;
+    color: #fff;
+    margin-bottom: 15px;
+}
+
+#modal-message {
+    font-size: 16px;
+    color: #cce8ff;
+    margin-bottom: 25px;
+}
+
+#modal-close-btn {
+    padding: 10px 25px;
+    background: linear-gradient(to bottom, #34baff, #0044ff);
+    color: white;
+    border: 1px solid #cce8ff;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: transform 0.1s, box-shadow 0.1s;
+}
+#modal-close-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 10px #34baff;
+}
+/* --- FIN POP-UPS MODAUX --- */
+
+
+/* --- NOUVEAU: STYLES DES BANNIÈRES DE TOUR --- */
+#turn-banner {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 20px 40px;
+    border-radius: 10px;
+    font-size: 36px;
+    font-weight: 900;
+    color: white;
+    opacity: 0;
+    transition: opacity 0.5s, transform 0.5s;
+    text-shadow: 0 0 10px rgba(0, 0, 0, 0.8);
+    z-index: 9000;
+    pointer-events: none;
+}
+
+/* Bannière JOUEUR (Bleu) */
+.player-turn-banner {
+    background: linear-gradient(90deg, #0044ff, #34baff);
+    border: 4px solid #cce8ff;
+    box-shadow: 0 0 25px rgba(52, 186, 255, 1);
+}
+
+/* Bannière ENNEMI (Rouge) */
+.enemy-turn-banner {
+    background: linear-gradient(90deg, #cc0000, #ff5757);
+    border: 4px solid #ffcccc;
+    box-shadow: 0 0 25px rgba(255, 0, 0, 1);
+}
+
+.banner-show {
+    opacity: 1 !important;
+    transform: translate(-50%, -50%) scale(1) !important;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: scale(0.9); }
+    to { opacity: 1; transform: scale(1); }
+}
+</style>
+</head>
+<body>
+
+<div id="player-status">
+    <div style="color: #ff5555; font-weight: bold; font-size: 14px;">PV Joueur:</div>
+    <div class="hp-bar-container">
+        <div id="player-hp-text" class="bar-text"></div>
+        <div id="player-hp-fill" class="hp-bar-fill"></div>
+    </div>
+    
+    <div style="color: #33ccff; font-weight: bold; font-size: 14px;">Bouclier:</div>
+    <div class="shield-bar-container">
+        <div id="player-shield-text" class="bar-text"></div>
+        <div id="player-shield-fill" class="shield-bar-fill"></div>
+    </div>
+
+    <div style="color: #00ff00; font-weight: bold; font-size: 14px;">Énergie:</div>
+    <div class="energy-bar-container">
+        <div id="player-energy-text" class="bar-text"></div>
+        <div id="player-energy-fill" class="energy-bar-fill"></div>
+    </div>
+</div>
+
+<div id="boss-container">
+    <div id="boss-img"></div>
+    <div id="boss-hp-bar">
+        <div id="boss-hp-fill"></div>
+        <div id="boss-hp-text"></div>
+    </div>
+</div>
+
+<button id="end-turn-btn">Fin de Tour</button>
+
+
+<div id="deck">
+    <img src="card-back.png" alt="Deck">
+</div>
+
+<div id="discard-pile">
+    <span id="discard-count">Défausse (0)</span>
+</div>
+
+
+<div id="field">
+    <div class="slot"></div>
+    <div class="slot"></div>
+    <div class="slot"></div>
+    <div class="slot"></div>
+    <div class="slot"></div>
+</div>
+
+<div id="hand"></div>
+
+<!-- NOUVELLE STRUCTURE MODALE -->
+<div id="modal-overlay">
+    <div id="modal-content">
+        <div id="modal-title">Notification</div>
+        <div id="modal-message">Ceci est un message.</div>
+        <button id="modal-close-btn">OK</button>
+    </div>
+</div>
+
+<!-- NOUVELLE BANNIÈRE DE TOUR -->
+<div id="turn-banner">Votre Tour</div>
+
+<script>
+// =================================================================
+// IMPORTANT : Veuillez vous assurer d'avoir ces fichiers images :
+// attack.png (pour l'attaque/dégâts), energy-pot.png, health-pot.png.
+// =================================================================
+
+// --- DONNÉES DE JEU (Inchangées) ---
+const iconAttack = "attack.png";
+const iconEnergy = "energy.png"; 
+const iconShield = "shield.png"; 
+const iconSpecial = "special.png"; 
+const iconEnergyPot = "energy-pot.png";
+const iconHealthPot = "health-pot.png";
+
+let deckData = [
+    {type:"UNIT", name:"Space Rio", atk:4, energy:2, shield:0, special:1, energy_pot:0, health_pot:0, front:"card1-front.png", statsBg:"stats-bg1.png"},
+    {type:"UNIT", name:"Drone Amas", atk:2, energy:1, shield:0, special:3, energy_pot:0, health_pot:0, front:"card2-front.png", statsBg:"stats-bg2.png"},
+    {type:"UNIT", name:"Laser", atk:5, energy:3, shield:0, special:0, energy_pot:0, health_pot:0, front:"card3-front.png", statsBg:"stats-bg3.png"}, 
+    {type:"SKILL", name:"Bouclier", atk:0, energy:2, shield:5, special:0, energy_pot:0, health_pot:0, front:"card4-front.png", statsBg:"stats-bg4.png"}, 
+    {type:"SKILL", name:"Recharge Rapide", atk:0, energy:0, shield:0, special:0, energy_pot:3, health_pot:0, front:"card5-front.png", statsBg:"stats-bg1.png"}, 
+    {type:"SKILL", name:"Régénération", atk:0, energy:0, shield:0, special:0, energy_pot:0, health_pot:5, front:"card6-front.png", statsBg:"stats-bg2.png"},
+    {type:"SKILL", name:"Super Shield", atk:0, energy:3, shield:10, special:0, energy_pot:0, health_pot:0, front:"card4-front.png", statsBg:"stats-bg4.png"}
+];
+
+// Double le deck pour avoir plus de cartes au début
+deckData = deckData.concat(JSON.parse(JSON.stringify(deckData))); 
+
+let discardData = []; 
+
+let handDiv = document.getElementById("hand");
+let slots = document.querySelectorAll(".slot");
+let discardCountDisplay = document.getElementById("discard-count");
+let discardPileDiv = document.getElementById("discard-pile"); 
+
+// --- ÉTAT DU BOSS (Inchangées) ---
+let bossState = {
+    name: "Rio Cyber",
+    maxHp: 50, 
+    currentHp: 50, 
+    imgUrl: "boss-image.png" 
+};
+
+// --- ÉTAT DU JOUEUR (HP + BOUCLIER + ÉNERGIE) ---
+let gameState = {
+    maxEnergy: 3,
+    currentEnergy: 3,
+    maxHandSize: 7, 
+    maxHp: 20, 
+    currentHp: 20, 
+    currentShield: 0,
+};
+
+let endTurnBtn = document.getElementById("end-turn-btn");
+
+// Éléments du Joueur
+let playerHpFill = document.getElementById("player-hp-fill");
+let playerHpText = document.getElementById("player-hp-text");
+let playerShieldFill = document.getElementById("player-shield-fill");
+let playerShieldText = document.getElementById("player-shield-text");
+
+// Éléments ÉNERGIE
+let playerEnergyFill = document.getElementById("player-energy-fill");
+let playerEnergyText = document.getElementById("player-energy-text");
+
+// Éléments du Boss
+let bossImg = document.getElementById("boss-img");
+let bossHpFill = document.getElementById("boss-hp-fill");
+let bossHpText = document.getElementById("boss-hp-text");
+
+// --- NOUVEAU: Éléments Modaux et Bannière ---
+const modalOverlay = document.getElementById("modal-overlay");
+const modalTitle = document.getElementById("modal-title");
+const modalMessage = document.getElementById("modal-message");
+const modalCloseBtn = document.getElementById("modal-close-btn");
+const turnBanner = document.getElementById("turn-banner");
+
+// --- NOUVEAU: FONCTION POP-UP STYLISÉ ---
+function showMessage(title, message, callback = null) {
+    modalTitle.textContent = title;
+    modalMessage.innerHTML = message;
+    modalOverlay.style.display = 'flex';
+    
+    // Fermeture du pop-up et appel du callback
+    const closeHandler = () => {
+        modalOverlay.style.display = 'none';
+        modalCloseBtn.removeEventListener('click', closeHandler);
+        if (callback) {
+            callback();
+        }
+    };
+
+    modalCloseBtn.addEventListener('click', closeHandler);
+}
+
+// --- NOUVEAU: FONCTION BANNIÈRE DE TOUR ---
+function showTurnBanner(type) {
+    let text = "";
+    let cssClass = "";
+    
+    if (type === 'player') {
+        text = "VOTRE TOUR";
+        cssClass = "player-turn-banner";
+        // Après le tour du boss, on pioche
+        // === MODIFICATION CLÉ ICI : LA PIOCHE EST COMMENTÉE ===
+        // drawCard(gameState.maxHandSize - handDiv.children.length); // Ligne commentée pour désactiver la pioche auto
+    } else if (type === 'enemy') {
+        text = "TOUR DE L'ENNEMI";
+        cssClass = "enemy-turn-banner";
+    }
+
+    turnBanner.textContent = text;
+    turnBanner.className = ''; 
+    turnBanner.classList.add(cssClass);
+
+    // Affichage
+    setTimeout(() => {
+        turnBanner.classList.add('banner-show');
+    }, 50);
+
+    // Disparition
+    setTimeout(() => {
+        turnBanner.classList.remove('banner-show');
+    }, 1500);
+}
+
+
+// --- FONCTION : MISE À JOUR DU COMPTEUR DE DÉFAUSSE ---
+function updateDiscardCount() {
+    discardCountDisplay.textContent = `Défausse (${discardData.length})`;
+}
+
+// --- FONCTION : MISE À JOUR DU JOUEUR (Affichage des 3 barres) ---
+function updatePlayerDisplay() {
+    // 1. PV (ROUGE)
+    let hpPercent = (gameState.currentHp / gameState.maxHp) * 100;
+    if (gameState.currentHp < 0) { gameState.currentHp = 0; hpPercent = 0; }
+    playerHpFill.style.width = `${hpPercent}%`;
+    playerHpText.textContent = `${gameState.currentHp} / ${gameState.maxHp}`;
+    if (gameState.currentHp <= 0) {
+        showMessage("DÉFAITE", "Vos PV sont à zéro. Le Boss vous a vaincu !");
+        endTurnBtn.disabled = true;
+    }
+
+    // 2. Bouclier (BLEU)
+    let shieldPercent = (gameState.currentShield / gameState.maxHp) * 100; 
+    playerShieldFill.style.width = `${shieldPercent}%`;
+    playerShieldText.textContent = `${gameState.currentShield}`;
+
+    // 3. Énergie (VERT)
+    updateEnergyDisplay();
+}
+
+function updateEnergyDisplay() {
+    let energyPercent = (gameState.currentEnergy / gameState.maxEnergy) * 100;
+    playerEnergyFill.style.width = `${energyPercent}%`;
+    playerEnergyText.textContent = `${gameState.currentEnergy} / ${gameState.maxEnergy}`;
+}
+
+
+function updateBossDisplay() {
+    bossImg.style.backgroundImage = `url('${bossState.imgUrl}')`;
+    let percent = (bossState.currentHp / bossState.maxHp) * 100;
+    if (bossState.currentHp < 0) { bossState.currentHp = 0; percent = 0; }
+    bossHpFill.style.width = `${percent}%`;
+    bossHpText.textContent = `${bossState.currentHp} / ${bossState.maxHp}`;
+    
+    if (bossState.currentHp <= 0) {
+        showMessage("VICTOIRE !", "FÉLICITATIONS ! Le Boss est vaincu !");
+        endTurnBtn.disabled = true;
+    }
+}
+
+// Initialisation des affichages
+updateEnergyDisplay();
+updateBossDisplay(); 
+updatePlayerDisplay();
+updateDiscardCount();
+
+
+// --- LOGIQUE ANIMATION DE DÉFAUSSE ---
+let lastRandomOffsetX = 0;
+let lastRandomOffsetY = 0;
+let lastRandomRot = 0;
+
+function discardCard(cardElement, delay = 0) {
+    let targetRect = discardPileDiv.getBoundingClientRect();
+    let cardRect = cardElement.getBoundingClientRect();
+    
+    cardElement.style.transition = "transform 0.5s ease-in, left 0.5s ease-in, top 0.5s ease-in, opacity 0.5s ease-in";
+    document.body.appendChild(cardElement);
+    cardElement.style.position = "fixed";
+    cardElement.style.left = cardRect.left + "px";
+    cardElement.style.top = cardRect.top + "px";
+    cardElement.style.zIndex = 9999;
+    
+    let targetX = targetRect.left + (targetRect.width / 2) - (cardRect.width / 2);
+    let targetY = targetRect.top + (targetRect.height / 2) - (cardRect.height / 2);
+    
+    let moveX = targetX - cardRect.left;
+    let moveY = targetY - cardRect.top;
+
+    let randomOffsetX = Math.floor(Math.random() * 80) - 40; 
+    let randomOffsetY = Math.floor(Math.random() * 80) - 40;
+    let randomRot = Math.floor(Math.random() * 40) - 20; 
+    
+    setTimeout(() => {
+        cardElement.style.transform = `
+            translateX(${moveX + randomOffsetX}px) 
+            translateY(${moveY + randomOffsetY}px) 
+            scale(0.7) 
+            rotate(${randomRot}deg) 
+            rotateY(180deg)`;
+        cardElement.style.opacity = 1; 
+        
+        lastRandomOffsetX = randomOffsetX;
+        lastRandomOffsetY = randomOffsetY;
+        lastRandomRot = randomRot;
+
+    }, delay);
+
+    setTimeout(() => {
+        cardElement.style.transition = "none";
+        cardElement.remove();
+        discardPileDiv.appendChild(cardElement);
+        
+        cardElement.style.position = "absolute";
+        
+        let cardSize = { w: 120 * 0.7, h: 170 * 0.7 }; 
+        let discardPileCenter = { x: discardPileDiv.clientWidth / 2, y: discardPileDiv.clientHeight / 2 };
+
+        cardElement.style.left = `${discardPileCenter.x - (cardSize.w / 2) + lastRandomOffsetX}px`;
+        cardElement.style.top = `${discardPileCenter.y - (cardSize.h / 2) + lastRandomOffsetY}px`;
+        
+        cardElement.style.zIndex = discardData.length + 10; 
+        
+        cardElement.style.transform = `scale(0.7) rotate(${lastRandomRot}deg) rotateY(180deg)`;
+        cardElement.style.opacity = 1;
+        
+        updateDiscardCount();
+    }, delay + 500); 
+}
+
+// --- LOGIQUE TOUR ENNEMI ---
+function enemyTurn() {
+    showTurnBanner('enemy');
+    endTurnBtn.disabled = true; // Désactiver le bouton pendant le tour ennemi
+    
+    // Délai pour laisser la bannière visible
+    setTimeout(() => {
+        
+        // 1. Attaque de base de l'ennemi
+        const enemyAttack = 5; 
+        let incomingDamage = enemyAttack;
+        let finalDamage = 0;
+        
+        // 2. Réduction par le bouclier
+        if (gameState.currentShield >= incomingDamage) {
+            gameState.currentShield -= incomingDamage;
+            incomingDamage = 0;
+            finalDamage = 0;
+        } else {
+            finalDamage = incomingDamage - gameState.currentShield;
+            gameState.currentShield = 0;
+        }
+        
+        // 3. Application des dégâts
+        gameState.currentHp -= finalDamage;
+        updatePlayerDisplay();
+
+        let message = `Le **${bossState.name}** attaque pour ${enemyAttack} 💥.\n`;
+        message += `Votre Bouclier 🛡️ a absorbé les dégâts.\n`;
+
+        if (finalDamage > 0) {
+            message = `Le **${bossState.name}** attaque pour ${enemyAttack} 💥.\n`;
+            message += `Bouclier 🛡️ réduit à 0.\n`;
+            message += `Vous subissez **${finalDamage}** dégâts (PV restants: ${gameState.currentHp}).`;
+        }
+
+        showMessage("Attaque Ennemi", message, () => {
+            // Après l'attaque de l'ennemi, on passe au tour du joueur
+            endTurnBtn.disabled = false;
+            showTurnBanner('player');
+        });
+        
+    }, 1600); 
+}
+
+
+// --- LOGIQUE FIN DE TOUR JOUEUR ---
+function endTurn() {
+    let totalAttack = 0;
+    let unitsDiscarded = [];
+    let animationDelay = 0; 
+    let unitsOnField = [];
+    
+    // 1. Détermination des unités et des cartes à défausser
+    slots.forEach(slot => {
+        if (slot.hasChildNodes()) {
+            unitsOnField.push(slot.firstChild);
+        }
+    });
+
+    // Cartes en main à défausser
+    let cardsInHand = Array.from(handDiv.children);
+    let cardsToDiscard = unitsOnField.concat(cardsInHand);
+
+    // Désactiver le bouton et l'interaction pendant la phase d'attaque/défausse
+    endTurnBtn.disabled = true; 
+    
+    // 2. Déclenchement des attaques et des animations
+    cardsToDiscard.forEach((cardElement, index) => {
+        animationDelay = index * 80; 
+        
+        // Stocker les données de la carte dans la pile de défausse
+        discardData.push(cardElement.originalData);
+        
+        if (unitsOnField.includes(cardElement)) {
+            // C'est une unité : attaquer avant de défausser
+            let atk = parseInt(cardElement.dataset.cardAttack) || 0;
+            totalAttack += atk;
+            unitsDiscarded.push(cardElement.dataset.cardName + " (" + atk + " ATK)");
+            // Lancer l'animation
+            discardCard(cardElement, animationDelay);
+
+        } else if (cardsInHand.includes(cardElement)) {
+            // C'est une carte en main : défausse directe
+            discardCard(cardElement, animationDelay);
+        }
+    });
+    
+    // 3. Application des dégâts et réinitialisation de l'énergie (Après l'animation)
+    setTimeout(() => {
+        let message = "Phase de défausse et d'attaque terminée.\n";
+        if (totalAttack > 0) {
+            bossState.currentHp -= totalAttack;
+            updateBossDisplay();
+            message = `Vos unités ont attaqué pour un total de **${totalAttack}** dégâts !`;
+            message += ` (Unités : ${unitsDiscarded.join(', ')})`;
+        } else {
+            message += "Aucune unité sur le terrain n'a attaqué ce tour.";
+        }
+        
+        showMessage("Fin de Tour Joueur", message, () => {
+            // 4. Recharge de l'énergie (Le bouclier n'est PAS réinitialisé)
+            gameState.currentEnergy = gameState.maxEnergy;
+            updatePlayerDisplay(); 
+            
+            // 5. Passer au tour de l'ennemi
+            enemyTurn();
+        });
+        
+    }, cardsToDiscard.length * 80 + 600); 
+    
+    // Vider la main (même si le DOM est géré par l'animation)
+    handDiv.innerHTML = '';
+}
+
+endTurnBtn.addEventListener('click', endTurn);
+
+
+// --- LOGIQUE PIOCHE, CRÉATION DE CARTE, MAIN, DRAG & DROP (Mise à jour pour les messages) ---
+
+function drawCard(count) {
+    if(deckData.length === 0 && discardData.length > 0) {
+        showMessage("Mélange du Deck", "Le deck est vide. Les cartes défaussées sont remélangées dans le deck.");
+        deckData = discardData;
+        discardData = [];
+        updateDiscardCount();
+    }
+    
+    for (let i = 0; i < count; i++) {
+        if(deckData.length === 0) { showMessage("Deck Vide", `Plus de cartes à piocher.`); break; }
+        if(handDiv.children.length >= gameState.maxHandSize) { showMessage("Main Pleine", `Main pleine ! Maximum: ${gameState.maxHandSize}`); break; }
+        
+        // Sélection et suppression aléatoire de la carte
+        let randomIndex = Math.floor(Math.random() * deckData.length);
+        let data = deckData.splice(randomIndex, 1)[0]; 
+        createCard(data);
+    }
+}
+
+document.getElementById("deck").onclick = () => {
+    drawCard(1); // Piocher une seule carte au clic
+};
+
+function createCard(data) {
+    let card = document.createElement("div");
+    card.className = "card flipped"; 
+    
+    card.originalData = data; 
+    
+    card.dataset.type = data.type;
+    card.dataset.cardName = data.name; 
+    card.dataset.cardCost = data.energy;
+    card.dataset.cardAttack = data.atk;
+    card.dataset.cardShield = data.shield;
+    card.dataset.cardEnergyPot = data.energy_pot;
+    card.dataset.cardHealthPot = data.health_pot;
+
+
+    let back = document.createElement("div");
+    back.className = "back";
+    
+    let front = document.createElement("div");
+    front.className = "front";
+    front.style.backgroundImage = `url('${data.front}')`;
+
+    let bgStyle = data.statsBg ? `background-image: url('${data.statsBg}');` : "";
+    
+    let statsHTML = '';
+    
+    if (data.atk > 0) {
+        statsHTML += `<div class="stat"><img src="${iconAttack}"><span>${data.atk}</span></div>`;
+    }
+    
+    if (data.shield > 0) {
+        statsHTML += `<div class="stat"><img src="${iconShield}"><span>${data.shield}</span></div>`;
+    } 
+    
+    if (data.energy_pot > 0) {
+        statsHTML += `<div class="stat"><img src="${iconEnergyPot}"><span>${data.energy_pot}</span></div>`;
+    }
+    
+    if (data.health_pot > 0) {
+        statsHTML += `<div class="stat"><img src="${iconHealthPot}"><span>${data.health_pot}</span></div>`;
+    }
+    
+    if (data.special > 0 && data.atk === 0 && data.shield === 0 && data.energy_pot === 0 && data.health_pot === 0) {
+        statsHTML += `<div class="stat"><img src="${iconSpecial}"><span>${data.special}</span></div>`;
+    }
+    
+    if (data.energy > 0) {
+        statsHTML += `<div class="stat cost-stat"><img src="${iconEnergy}"><span>${data.energy}</span></div>`;
+    }
+
+    front.innerHTML = `
+        <div class="card-title">${data.name}</div>
+        <div class="card-stats" style="${bgStyle}">
+            ${statsHTML}
+        </div>
+    `;
+
+    card.appendChild(front);
+    card.appendChild(back);
+
+    let deckRect = document.getElementById("deck").getBoundingClientRect();
+    document.body.appendChild(card);
+    
+    card.style.left = deckRect.left + "px";
+    card.style.top = deckRect.top + "px";
+    card.style.zIndex = 1000;
+
+    setTimeout(() => {
+        card.style.left = (window.innerWidth / 2 - 60) + "px";
+        card.style.top = (window.innerHeight - 250) + "px";
+        card.style.transform = "scale(1.5) rotateY(0deg)"; 
+        card.className = "card"; 
+    }, 50);
+
+    setTimeout(() => {
+        card.style.transition = "none"; 
+        card.style.transform = "scale(1)";
+        handDiv.appendChild(card); 
+        updateHandLayout();
+        enableDrag(card);
+        
+        requestAnimationFrame(() => {
+            card.style.transition = "transform 0.4s, left 0.4s, top 0.4s";
+        });
+    }, 700);
+}
+
+function updateHandLayout() {
+    const cards = Array.from(handDiv.children);
+    const total = cards.length;
+    const arcAngle = 40; 
+    
+    cards.forEach((card, index) => {
+        card.style.position = "absolute";
+        card.style.top = ""; 
+        card.style.left = "50%";
+        
+        let centerIndex = (total - 1) / 2;
+        let offset = index - centerIndex;
+        let angle = offset * (arcAngle / (total || 1));
+        let indent = Math.abs(offset) * 15; 
+
+        card.style.transform = `translateX(-50%) translateX(${offset * 70}px) translateY(${indent}px) rotate(${angle}deg)`;
+        card.style.zIndex = index + 1;
+    });
+}
+
+function enableDrag(card) {
+    let isDragging = false;
+    let startX, startY;
+
+    card.onpointerdown = (e) => {
+        if (card.parentElement !== handDiv) return; 
+        e.preventDefault(); 
+        isDragging = true;
+        card.setPointerCapture(e.pointerId);
+        card.style.transition = "none"; 
+        
+        let rect = card.getBoundingClientRect();
+        document.body.appendChild(card);
+        card.style.position = "fixed";
+        card.style.left = rect.left + "px";
+        card.style.top = rect.top + "px";
+        card.style.transform = "none";
+        card.style.zIndex = 9999;
+
+        startX = e.clientX - rect.left;
+        startY = e.clientY - rect.top;
+        
+        card.style.transform = "scale(1.1)"; 
+        
+        document.addEventListener('pointermove', onPointerMove);
+        document.addEventListener('pointerup', onPointerUp);
+    };
+
+    const onPointerMove = (e) => {
+        if (!isDragging) return;
+        
+        card.style.left = (e.clientX - startX) + "px";
+        card.style.top = (e.clientY - startY) + "px";
+        
+        checkSlotHover(e.clientX, e.clientY);
+    };
+
+    const onPointerUp = (e) => {
+        if (!isDragging) return;
+
+        isDragging = false;
+        card.style.transition = "transform 0.4s, left 0.4s, top 0.4s"; 
+
+        let dropped = false;
+        
+        let cardCost = parseInt(card.dataset.cardCost) || 0; 
+        let cardTitle = card.dataset.cardName; 
+        let cardAttack = parseInt(card.dataset.cardAttack) || 0;
+        let cardShield = parseInt(card.dataset.cardShield) || 0;
+        let cardEnergyPot = parseInt(card.dataset.cardEnergyPot) || 0; 
+        let cardHealthPot = parseInt(card.dataset.cardHealthPot) || 0; 
+        
+        // --- LOGIQUE DE DÉPÔT ---
+        slots.forEach(slot => {
+            let r = slot.getBoundingClientRect();
+            if (e.clientX > r.left && e.clientX < r.right && e.clientY > r.top && e.clientY < r.bottom) {
+                
+                // 1. VÉRIFICATION DU COÛT
+                if (gameState.currentEnergy < cardCost) {
+                    showMessage("Énergie Insuffisante", `Il manque **${cardCost - gameState.currentEnergy}** ⚡ pour jouer la carte **${cardTitle}** (Coût: ${cardCost}).`);
+                    return; 
+                }
+
+                // 2. PAIEMENT (Si le coût est suffisant)
+                if (cardCost > 0) { 
+                    gameState.currentEnergy -= cardCost;
+                    updatePlayerDisplay(); 
+                }
+
+                if (card.dataset.type === "SKILL") {
+                    
+                    let effectTriggered = false;
+                    let message = `Compétence **${cardTitle}** activée ! \n`;
+                    
+                    // 2.1. Effet Potion d'Énergie (Restaure l'énergie, capée à maxEnergy)
+                    if (cardEnergyPot > 0) {
+                        gameState.currentEnergy = Math.min(gameState.maxEnergy, gameState.currentEnergy + cardEnergyPot);
+                        message += `+**${cardEnergyPot}** Énergie ⚡. `;
+                        effectTriggered = true;
+                    }
+                    
+                    // 2.2. Effet Potion de Santé (Restaure la santé, capée à maxHp)
+                    if (cardHealthPot > 0) {
+                        gameState.currentHp = Math.min(gameState.maxHp, gameState.currentHp + cardHealthPot);
+                        message += `+**${cardHealthPot}** PV ❤️. `;
+                        effectTriggered = true;
+                    }
+                    
+                    // 2.3. Effet Bouclier
+                    if (cardShield > 0) {
+                        gameState.currentShield += cardShield;
+                        message += `+**${cardShield}** Bouclier 🛡️. `;
+                        effectTriggered = true;
+                    }
+
+                    updatePlayerDisplay();
+                    
+                    if (!effectTriggered) {
+                        message = `Compétence **${cardTitle}** jouée. (Pas d'effet spécifique codé pour le moment).`;
+                    }
+                    
+                    // Défausser la carte Compétence immédiatement
+                    card.remove(); 
+                    discardData.push(card.originalData); // Ajout aux données de défausse
+                    discardCard(card, 0); // Lancer l'animation de défausse
+                    updateHandLayout();
+                    showMessage("Activation Compétence", message);
+                    
+                    dropped = true;
+                    return; 
+                    
+                } else if (card.dataset.type === "UNIT") {
+                    // C'est une UNITÉ, vérifier si l'emplacement est libre
+                    if (slot.hasChildNodes()) {
+                        showMessage("Emplacement Occupé", "Cet emplacement est déjà occupé par une unité.");
+                        // Rembourser l'énergie si le dépôt échoue
+                        gameState.currentEnergy += cardCost;
+                        updatePlayerDisplay();
+                        return;
+                    }
+                    
+                    // 2.4. Placement de l'Unité sur le Terrain
+                    card.style.position = "static";
+                    card.style.left = "";
+                    card.style.top = "";
+                    card.style.transform = "none";
+                    card.style.zIndex = 1;
+                    
+                    slot.appendChild(card);
+                    
+                    // S'assurer que le parent est le slot et non le body
+                    card.style.width = "100%";
+                    card.style.height = "100%";
+                    
+                    updateHandLayout(); 
+                    showMessage("Unité Jouée", `**${cardTitle}** est déployé !`);
+                    
+                    // Désactiver le drag une fois sur le terrain
+                    card.onpointerdown = null; 
+                    dropped = true;
+                    return; 
+                }
+            }
+            slot.classList.remove('highlight');
+        });
+
+        // Si non déposée dans un slot valide ou si le coût n'est pas suffisant, revenir à la main
+        if (!dropped) {
+            handDiv.appendChild(card);
+            updateHandLayout();
+            card.style.position = "absolute"; 
+            card.style.zIndex = 1; 
+            card.style.transform = "none"; // Sera corrigé par updateHandLayout
+        }
+
+        document.removeEventListener('pointermove', onPointerMove);
+        document.removeEventListener('pointerup', onPointerUp);
+    };
+}
+
+
+function checkSlotHover(x, y) {
+    let hovered = false;
+    slots.forEach(slot => {
+        let r = slot.getBoundingClientRect();
+        if (x > r.left && x < r.right && y > r.top && y < r.bottom) {
+            slot.classList.add('highlight');
+            hovered = true;
+        } else {
+            slot.classList.remove('highlight');
+        }
+    });
+}
+
+
+// Initialiser une première pioche manuelle si vous voulez commencer le jeu
+// drawCard(5); // Optionnel, si vous voulez quand même des cartes au début
+// showTurnBanner('player'); // Afficher la bannière de départ
+
+</script>
+</body>
+</html>

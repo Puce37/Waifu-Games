@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <link rel="shortcut icon" type="image/png" href="../../Logo/logo.png" />
+  <title>Rio Memory Games</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&display=swap" rel="stylesheet" />
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background: radial-gradient(circle at center, #0a0a0a, #000000 80%);
+      color: #00f0ff;
+      text-align: center;
+      margin: 0;
+      padding: 20px;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    /* Motif géométrique léger */
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: repeating-linear-gradient(
+          45deg,
+          rgba(0, 240, 255, 0.05),
+          rgba(0, 240, 255, 0.05) 2px,
+          transparent 2px,
+          transparent 10px
+        ),
+        repeating-linear-gradient(
+          -45deg,
+          rgba(0, 240, 255, 0.05),
+          rgba(0, 240, 255, 0.05) 2px,
+          transparent 2px,
+          transparent 10px
+        );
+      z-index: 0;
+      pointer-events: none;
+      mix-blend-mode: screen;
+    }
+
+    /* Contenu au-dessus */
+    body > * {
+      position: relative;
+      z-index: 1;
+    }
+
+    h1 {
+      font-family: 'Orbitron', sans-serif;
+      font-weight: 900;
+      font-size: 3rem;
+      letter-spacing: 0.15em;
+      color: #00f0ff;
+      text-transform: uppercase;
+      text-shadow: 0 0 5px #00f0ff, 0 0 10px #00f0ff, 0 0 20px #00e0ff,
+        0 0 30px #00d0ff, 0 0 40px #00c0ff;
+      margin-bottom: 20px;
+    }
+
+    #game-board {
+      display: grid;
+      grid-template-columns: repeat(4, 120px);
+      grid-gap: 15px;
+      justify-content: center;
+    }
+
+    .card {
+      width: 120px;
+      height: 120px;
+      perspective: 1000px;
+      cursor: pointer;
+    }
+
+    .card-inner {
+      width: 100%;
+      height: 100%;
+      position: relative;
+      transform-style: preserve-3d;
+      transition: transform 0.6s;
+    }
+
+    .card.flipped .card-inner {
+      transform: rotateY(180deg);
+    }
+
+    .card-front,
+    .card-back {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      backface-visibility: hidden;
+      border-radius: 8px;
+    }
+
+    .card-back {
+      background-image: url('./rio/back.png');
+      background-size: cover;
+      background-position: center;
+    }
+
+    .card-front {
+      transform: rotateY(180deg);
+      background-color: white;
+    }
+
+    .card-front img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 8px;
+    }
+
+    #message {
+      margin-top: 30px;
+      font-size: 2rem;
+      font-weight: 800;
+      color: #00f0ff;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      text-shadow: 0 0 5px #00f0ff, 0 0 10px #00f0ff, 0 0 20px #00e0ff,
+        0 0 30px #00d0ff;
+      animation: glow 2.5s ease-in-out infinite alternate;
+    }
+
+    @keyframes glow {
+      from {
+        text-shadow: 0 0 5px #00f0ff, 0 0 10px #00f0ff, 0 0 20px #00e0ff,
+          0 0 30px #00d0ff;
+      }
+      to {
+        text-shadow: 0 0 15px #00ffff, 0 0 25px #00ffff, 0 0 35px #00c0ff,
+          0 0 45px #00c0ff;
+      }
+    }
+
+    button {
+      margin-top: 20px;
+      padding: 12px 30px;
+      font-size: 18px;
+      font-weight: 700;
+      color: #00f0ff;
+      background: linear-gradient(145deg, #0a2a5f, #003080);
+      border: 2px solid #00f0ff;
+      border-radius: 12px;
+      cursor: pointer;
+      box-shadow: 0 0 6px #00bfff, inset 0 0 8px #0077cc;
+      transition: all 0.3s ease;
+      text-transform: uppercase;
+      letter-spacing: 1.2px;
+      user-select: none;
+    }
+
+    button:hover {
+      color: #ffffff;
+      background: linear-gradient(145deg, #005eff, #00ffff);
+      box-shadow: 0 0 12px #00ffff, 0 0 30px #00ffff, inset 0 0 20px #00ffff;
+      transform: translateY(-3px);
+    }
+
+    button:active {
+      transform: translateY(1px);
+      box-shadow: 0 0 6px #00c6ff, inset 0 0 10px #00c6ff;
+    }
+
+    /* Bouton retour petit dans le coin */
+    #btn-return {
+      position: fixed;
+      top: 15px;
+      left: 15px;
+      padding: 8px 15px;
+      font-size: 14px;
+      border-radius: 8px;
+      background: linear-gradient(145deg, #0a2a5f, #003080);
+      border: 2px solid #00f0ff;
+      box-shadow: 0 0 6px #00bfff, inset 0 0 8px #0077cc;
+      user-select: none;
+      z-index: 1000;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    #btn-return:hover {
+      color: #fff;
+      background: linear-gradient(145deg, #005eff, #00ffff);
+      box-shadow: 0 0 12px #00ffff, 0 0 30px #00ffff, inset 0 0 20px #00ffff;
+      transform: translateY(-2px);
+    }
+
+    #btn-return:active {
+      transform: translateY(1px);
+      box-shadow: 0 0 6px #00c6ff, inset 0 0 10px #00c6ff;
+    }
+	
+	@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.card {
+  opacity: 0;
+  animation: fadeInUp 0.5s ease forwards;
+}
+
+  </style>
+</head>
+<body>
+  <button id="btn-return" onclick="goToMenu()">⬅️ Retour</button>
+
+  <h1>🟢 Facile</h1>
+  <div id="game-board"></div>
+  <div id="message"></div>
+  <button onclick="restartGame()">🔁 Rejouer</button>
+
+  <script src="../../point.js"></script>
+  <script>
+    const images = [
+      './rio/1.png',
+      './rio/2.png',
+      './rio/3.png',
+      './rio/4.png',
+      './rio/5.png',
+      './rio/6.png',
+      './rio/7.png',
+      './rio/8.png'
+    ];
+
+    let flippedCards = [];
+    let matchedCount = 0;
+    let cards = [];
+
+    function shuffle(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+      }
+      return array;
+    }
+
+    function createBoard() {
+      const board = document.getElementById('game-board');
+      board.innerHTML = '';
+      matchedCount = 0;
+      flippedCards = [];
+
+      const doubledImages = shuffle([...images, ...images]);
+
+      cards = doubledImages.map((imgSrc, index) => {
+        const card = document.createElement('div');
+        card.classList.add('card');
+        card.dataset.image = imgSrc;
+
+        const cardInner = document.createElement('div');
+        cardInner.classList.add('card-inner');
+
+        const cardFront = document.createElement('div');
+        cardFront.classList.add('card-front');
+        const img = document.createElement('img');
+        img.src = imgSrc;
+        cardFront.appendChild(img);
+
+        const cardBack = document.createElement('div');
+        cardBack.classList.add('card-back');
+
+        cardInner.appendChild(cardBack);
+        cardInner.appendChild(cardFront);
+        card.appendChild(cardInner);
+
+        card.addEventListener('click', () => flipCard(card));
+
+        card.style.animationDelay = `${index * 50}ms`; // petit décalage entre chaque carte
+		board.appendChild(card);
+        return card;
+      });
+
+      document.getElementById('message').innerText = '';
+    }
+
+    function flipCard(card) {
+      if (
+        card.classList.contains('flipped') ||
+        flippedCards.length === 2
+      )
+        return;
+
+      card.classList.add('flipped');
+      flippedCards.push(card);
+
+      if (flippedCards.length === 2) {
+        const [card1, card2] = flippedCards;
+        const img1 = card1.dataset.image;
+        const img2 = card2.dataset.image;
+
+        if (img1 === img2) {
+          matchedCount++;
+          flippedCards = [];
+          if (matchedCount === images.length) {
+          document.getElementById('message').innerText =
+          '🎉 Bien joué ! + 10 points !';
+         addPoints(10);
+          }
+        } else {
+          setTimeout(() => {
+            card1.classList.remove('flipped');
+            card2.classList.remove('flipped');
+            flippedCards = [];
+          }, 1000);
+        }
+      }
+    }
+
+    function restartGame() {
+  const board = document.getElementById('game-board');
+  const allCards = board.querySelectorAll('.card');
+
+  // Étape 1 : retourner toutes les cartes
+  allCards.forEach(card => {
+    card.classList.add('flipped');
+  });
+
+  // Étape 2 : attendre un peu, puis tout refermer
+  setTimeout(() => {
+    allCards.forEach(card => {
+      card.classList.remove('flipped');
+    });
+
+    // Étape 3 : attendre que l’animation soit finie avant de recréer
+    setTimeout(() => {
+      createBoard(); // recrée avec nouveau mélange
+    }, 600); // temps de l'animation CSS (0.6s)
+  }, 1500); // laisse le temps de voir les cartes
+}
+
+    function goToMenu() {
+      window.location.href = 'choix_version.html';
+    }
+
+    window.onload = createBoard;
+  </script>
+</body>
+</html>

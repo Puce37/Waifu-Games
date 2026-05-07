@@ -1,0 +1,279 @@
+/* ------------------ Fond futuriste ------------------ */
+body {
+  font-family: 'Orbitron', sans-serif;
+  background: radial-gradient(circle at center, #0a0a0a, #000000 80%);
+  color: #00f0ff;
+  margin: 0;
+  padding: 40px 20px;
+  text-align: center;
+  min-height: 100vh;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background:
+    repeating-linear-gradient(
+      45deg,
+      rgba(0, 240, 255, 0.05),
+      rgba(0, 240, 255, 0.05) 2px,
+      transparent 2px,
+      transparent 10px
+    ),
+    repeating-linear-gradient(
+      -45deg,
+      rgba(0, 240, 255, 0.05),
+      rgba(0, 240, 255, 0.05) 2px,
+      transparent 2px,
+      transparent 10px
+    );
+  z-index: 0;
+  pointer-events: none;
+  mix-blend-mode: screen;
+}
+
+body > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* ------------------ Titre ------------------ */
+h1 {
+  font-weight: 900;
+  font-size: 4rem;
+  letter-spacing: 0.15em;
+  color: #00f0ff;
+  text-transform: uppercase;
+  text-shadow:
+    0 0 5px #00f0ff,
+    0 0 10px #00f0ff,
+    0 0 20px #00e0ff,
+    0 0 30px #00d0ff,
+    0 0 40px #00c0ff;
+  margin-bottom: 40px;
+}
+
+/* ------------------ Points + Bonus ------------------ */
+.points-display {
+  font-size: 1.5rem;
+  margin-bottom: 10px;
+}
+
+#bonusDisplay {
+  font-size: 1.2rem;
+  margin-bottom: 25px;
+  color: #00ff99;
+}
+
+/* ------------------ Grille d'inventaire ------------------ */
+.inventory-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+  z-index: 1;
+  position: relative;
+  max-width: 1200px;
+}
+
+/* ------------------ Carte individuelle ------------------ */
+.item {
+  background: #111;
+  padding: 15px;
+  border-radius: 14px;
+  text-align: center;
+  width: 180px;
+  box-shadow: 0 0 15px #00f0ff;
+  transition: transform 0.2s ease;
+}
+
+.item:hover {
+  transform: scale(1.05);
+}
+
+.item img {
+  width: 128px;
+  height: 128px;
+  object-fit: contain;
+  border-radius: 8px;
+  margin-bottom: 10px;
+}
+
+.item p {
+  margin: 5px 0;
+  font-weight: bold;
+}
+
+/* ------------------ Boutons dans cartes ------------------ */
+.item button {
+  background: linear-gradient(145deg, #0a2a5f, #003080);
+  border: 2px solid #00f0ff;
+  color: #00f0ff;
+  font-weight: bold;
+  padding: 6px 12px;
+  border-radius: 10px;
+  cursor: pointer;
+  margin: 4px;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  font-size: 0.9rem;
+  letter-spacing: 0.05em;
+  user-select: none;
+  outline: none;
+  box-shadow: 0 0 6px #00bfff, inset 0 0 8px #0077cc;
+}
+
+.item button:hover {
+  color: #fff;
+  background: linear-gradient(145deg, #005eff, #00ffff);
+  box-shadow: 0 0 12px #00ffff, inset 0 0 20px #00ffff;
+  transform: translateY(-2px);
+}
+
+.item button:active {
+  transform: translateY(1px);
+  box-shadow: 0 0 6px #00c6ff, inset 0 0 10px #00c6ff;
+}
+
+/* ------------------ Bouton Retour ------------------ */
+.back-btn {
+  margin-top: 40px;
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #00f0ff;
+  background: linear-gradient(145deg, #0a2a5f, #003080);
+  border: 2px solid #00f0ff;
+  border-radius: 12px;
+  padding: 12px 25px;
+  cursor: pointer;
+  box-shadow: 0 0 8px #00bfff, inset 0 0 8px #0077cc;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.back-btn:hover {
+  background: linear-gradient(145deg, #005eff, #00ffff);
+  color: #fff;
+  box-shadow: 0 0 14px #00ffff, 0 0 25px #00ffff, inset 0 0 18px #00ffff;
+  transform: translateY(-2px);
+}
+
+.back-btn:active {
+  transform: translateY(1px);
+  box-shadow: 0 0 6px #00c6ff, inset 0 0 10px #00c6ff;
+}
+
+/* ------------------ Bouton Tout vendre ------------------ */
+.sell-all-btn {
+  margin-top: 25px;
+  padding: 12px 25px;
+  font-weight: 700;
+  font-size: 1.2rem;
+  color: #ffffff;
+  background: linear-gradient(145deg, #3a0000, #800000);
+  border: 2px solid #ff4444;
+  border-radius: 12px;
+  cursor: pointer;
+  box-shadow: 0 0 10px #ff4444, inset 0 0 8px #990000;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.sell-all-btn:hover {
+  background: linear-gradient(145deg, #cc0000, #ff4444);
+  color: #fff;
+  box-shadow: 0 0 14px #ff4444, 0 0 25px #ff4444, inset 0 0 18px #ff4444;
+  transform: translateY(-2px);
+}
+
+.sell-all-btn:active {
+  transform: translateY(1px);
+  box-shadow: 0 0 6px #ff6666, inset 0 0 10px #ff6666;
+}
+
+/* -------- Modal Vente par Rareté -------- */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.85);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+  backdrop-filter: blur(5px);
+}
+
+.modal.hidden {
+  display: none;
+}
+
+.modal-content {
+  background: #111;
+  padding: 30px 40px;
+  border-radius: 15px;
+  border: 2px solid #00f0ff;
+  box-shadow: 0 0 20px #00f0ff;
+  text-align: left;
+  min-width: 300px;
+  max-width: 90%;
+}
+
+.modal-content h2 {
+  color: #00f0ff;
+  margin-bottom: 20px;
+  font-size: 2rem;
+  text-align: center;
+  text-shadow: 0 0 10px #00f0ff;
+}
+
+.modal-content label {
+  display: block;
+  font-size: 1.2rem;
+  margin-bottom: 10px;
+  color: #ffffff;
+}
+
+.modal-content input[type="checkbox"] {
+  transform: scale(1.3);
+  margin-right: 10px;
+}
+
+.modal-buttons {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.sell-confirm, .sell-cancel {
+  font-weight: bold;
+  padding: 10px 20px;
+  border-radius: 10px;
+  border: 2px solid #00f0ff;
+  background: linear-gradient(145deg, #0a2a5f, #003080);
+  color: #00f0ff;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.sell-confirm:hover {
+  background: linear-gradient(145deg, #00aa88, #00ffcc);
+  color: #000;
+  box-shadow: 0 0 12px #00fff7;
+}
+
+.sell-cancel:hover {
+  background: linear-gradient(145deg, #880000, #ff4444);
+  color: white;
+  box-shadow: 0 0 12px #ff4444;
+}

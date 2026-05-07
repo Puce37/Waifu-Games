@@ -1,0 +1,224 @@
+    body {
+      font-family: 'Orbitron', sans-serif;
+      background: radial-gradient(circle at center, #0a0a0a, #000000 80%);
+      color: #00f0ff;
+      margin: 0;
+      padding: 40px 20px;
+      text-align: center;
+      position: relative;
+      min-height: 100vh;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: center;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background:
+        repeating-linear-gradient(
+          45deg,
+          rgba(0, 240, 255, 0.05),
+          rgba(0, 240, 255, 0.05) 2px,
+          transparent 2px,
+          transparent 10px
+        ),
+        repeating-linear-gradient(
+          -45deg,
+          rgba(0, 240, 255, 0.05),
+          rgba(0, 240, 255, 0.05) 2px,
+          transparent 2px,
+          transparent 10px
+        );
+      z-index: 0;
+      pointer-events: none;
+      mix-blend-mode: screen;
+    }
+
+    body > * {
+      position: relative;
+      z-index: 1;
+    }
+
+    h1 {
+      font-weight: 900;
+      font-size: 3rem;
+       text-shadow:
+        0 0 5px #00f0ff,
+        0 0 10px #00f0ff,
+        0 0 20px #00e0ff,
+        0 0 30px #00d0ff,
+        0 0 40px #00c0ff;
+      margin-bottom: 30px;
+    }
+
+	h2 {
+      font-weight: 100;
+      font-size: 1rem;
+	  color: #ff4444;
+       text-shadow:
+        0 0 5px #ff4444,
+        0 0 10px #ff4444,
+        0 0 20px #ff4444,
+        0 0 30px #ff4444,
+        0 0 40px #ff4444;
+      margin-bottom: 30px;
+    }
+	
+    #pointsDisplay {
+      font-size: 1.5em;
+      margin-bottom: 20px;
+      color: #00f0ff;
+       text-shadow:
+        0 0 5px #00f0ff,
+        0 0 10px #00f0ff,
+        0 0 20px #00e0ff,
+        0 0 30px #00d0ff,
+        0 0 40px #00c0ff;
+    }
+
+    button {
+      padding: 15px 30px;
+      font-size: 18px;
+      font-weight: bold;
+      color: #00f0ff;
+      background: linear-gradient(145deg, #0a2a5f, #003080);
+      border: 2px solid #00f0ff;
+      border-radius: 12px;
+      cursor: pointer;
+      box-shadow: 0 0 6px #00bfff, inset 0 0 8px #0077cc;
+      margin: 10px;
+      transition: all 0.2s ease-in-out;
+    }
+
+    button:hover {
+      background: linear-gradient(145deg, #005eff, #00ffff);
+      transform: scale(1.05);
+	  box-shadow:
+        0 0 5px #00f0ff,
+        0 0 10px #00f0ff,
+        0 0 20px #00e0ff,
+        0 0 30px #00d0ff,
+        0 0 40px #00c0ff;
+    }
+
+    #spinner {
+      width: 256px;
+      height: 256px;
+      margin: 20px auto;
+      border-radius: 20px;
+      overflow: hidden;
+    }
+
+	.exotique { color: #ff007a; text-shadow: 0 0 10px #ff007a; }
+    .legendary { color: #ffd700; text-shadow: 0 0 10px #ffd700; }
+    .epique { color: #a85fff; text-shadow: 0 0 10px #a85fff; }
+    .rare { color: deepskyblue; text-shadow: 0 0 10px deepskyblue; }
+    .peucommun { color: #00ff88; text-shadow: 0 0 8px #00ff88; }
+    .commun { color: gray; }
+
+    img.reward {
+      width: 256px;
+      height: 256px;
+      border-radius: 16px;
+      margin-top: 10px;
+    }
+
+    /* Styles gacha cards */
+    .gacha-container {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 30px;
+      margin-top: 40px;
+    }
+
+    .gacha-card1 {
+      background: #111;
+      border: 2px solid #00ff88;
+      border-radius: 16px;
+      width: 300px;
+      padding: 15px;
+      cursor: pointer;
+      transition: transform 0.3s, box-shadow 0.3s;
+      box-shadow: 0 0 12px #00ff88;
+      text-align: center;
+    }
+
+    .gacha-card1:hover {
+      transform: scale(1.05);
+      box-shadow:
+        0 0 5px #00ff88,
+        0 0 10px #00ff88,
+        0 0 20px #00ff88,
+        0 0 30px #00ff88,
+        0 0 40px #00ff88;
+    }
+
+    .gacha-card1 img {
+      width: 100%;
+      height: auto;
+      border-radius: 12px;
+      margin-bottom: 10px;
+    }
+	
+	.gacha-card2 {
+      background: #111;
+      border: 2px solid #a85fff;
+      border-radius: 16px;
+      width: 300px;
+      padding: 15px;
+      cursor: pointer;
+      transition: transform 0.3s, box-shadow 0.3s;
+      box-shadow: 0 0 12px #a85fff;
+      text-align: center;
+    }
+
+    .gacha-card2:hover {
+      transform: scale(1.05);
+      box-shadow:
+        0 0 5px #a85fff,
+        0 0 10px #a85fff,
+        0 0 20px #a85fff,
+        0 0 30px #a85fff,
+        0 0 40px #a85fff;
+    }
+
+    .gacha-card2 img {
+      width: 100%;
+      height: auto;
+      border-radius: 12px;
+      margin-bottom: 10px;
+    }
+	
+	.gacha-card3 {
+      background: #111;
+      border: 2px solid #ff007a;
+      border-radius: 16px;
+      width: 300px;
+      padding: 15px;
+      cursor: pointer;
+      transition: transform 0.3s, box-shadow 0.3s;
+      box-shadow: 0 0 12px #ff007a;
+      text-align: center;
+    }
+
+    .gacha-card3:hover {
+      transform: scale(1.05);
+      box-shadow:
+        0 0 5px #ff007a,
+        0 0 10px #ff007a,
+        0 0 20px #ff007a,
+        0 0 30px #ff007a,
+        0 0 40px #ff007a;
+    }
+
+    .gacha-card3 img {
+      width: 100%;
+      height: auto;
+      border-radius: 12px;
+      margin-bottom: 10px;
+    }

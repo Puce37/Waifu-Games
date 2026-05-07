@@ -1,0 +1,31 @@
+/* --- LE PORTAIL IMAGE --- */
+#portal-overlay {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    background-image: url('./image/Teleport.png'); 
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    border-radius: 50%;
+    transform: translate(-50%, -50%) scale(0) rotate(0deg);
+    z-index: 9999;
+    pointer-events: none;
+    opacity: 0;
+    /* Transition fluide et optimisée */
+    transition: 
+        width 0.7s ease-in, 
+        height 0.7s ease-in, 
+        opacity 0.4s ease-out, 
+        transform 0.7s cubic-bezier(0.7, 0, 0.3, 1),
+        filter 0.3s ease;
+}
+
+#portal-overlay.active {
+    width: 250vw; /* Un peu moins grand pour gagner en performance */
+    height: 250vw;
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1) rotate(360deg); /* Une seule rotation suffit */
+}

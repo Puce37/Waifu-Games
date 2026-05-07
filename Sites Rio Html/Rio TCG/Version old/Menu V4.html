@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Mini TCG Rio</title>
+<style>
+/* --- ESTHÉTIQUE GÉNÉRALE --- */
+body {
+    margin:0;
+    font-family: 'Segoe UI', sans-serif;
+    background: #001020;
+    color:#cce8ff;
+    overflow:hidden;
+    user-select: none;
+	touch-action: none; /* Pour tout le corps, si tu ne veux AUCUN défilement */
+}
+
+/* --- LE DECK --- */
+#deck {
+    position:absolute;
+    bottom:30px;
+    right:30px;
+    width:120px;
+    height:170px;
+    cursor:pointer;
+    perspective: 800px;
+    z-index: 50;
+}
+#deck img {
+    width:100%; height:100%;
+    border-radius:10px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+    transition:0.3s;
+    border: 2px solid #fff;
+}
+#deck:hover img { transform:scale(1.05) rotateY(-10deg); }
+
+/* --- LE TERRAIN --- */
+#field {
+    position:absolute;
+    top:120px;
+    left:50%;
+    transform:translateX(-50%);
+    display:flex;
+    gap:15px;
+}
+.slot {
+    width:130px;
+    height:190px;
+    border-radius:12px;
+    border:2px dashed #34baff;
+    background:rgba(0,60,120,0.2);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    transition: background 0.3s, box-shadow 0.3s;
+}
+.slot.highlight { 
+    background:rgba(52, 186, 255, 0.3); 
+    box-shadow: 0 0 15px #34baff; 
+    border-style: solid;
+}
+
+/* --- LA MAIN DU JOUEUR --- */
+#hand {
+    position:absolute;
+    bottom:0px;
+    left:50%;
+    transform:translateX(-50%);
+    width:800px;
+    height:250px;
+    pointer-events:none; 
+}
+
+/* --- LA CARTE --- */
+.card {
+    width:120px;
+    height:170px;
+    border-radius:10px;
+    position:absolute;
+    cursor:grab;
+    transform-style: preserve-3d;
+    transition: transform 0.4s, left 0.4s, top 0.4s;
+    pointer-events: auto;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+	touch-action: none; /* TRÈS important pour éviter les conflits avec le défilement mobile */
+}
+
+.card:active { cursor: grabbing; }
+
+/* Faces de la carte */
+.card .front, .card .back {
+    position:absolute;
+    width:100%; height:100%;
+    border-radius:10px;
+    backface-visibility: hidden;
+    overflow: hidden;
+    background-color: #0d1b2a; /* Couleur de fond si l'image charge mal */
+}
+
+/* Design Face Avant */
+.card .front {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background-size: cover;
+    background-position: center;
+    border: 2px solid #4bd3ff;
+}
+
+/* Design Face Arrière */
+.card .back {
+    transform: rotateY(180deg);
+    background: url('card-back.png') center/cover no-repeat;
+    border: 2px solid #fff;
+}
+.card.flipped { transform: rotateY(180deg); }
+
+/* Contenu Carte (Texte et Stats) */
+.card-title {
+    text-align:center;
+    padding-top: 8px;
+    color:#fff;
+    font-weight:bold;
+    text-shadow: 0 0 4px #000, 0 0 2px #000; /* Ombre forte pour lisibilité sur image */
+    background: linear-gradient(to bottom, rgba(0,0,0,0.7), transparent);
+    padding-bottom: 10px;
+}
+
+.card-stats {
+    display:flex;
+    justify-content:space-around;
+    align-items: center;
+    padding:5px 0;
+    height: 35px;
+    border-top: 1px solid rgba(255,255,255,0.3);
+    background-size: cover; /* Pour ton image de fond de stats */
+    background-color: rgba(0,0,0,0.6); /* Fallback */
+}
+
+.stat { 
+    width:30px; height:30px; 
+    position:relative; 
+    display: flex; 
+    justify-content: center; 
+    align-items: center;
+}
+.stat img { width:100%; height:100%; position: absolute; left: 0; top: 0; }
+.stat span {
+    z-index: 2;
+    color:white;
+    font-weight:bold;
+    font-size: 14px;
+    text-shadow:0 0 3px black, 0 0 5px black;
+}
+</style>
+</head>
+<body>
+
+<div id="deck">
+    <img src="card-back.png" alt="Deck">
+</div>
+
+<div id="field">
+    <div class="slot"></div>
+    <div class="slot"></div>
+    <div class="slot"></div>
+    <div class="slot"></div>
+    <div class="slot"></div>
+</div>
+
+<div id="hand"></div>
+
+<script>
+// --- DONNÉES (Tes images ici) ---
+let deckData = [
+  {type:"UNIT", name:"Space Rio", atk:4, energy:2, special:1, front:"card1-front.png", statsBg:"stats-bg1.png"},
+  {type:"UNIT", name:"Drone Amas", atk:2, energy:1, special:3, front:"card2-front.png", statsBg:"stats-bg2.png"},
+  {type:"SKILL", name:"Amas", atk:5, energy:3, special:0, front:"card3-front.png", statsBg:"stats-bg3.png"},
+  {type:"SKILL", name:"Bouclier", atk:0, energy:2, special:5, front:"card4-front.png", statsBg:"stats-bg4.png"},
+  {type:"UNIT", name:"Space Rio", atk:4, energy:2, special:1, front:"card1-front.png", statsBg:"stats-bg1.png"},
+  {type:"UNIT", name:"Drone Amas", atk:2, energy:1, special:3, front:"card2-front.png", statsBg:"stats-bg2.png"}
+];
+
+// Noms de tes icones
+const iconHeart = "heart.png";
+const iconEnergy = "energy.png";
+const iconSpecial = "special.png";
+
+let handDiv = document.getElementById("hand");
+let slots = document.querySelectorAll(".slot");
+
+// --- LOGIQUE PIOCHE ---
+document.getElementById("deck").onclick = () => {
+    if(deckData.length === 0) { alert("Plus de cartes !"); return; }
+    if(handDiv.children.length >= 7) { alert("Main pleine !"); return; }
+
+    let data = deckData.pop(); 
+    createCard(data);
+};
+
+function createCard(data) {
+    // 1. Structure
+    let card = document.createElement("div");
+    card.className = "card flipped"; 
+    card.dataset.type = data.type;
+
+    // Face Arrière
+    let back = document.createElement("div");
+    back.className = "back";
+    
+    // Face Avant (avec l'image de fond data.front)
+    let front = document.createElement("div");
+    front.className = "front";
+    front.style.backgroundImage = `url('${data.front}')`;
+
+    // Injection HTML (Titre et Stats avec images)
+    // Note: J'ai ajouté un check pour statsBg, si tu ne l'as pas sur toutes les cartes
+    let bgStyle = data.statsBg ? `background-image: url('${data.statsBg}');` : "";
+    
+    front.innerHTML = `
+        <div class="card-title">${data.name}</div>
+        <div class="card-stats" style="${bgStyle}">
+            <div class="stat"><img src="${iconHeart}"><span>${data.atk}</span></div>
+            <div class="stat"><img src="${iconEnergy}"><span>${data.energy}</span></div>
+            <div class="stat"><img src="${iconSpecial}"><span>${data.special}</span></div>
+        </div>
+    `;
+
+    card.appendChild(front);
+    card.appendChild(back);
+
+    // 2. Positionnement initial sur le deck
+    let deckRect = document.getElementById("deck").getBoundingClientRect();
+    document.body.appendChild(card);
+    
+    card.style.left = deckRect.left + "px";
+    card.style.top = deckRect.top + "px";
+    card.style.zIndex = 1000;
+
+    // 3. Animation Pioche
+    setTimeout(() => {
+        card.style.left = (window.innerWidth / 2 - 60) + "px";
+        card.style.top = (window.innerHeight - 250) + "px";
+        card.style.transform = "scale(1.5) rotateY(0deg)"; 
+        card.className = "card"; 
+    }, 50);
+
+    // 4. Fin animation -> Mise en main
+    setTimeout(() => {
+        card.style.transition = "none"; 
+        card.style.transform = "scale(1)";
+        handDiv.appendChild(card); 
+        updateHandLayout();
+        enableDrag(card);
+        
+        requestAnimationFrame(() => {
+            card.style.transition = "transform 0.4s, left 0.4s, top 0.4s";
+        });
+    }, 700);
+}
+
+// --- LOGIQUE MAIN (EVENTAIL) ---
+function updateHandLayout() {
+    const cards = Array.from(handDiv.children);
+    const total = cards.length;
+    const arcAngle = 40; 
+    
+    cards.forEach((card, index) => {
+        card.style.position = "absolute";
+        card.style.top = ""; 
+        card.style.left = "50%";
+        
+        let centerIndex = (total - 1) / 2;
+        let offset = index - centerIndex;
+        let angle = offset * (arcAngle / (total || 1));
+        let indent = Math.abs(offset) * 15; 
+
+        card.style.transform = `translateX(-50%) translateX(${offset * 70}px) translateY(${indent}px) rotate(${angle}deg)`;
+        card.style.zIndex = index + 1;
+    });
+}
+
+// --- LOGIQUE DRAG & DROP ---
+function enableDrag(card) {
+    let isDragging = false;
+    let startX, startY;
+
+    // Début du drag (Pointer Down)
+    card.onpointerdown = (e) => {
+        if (card.parentElement !== handDiv) return; 
+        
+        e.preventDefault(); 
+
+        isDragging = true;
+        card.setPointerCapture(e.pointerId);
+
+        // Désactiver les transitions pendant le drag
+        card.style.transition = "none"; 
+        
+        // --- 🔑 CORRECTION Z-INDEX & DÉCALAGE ---
+        // 1. On récupère la position actuelle visuelle (rect)
+        let rect = card.getBoundingClientRect();
+        
+        // 2. On la détache de la main et on l'attache au body pour garantir z-index: 9999 maximal.
+        document.body.appendChild(card);
+        
+        // 3. On applique la position calculée
+        card.style.position = "fixed";
+        card.style.left = rect.left + "px";
+        card.style.top = rect.top + "px";
+        
+        // 4. On annule l'ancienne transformation CSS (rotation + translation)
+        card.style.transform = "none";
+        card.style.zIndex = 9999;
+        // ------------------------------------------
+
+        // Calcul précis de l'offset souris/toucher pour le mouvement
+        startX = e.clientX - rect.left;
+        startY = e.clientY - rect.top;
+        
+        // Mise à l'échelle pour l'effet "je la tiens"
+        card.style.transform = "scale(1.1)"; 
+        
+        // Écoute des événements de mouvement et de fin sur le document entier
+        document.addEventListener('pointermove', onPointerMove);
+        document.addEventListener('pointerup', onPointerUp);
+    };
+
+    // Mouvement du drag (Pointer Move)
+    const onPointerMove = (e) => {
+        if (!isDragging) return;
+        
+        card.style.left = (e.clientX - startX) + "px";
+        card.style.top = (e.clientY - startY) + "px";
+        
+        // Mettre en évidence les slots de dépôt
+        checkSlotHover(e.clientX, e.clientY);
+    };
+
+    // Fin du drag (Pointer Up)
+    const onPointerUp = (e) => {
+        if (!isDragging) return;
+
+        isDragging = false;
+        
+        // Rétablissement de l'état normal
+        card.style.transition = "transform 0.4s, left 0.4s, top 0.4s"; 
+
+        let dropped = false;
+        
+        // --- LOGIQUE DE DÉPÔT ---
+        slots.forEach(slot => {
+            let r = slot.getBoundingClientRect();
+            if (e.clientX > r.left && e.clientX < r.right && e.clientY > r.top && e.clientY < r.bottom) {
+                if (card.dataset.type === "SKILL") {
+                    alert("Compétence activée : " + card.querySelector(".card-title").textContent);
+                    card.remove(); 
+                    dropped = true;
+                } else if (!slot.hasChildNodes()) {
+                    // C'est une UNITÉ et le slot est vide
+                    card.style.position = "relative";
+                    card.style.left = "0";
+                    card.style.top = "0";
+                    card.style.transform = "none";
+                    card.style.width = "100%";
+                    card.style.height = "100%";
+                    slot.appendChild(card);
+                    dropped = true;
+                }
+            }
+            slot.classList.remove("highlight");
+        });
+
+        // --- RETOUR À LA MAIN (si échec du dépôt) ---
+        if (!dropped) {
+            // Ici la carte est encore dans le body
+            handDiv.appendChild(card);
+            
+            // On réinitialise les styles pour qu'updateHandLayout fonctionne
+            card.style.position = "absolute";
+            card.style.left = "50%"; 
+            
+            updateHandLayout();
+        } else {
+            // La carte est jouée ou utilisée, on réorganise la main restante
+            updateHandLayout(); 
+        }
+        
+        // Retrait des écouteurs d'événements
+        document.removeEventListener('pointermove', onPointerMove);
+        document.removeEventListener('pointerup', onPointerUp);
+    };
+}
+
+function checkSlotHover(x, y) {
+    slots.forEach(slot => {
+        let r = slot.getBoundingClientRect();
+        if (x > r.left && x < r.right && y > r.top && y < r.bottom) {
+            slot.classList.add("highlight");
+        } else {
+            slot.classList.remove("highlight");
+        }
+    });
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Rio TCG - QG</title>
+    <link rel="stylesheet" href="index.css">
+</head>
+<body>
+
+<div id="main-menu-container">
+    
+    <!-- HEADER -->
+    <header>
+        <div class="currency-display">
+            <span style="font-size:30px;">🪙</span> 
+            <span id="coin-display">0</span>
+        </div>
+        <div class="player-stats-summary">
+            <span id="stat-hp-display">❤️ 20</span>
+            <span id="stat-energy-display">⚡ 3</span>
+            <span id="stat-shield-display">🛡️ 0</span>
+        </div>
+        <div>
+            <!-- Lance le jeu (page game.html) -->
+            <button class="btn-primary" id="play-btn" onclick="window.location.href='game.html'">LANCER LE COMBAT ⚔️</button>
+        </div>
+    </header>
+
+    <!-- NAV TABS -->
+    <nav>
+        <button onclick="switchTab('inventory')" class="active" id="tab-inventory">Inventaire & Deck</button>
+        <button onclick="switchTab('shop')" id="tab-shop">Améliorations (Shop)</button>
+        <button onclick="switchTab('gacha')" id="tab-gacha">Recrutement (Gacha)</button>
+    </nav>
+
+    <!-- SECTION: INVENTAIRE -->
+    <div id="inventory" class="section-content active">
+        <div id="deck-counter">Deck: 0 / 60</div>
+        <div style="text-align:center; margin-bottom:10px; font-style:italic; font-size:12px; color:#aaa;">
+            Cliquez pour ajouter/retirer du deck. Flèche verte = Niveau sup. dispo !
+        </div>
+        <div class="card-grid" id="inventory-grid">
+            <!-- Les cartes sont générées par JS ici -->
+        </div>
+    </div>
+
+    <!-- SECTION: SHOP -->
+    <div id="shop" class="section-content">
+        <div class="shop-grid">
+            <div class="shop-item">
+                <div class="shop-icon">❤️</div>
+                <h3>Max PV +5</h3>
+                <p>Coût: 100 🪙</p>
+                <button class="btn-primary" onclick="buyUpgrade('hp')">Acheter</button>
+            </div>
+            <div class="shop-item">
+                <div class="shop-icon">⚡</div>
+                <h3>Max Énergie +1</h3>
+                <p>Coût: 300 🪙</p>
+                <button class="btn-primary" onclick="buyUpgrade('energy')">Acheter</button>
+            </div>
+            <div class="shop-item">
+                <div class="shop-icon">🛡️</div>
+                <h3>Bouclier Début +5</h3>
+                <p>Coût: 150 🪙</p>
+                <button class="btn-primary" onclick="buyUpgrade('shield')">Acheter</button>
+            </div>
+        </div>
+        <div style="text-align:center; margin-top:20px; color:#ff5555;" id="shop-msg"></div>
+    </div>
+
+    <!-- SECTION: GACHA -->
+    <div id="gacha" class="section-content">
+        <div class="gacha-container">
+            <h2 style="color: #ff00cc; text-shadow:0 0 10px #ff00cc;">TIRAGE DIMENSIONNEL</h2>
+            <p>Obtenez de nouvelles cartes ou des doublons pour améliorer vos unités !</p>
+            <p>Prix : 50 🪙</p>
+            <button id="gacha-btn" onclick="pullGacha()">TIRER</button>
+        </div>
+    </div>
+
+</div>
+
+<!-- OVERLAY RÉSULTAT GACHA -->
+<div id="gacha-result" class="pull-result">
+    <div id="new-card-display" class="card new-card-glow" style="position:relative; top:auto; left:auto;">
+        <!-- Carte affichée ici -->
+        <div class="front"></div> 
+        <div class="back"></div>
+    </div>
+    <h2 id="gacha-text" style="color:white; margin-top:20px;"></h2>
+    <button class="btn-primary" onclick="closeGachaResult()">Continuer</button>
+</div>
+
+<!-- Import des scripts -->
+<script src="data.js"></script>
+<script src="menu.js"></script>
+
+</body>
+</html>
