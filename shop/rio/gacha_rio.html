@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Magasin</title>
+    <link rel="stylesheet" href="./css/rio_gacha.css" />
+    <link rel="shortcut icon" type="image/png" href="../../../Logo/logo.png" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <h1>🎰 Paquets de cartes</h1>
+    <h2>Seules les cartes cliquées seront ajoutées à l’inventaire.</h2>
+
+    <div id="pointsDisplay">Points : <span id="points">0</span></div>
+
+    <div class="gacha-container">
+      <div
+        class="gacha-card1"
+        onclick="window.location.href = 'rio_peucommun.html'"
+      >
+        <img src="./visuels/peucommun.png" alt="Gacha Peu-Commun" />
+        <h2 class="peucommun">Peu-Commun</h2>
+        <p class="peucommun">🎯 Beaucoup de communs, faible chance d’un rare</p>
+        <p class="peucommun">💠 250 points</p>
+      </div>
+
+      <div
+        class="gacha-card2"
+        onclick="window.location.href = 'rio_epique.html'"
+      >
+        <img src="./visuels/epique.png" alt="Gacha Épique" />
+        <h2 class="epique">Épique</h2>
+        <p class="epique">✨ Boosté sur rares et épiques</p>
+        <p class="epique">💠 500 points</p>
+      </div>
+
+      <div
+        class="gacha-card3"
+        onclick="window.location.href = 'rio_exotique.html'"
+      >
+        <img src="./visuels/exotique.png" alt="Gacha Exotique" />
+        <h2 class="exotique">Exotique</h2>
+        <p class="exotique">🔥 0.1% pour un objet x10 exotique</p>
+        <p class="exotique">💠 1000 points</p>
+      </div>
+    </div>
+    <br />
+    <button onclick="window.location.href = '../magasin.html'">🔙 Retour</button>
+    <script src="../point.js"></script>
+    <script src="../../../js/gacha.js"></script>
+  </body>
+</html>

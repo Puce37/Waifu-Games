@@ -9,54 +9,67 @@
       rel="stylesheet"
     />
     <style>
-      body {
-        font-family: "Orbitron", sans-serif;
-        background: radial-gradient(circle at center, #0a0a0a, #000000 80%);
-        color: #00f0ff;
-        margin: 0;
-        padding: 40px 20px;
-        text-align: center;
-        position: relative;
-        overflow-x: hidden;
-        min-height: 100vh;
-        overflow: hidden;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-      }
+      /* ===== Base ===== */
+body {
+  font-family: 'Orbitron', sans-serif;
+  margin: 0;
+  min-height: 100vh;
+  overflow: hidden;
 
-      body::before {
-        content: "";
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background:
-          repeating-linear-gradient(
-            45deg,
-            rgba(0, 240, 255, 0.05),
-            rgba(0, 240, 255, 0.05) 2px,
-            transparent 2px,
-            transparent 10px
-          ),
-          repeating-linear-gradient(
-            -45deg,
-            rgba(0, 240, 255, 0.05),
-            rgba(0, 240, 255, 0.05) 2px,
-            transparent 2px,
-            transparent 10px
-          );
-        z-index: 0;
-        pointer-events: none;
-        mix-blend-mode: screen;
-      }
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 
-      body > * {
-        position: relative;
-        z-index: 1;
-      }
+  background:
+    radial-gradient(circle at top, rgba(140, 0, 255, 0.15), transparent 40%),
+    radial-gradient(circle at bottom, rgba(0, 200, 255, 0.12), transparent 40%),
+    linear-gradient(135deg, #050510, #090916 40%, #020205);
+
+  color: #d8f6ff;
+  position: relative;
+}
+
+/* ===== Grille futuriste ===== */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+
+  background-image:
+    linear-gradient(rgba(0,255,255,0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,255,255,0.05) 1px, transparent 1px);
+
+  background-size: 40px 40px;
+
+  mask-image: radial-gradient(circle at center, black 30%, transparent 90%);
+  pointer-events: none;
+
+  animation: gridMove 12s linear infinite;
+}
+
+@keyframes gridMove {
+  from {
+    transform: translateY(0px);
+  }
+  to {
+    transform: translateY(40px);
+  }
+}
+
+/* ===== Glow ambiance ===== */
+body::after {
+  content: "";
+  position: fixed;
+  width: 700px;
+  height: 700px;
+  background: radial-gradient(circle, rgba(0,255,255,0.08), transparent 70%);
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  filter: blur(50px);
+  pointer-events: none;
+}
 
       h1 {
         font-weight: 900;

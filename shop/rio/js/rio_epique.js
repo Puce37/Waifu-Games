@@ -222,7 +222,7 @@ buyPackBtn.addEventListener('click', () => {
 });
 
 goBackBtn.addEventListener('click', () => {
-  window.location.href = './gacha.html';
+  window.location.href = './gacha_rio.html';
 });
 
 // Affiche points au chargement

@@ -1,0 +1,479 @@
+/* =======================================================
+   CYBER GLASS GACHA UI
+======================================================= */
+
+body {
+  font-family: 'Orbitron', sans-serif;
+  margin: 0;
+  min-height: 100vh;
+  overflow-x: hidden;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  padding: 40px 20px;
+
+  background:
+    radial-gradient(circle at top, rgba(140, 0, 255, 0.16), transparent 40%),
+    radial-gradient(circle at bottom, rgba(0, 200, 255, 0.12), transparent 40%),
+    linear-gradient(135deg, #050510, #090916 45%, #020205);
+
+  color: #d8f6ff;
+  position: relative;
+}
+
+/* =======================================================
+   GRID BACKGROUND
+======================================================= */
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+
+  background-image:
+    linear-gradient(rgba(0,255,255,0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,255,255,0.05) 1px, transparent 1px);
+
+  background-size: 40px 40px;
+
+  animation: gridMove 12s linear infinite;
+
+  mask-image: radial-gradient(circle at center, black 25%, transparent 90%);
+  pointer-events: none;
+}
+
+@keyframes gridMove {
+  from {
+    transform: translateY(0px);
+  }
+  to {
+    transform: translateY(40px);
+  }
+}
+
+/* =======================================================
+   AMBIENT GLOW
+======================================================= */
+
+body::after {
+  content: "";
+  position: fixed;
+  width: 700px;
+  height: 700px;
+
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  background:
+    radial-gradient(circle,
+      rgba(0,255,255,0.07),
+      rgba(157,77,255,0.06),
+      transparent 70%);
+
+  filter: blur(60px);
+
+  pointer-events: none;
+}
+
+/* =======================================================
+   TITLES
+======================================================= */
+
+h1 {
+  font-size: 4rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+
+  margin-bottom: 15px;
+
+  background: linear-gradient(
+    90deg,
+    #00e5ff,
+    #9d4dff,
+    #00e5ff
+  );
+
+  background-size: 300%;
+
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+
+  animation: titleFlow 6s linear infinite;
+
+  text-shadow:
+    0 0 15px rgba(0,255,255,0.35),
+    0 0 30px rgba(157,77,255,0.25);
+}
+
+@keyframes titleFlow {
+  0% {
+    background-position: 0%;
+  }
+  100% {
+    background-position: 300%;
+  }
+}
+
+h2 {
+  font-size: 1rem;
+  font-weight: 400;
+
+  color: #ff4d88;
+
+  margin-bottom: 30px;
+
+  text-shadow:
+    0 0 8px rgba(255,0,122,0.8),
+    0 0 20px rgba(255,0,122,0.4);
+}
+
+/* =======================================================
+   POINTS DISPLAY
+======================================================= */
+
+#pointsDisplay {
+  padding: 14px 30px;
+
+  margin-bottom: 30px;
+
+  border-radius: 18px;
+
+  background: rgba(255,255,255,0.04);
+
+  border: 1px solid rgba(0,255,255,0.2);
+
+  backdrop-filter: blur(10px);
+
+  font-size: 1.4rem;
+  letter-spacing: 0.08em;
+
+  box-shadow:
+    0 0 15px rgba(0,255,255,0.12);
+
+  color: #dffcff;
+}
+
+/* =======================================================
+   BUTTONS
+======================================================= */
+
+button {
+  position: relative;
+  overflow: hidden;
+
+  padding: 16px 32px;
+
+  border-radius: 18px;
+
+  border: 1px solid rgba(0,255,255,0.3);
+
+  background: rgba(255,255,255,0.05);
+
+  backdrop-filter: blur(10px);
+
+  color: #dffcff;
+
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+
+  cursor: pointer;
+
+  transition: 0.3s ease;
+
+  box-shadow:
+    0 0 15px rgba(0,255,255,0.08),
+    inset 0 0 10px rgba(255,255,255,0.02);
+
+  margin: 10px;
+}
+
+/* Shine effect */
+
+button::before {
+  content: "";
+
+  position: absolute;
+  top: 0;
+  left: -120%;
+
+  width: 80%;
+  height: 100%;
+
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255,255,255,0.22),
+    transparent
+  );
+
+  transform: skewX(-20deg);
+
+  transition: 0.7s;
+}
+
+button:hover::before {
+  left: 140%;
+}
+
+button:hover {
+  transform: translateY(-4px) scale(1.02);
+
+  background: rgba(0,255,255,0.08);
+
+  border-color: #00e5ff;
+
+  box-shadow:
+    0 0 18px rgba(0,229,255,0.45),
+    0 0 45px rgba(157,77,255,0.2);
+}
+
+button:active {
+  transform: scale(0.97);
+}
+
+/* =======================================================
+   SPINNER
+======================================================= */
+
+#spinner {
+  width: 256px;
+  height: 256px;
+
+  margin: 30px auto;
+
+  border-radius: 26px;
+
+  overflow: hidden;
+
+  background: rgba(255,255,255,0.04);
+
+  border: 1px solid rgba(0,255,255,0.2);
+
+  backdrop-filter: blur(12px);
+
+  box-shadow:
+    0 0 20px rgba(0,255,255,0.15),
+    0 0 60px rgba(157,77,255,0.12);
+}
+
+/* =======================================================
+   REWARD IMAGE
+======================================================= */
+
+img.reward {
+  width: 256px;
+  height: 256px;
+
+  object-fit: cover;
+
+  border-radius: 22px;
+
+  margin-top: 15px;
+
+  border: 1px solid rgba(255,255,255,0.12);
+
+  box-shadow:
+    0 0 20px rgba(0,255,255,0.18);
+}
+
+/* =======================================================
+   RARITIES
+======================================================= */
+
+.exotique {
+  color: #ff007a;
+  text-shadow:
+    0 0 10px #ff007a,
+    0 0 25px #ff007a;
+}
+
+.legendary {
+  color: #ffd700;
+  text-shadow:
+    0 0 10px #ffd700,
+    0 0 25px #ffd700;
+}
+
+.epique {
+  color: #b16cff;
+  text-shadow:
+    0 0 10px #b16cff,
+    0 0 25px #b16cff;
+}
+
+.rare {
+  color: #00cfff;
+  text-shadow:
+    0 0 10px #00cfff,
+    0 0 25px #00cfff;
+}
+
+.peucommun {
+  color: #00ff99;
+  text-shadow:
+    0 0 10px #00ff99,
+    0 0 25px #00ff99;
+}
+
+.commun {
+  color: #9a9a9a;
+}
+
+/* =======================================================
+   GACHA CONTAINER
+======================================================= */
+
+.gacha-container {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+
+  gap: 35px;
+
+  margin-top: 50px;
+}
+
+/* =======================================================
+   BASE CARD
+======================================================= */
+
+.gacha-card1,
+.gacha-card2,
+.gacha-card3 {
+  position: relative;
+  overflow: hidden;
+
+  width: 300px;
+
+  padding: 18px;
+
+  border-radius: 26px;
+
+  background: rgba(255,255,255,0.05);
+
+  backdrop-filter: blur(14px);
+
+  cursor: pointer;
+
+  transition: 0.35s ease;
+
+  text-align: center;
+}
+
+/* Image */
+
+.gacha-card1 img,
+.gacha-card2 img,
+.gacha-card3 img {
+  width: 100%;
+  height: auto;
+
+  border-radius: 18px;
+
+  margin-bottom: 14px;
+
+  transition: 0.3s ease;
+}
+
+/* Hover image zoom */
+
+.gacha-card1:hover img,
+.gacha-card2:hover img,
+.gacha-card3:hover img {
+  transform: scale(1.03);
+}
+
+/* Shine effect */
+
+.gacha-card1::before,
+.gacha-card2::before,
+.gacha-card3::before {
+  content: "";
+
+  position: absolute;
+  top: 0;
+  left: -130%;
+
+  width: 70%;
+  height: 100%;
+
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255,255,255,0.18),
+    transparent
+  );
+
+  transform: skewX(-25deg);
+
+  transition: 0.8s;
+}
+
+.gacha-card1:hover::before,
+.gacha-card2:hover::before,
+.gacha-card3:hover::before {
+  left: 150%;
+}
+
+/* =======================================================
+   GREEN CARD
+======================================================= */
+
+.gacha-card1 {
+  border: 1px solid rgba(0,255,136,0.35);
+
+  box-shadow:
+    0 0 20px rgba(0,255,136,0.15);
+}
+
+.gacha-card1:hover {
+  transform: translateY(-8px);
+
+  box-shadow:
+    0 0 20px rgba(0,255,136,0.45),
+    0 0 60px rgba(0,255,136,0.2);
+}
+
+/* =======================================================
+   PURPLE CARD
+======================================================= */
+
+.gacha-card2 {
+  border: 1px solid rgba(177,108,255,0.35);
+
+  box-shadow:
+    0 0 20px rgba(177,108,255,0.15);
+}
+
+.gacha-card2:hover {
+  transform: translateY(-8px);
+
+  box-shadow:
+    0 0 20px rgba(177,108,255,0.45),
+    0 0 60px rgba(177,108,255,0.2);
+}
+
+/* =======================================================
+   PINK CARD
+======================================================= */
+
+.gacha-card3 {
+  border: 1px solid rgba(255,0,122,0.35);
+
+  box-shadow:
+    0 0 20px rgba(255,0,122,0.15);
+}
+
+.gacha-card3:hover {
+  transform: translateY(-8px);
+
+  box-shadow:
+    0 0 20px rgba(255,0,122,0.45),
+    0 0 60px rgba(255,0,122,0.2);
+}

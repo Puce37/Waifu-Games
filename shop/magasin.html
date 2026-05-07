@@ -2,27 +2,125 @@
 <html lang="fr">
   <head>
     <meta charset="UTF-8" />
+
     <title>Magasin - Cyber Luna</title>
+
     <link rel="stylesheet" href="../point.css" />
-    <link rel="shortcut icon" type="image/png" href="../Logo/logo.png" />
+
+    <link
+      rel="shortcut icon"
+      type="image/png"
+      href="../Logo/logo.png"
+    />
+
     <link
       href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&display=swap"
       rel="stylesheet"
     />
+
     <link rel="stylesheet" href="../css/magasin.css" />
   </head>
+
   <body>
+
+    <!-- =======================================================
+         TITLE
+    ======================================================== -->
+
     <h1>🛒 Magasin</h1>
 
-    <br />
-    <button onclick="gacha()">🎰 Paquets de cartes</button>
+    <h2>
+      Choisissez une collection de cartes
+    </h2>
 
-    <div class="points-display">💠 Points : <span id="points">0</span></div>
-    <div class="store-grid" id="store"></div>
+    <!-- =======================================================
+         POINTS
+    ======================================================== -->
+
+    <div class="points-display">
+      💠 Points : <span id="points">0</span>
+    </div>
+
+    <!-- =======================================================
+         COLLECTIONS
+    ======================================================== -->
+
+    <div class="gacha-container">
+
+      <!-- ======================
+           RIO
+      ======================= -->
+
+      <div
+        class="gacha-card-rio"
+        onclick="window.location.href='./rio/gacha_rio.html'"
+      >
+        <img
+          src="./rio/visuels/rio.jpg"
+          alt="Rio"
+        />
+
+        <h2 class="rio">
+          Rio
+        </h2>
+
+        <p class="rio">
+          🔥 Collection rouge cyber futuriste
+        </p>
+
+        <p class="rio">
+          🎰 Accéder aux gachas Rio
+        </p>
+      </div>
+
+      <!-- ======================
+           KASUMI
+      ======================= -->
+
+      <div
+        class="gacha-card-kasumi"
+        onclick="window.location.href='./Kasumi/gacha_kasumi.html'"
+      >
+        <img
+          src="./visuels/kasumi.png"
+          alt="Kasumi"
+        />
+
+        <h2 class="kasumi">
+          Kasumi
+        </h2>
+
+        <p class="kasumi">
+          💠 Collection bleu canard holographique
+        </p>
+
+        <p class="kasumi">
+          🎰 Accéder aux gachas Kasumi
+        </p>
+      </div>
+
+    </div>
+
     <br />
-    <button onclick="goBack()">🔙 Retour</button>
+
+    <!-- =======================================================
+         STORE ITEMS
+    ======================================================== -->
+
+    <div class="store-grid" id="store"></div>
+
+    <br />
+
+    <!-- =======================================================
+         BACK BUTTON
+    ======================================================== -->
+
+    <button onclick="goBack()">
+      🔙 Retour
+    </button>
 
     <script src="../point.js"></script>
     <script src="../js/magasin.js"></script>
+
   </body>
 </html>

@@ -1,166 +1,241 @@
-/* Fond noir futuriste avec grille légère */
+/* ===== Base ===== */
 body {
   font-family: 'Orbitron', sans-serif;
-  background: radial-gradient(circle at center, #0a0a0a, #000000 80%);
-  color: #00f0ff;
   margin: 0;
-  padding: 40px 20px;
-  text-align: center;
-  position: relative;
-  overflow-x: hidden;
   min-height: 100vh;
-	overflow: hidden;
+  overflow: hidden;
+
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+
+  background:
+    radial-gradient(circle at top, rgba(140, 0, 255, 0.15), transparent 40%),
+    radial-gradient(circle at bottom, rgba(0, 200, 255, 0.12), transparent 40%),
+    linear-gradient(135deg, #050510, #090916 40%, #020205);
+
+  color: #d8f6ff;
+  position: relative;
 }
+
+/* ===== Grille futuriste ===== */
 body::before {
   content: "";
   position: fixed;
-  top: 0; left: 0; right: 0; bottom: 0;
-  background:
-    repeating-linear-gradient(
-      45deg,
-      rgba(0, 240, 255, 0.05),
-      rgba(0, 240, 255, 0.05) 2px,
-      transparent 2px,
-      transparent 10px
-    ),
-    repeating-linear-gradient(
-      -45deg,
-      rgba(0, 240, 255, 0.05),
-      rgba(0, 240, 255, 0.05) 2px,
-      transparent 2px,
-      transparent 10px
-    );
-  z-index: 0;
+  inset: 0;
+
+  background-image:
+    linear-gradient(rgba(0,255,255,0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,255,255,0.05) 1px, transparent 1px);
+
+  background-size: 40px 40px;
+
+  mask-image: radial-gradient(circle at center, black 30%, transparent 90%);
   pointer-events: none;
-  mix-blend-mode: screen;
-}
-/* Contenu au-dessus */
-body > * {
-  position: relative;
-  z-index: 1;
+
+  animation: gridMove 12s linear infinite;
 }
 
-/* Titre futuriste */
+@keyframes gridMove {
+  from {
+    transform: translateY(0px);
+  }
+  to {
+    transform: translateY(40px);
+  }
+}
+
+/* ===== Glow ambiance ===== */
+body::after {
+  content: "";
+  position: fixed;
+  width: 700px;
+  height: 700px;
+  background: radial-gradient(circle, rgba(0,255,255,0.08), transparent 70%);
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  filter: blur(50px);
+  pointer-events: none;
+}
+
+/* ===== Titre ===== */
 h1 {
-  font-weight: 900;
-  font-size: 4rem;
-  letter-spacing: 0.15em;
-  color: #00f0ff;
+  font-size: 4.5rem;
   text-transform: uppercase;
-  text-shadow:
-    0 0 5px #00f0ff,
-    0 0 10px #00f0ff,
-    0 0 20px #00e0ff,
-    0 0 30px #00d0ff,
-    0 0 40px #00c0ff;
+  letter-spacing: 0.2em;
   margin-bottom: 60px;
+
+  background: linear-gradient(90deg, #00e5ff, #9d4dff, #00e5ff);
+  background-size: 300%;
+
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+
+  animation: glowText 5s linear infinite;
+
+  text-shadow:
+    0 0 10px rgba(0,255,255,0.5),
+    0 0 20px rgba(157,77,255,0.5);
 }
 
-/* Menu container */
+@keyframes glowText {
+  0% { background-position: 0%; }
+  100% { background-position: 300%; }
+}
+
+/* ===== Menu ===== */
 .menu {
   display: flex;
   flex-direction: column;
-  gap: 25px;
-  width: 300px;
+  gap: 20px;
+  width: 320px;
 }
 
-/* Boutons futuristes */
+/* ===== Boutons ===== */
 .menu button {
-  padding: 15px 0;
-  font-size: 1.5rem;
+  position: relative;
+  overflow: hidden;
+
+  padding: 16px;
+  font-size: 1.2rem;
   font-weight: 700;
-  color: #00f0ff;
-  background: linear-gradient(145deg, #0a2a5f, #003080);
-  border: 2px solid #00f0ff;
-  border-radius: 12px;
-  cursor: pointer;
-  box-shadow:
-    0 0 6px #00bfff,
-    inset 0 0 8px #0077cc;
-  transition: all 0.3s ease;
-  text-transform: uppercase;
   letter-spacing: 0.12em;
-  user-select: none;
-  outline: none;
+  text-transform: uppercase;
+
+  color: #dffcff;
+
+  background: rgba(255,255,255,0.05);
+  backdrop-filter: blur(10px);
+
+  border: 1px solid rgba(0,255,255,0.3);
+  border-radius: 18px;
+
+  cursor: pointer;
+
+  transition: 0.3s ease;
+
+  box-shadow:
+    0 0 20px rgba(0,255,255,0.08),
+    inset 0 0 15px rgba(255,255,255,0.03);
 }
+
+/* Ligne animée */
+.menu button::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -120%;
+
+  width: 80%;
+  height: 100%;
+
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255,255,255,0.25),
+    transparent
+  );
+
+  transform: skewX(-20deg);
+  transition: 0.6s;
+}
+
+.menu button:hover::before {
+  left: 140%;
+}
+
+/* Hover */
 .menu button:hover {
-  color: #ffffff;
-  background: linear-gradient(145deg, #005eff, #00ffff);
+  transform: translateY(-4px) scale(1.02);
+
+  border-color: #00e5ff;
+
   box-shadow:
-    0 0 12px #00ffff,
-    0 0 30px #00ffff,
-    inset 0 0 20px #00ffff;
-  transform: translateY(-3px);
+    0 0 15px rgba(0,229,255,0.4),
+    0 0 40px rgba(157,77,255,0.25);
+
+  background: rgba(0,255,255,0.08);
 }
+
 .menu button:active {
-  transform: translateY(1px);
-  box-shadow:
-    0 0 6px #00c6ff,
-    inset 0 0 10px #00c6ff;
+  transform: scale(0.98);
 }
 
+/* ===== Bouton Discord ===== */
 .discord-btn {
-position: fixed;
-bottom: 20px;
-left: 20px;
-z-index: 10;
-display: inline-block;
-width: 50px;
-height: 50px;
-border-radius: 12px;
-background: linear-gradient(145deg, #0a2a5f, #003080);
-border: 2px solid #00f0ff;
-box-shadow:
-  0 0 6px #00bfff,
-  inset 0 0 8px #0077cc;
-cursor: pointer;
-transition: all 0.3s ease;
-}
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
 
-.discord-btn img {
-width: 100%;
-height: 100%;
-object-fit: contain;
-display: block;
-pointer-events: none; /* évite de bloquer le clic */
+  width: 58px;
+  height: 58px;
+
+  border-radius: 18px;
+
+  background: rgba(255,255,255,0.06);
+  backdrop-filter: blur(10px);
+
+  border: 1px solid rgba(0,255,255,0.25);
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  transition: 0.3s;
+
+  box-shadow:
+    0 0 15px rgba(0,255,255,0.15);
 }
 
 .discord-btn:hover {
-background: linear-gradient(145deg, #005eff, #00ffff);
-box-shadow:
-  0 0 12px #00ffff,
-  0 0 30px #00ffff,
-  inset 0 0 20px #00ffff;
-transform: translateY(-3px);
+  transform: translateY(-4px) rotate(4deg);
+
+  box-shadow:
+    0 0 20px rgba(0,255,255,0.45),
+    0 0 40px rgba(157,77,255,0.3);
 }
 
+.discord-btn img {
+  width: 70%;
+  height: 70%;
+  object-fit: contain;
+}
+
+/* ===== Fullscreen Warning ===== */
 #fullscreen-warning {
-position: fixed;
-top: 0; left: 0; right: 0; bottom: 0;
-background: rgba(0, 0, 0, 0.95);
-color: #00f0ff;
-font-family: 'Orbitron', sans-serif;
-font-size: 2.5rem;
-display: flex;
-justify-content: center;
-align-items: center;
-text-transform: uppercase;
-letter-spacing: 0.15em;
-z-index: 9999;
-opacity: 1;
-transition: opacity 1s ease;
-user-select: none;
+  position: fixed;
+  inset: 0;
+
+  background: rgba(0,0,0,0.92);
+  backdrop-filter: blur(8px);
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  z-index: 9999;
+
+  color: white;
+  font-size: 2rem;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
 }
 
 #fullscreen-warning .message {
-text-shadow:
-  0 0 5px #00f0ff,
-  0 0 10px #00f0ff,
-  0 0 20px #00e0ff,
-  0 0 30px #00d0ff,
-  0 0 40px #00c0ff;
+  padding: 30px 50px;
+
+  border-radius: 20px;
+
+  background: rgba(255,255,255,0.05);
+
+  border: 1px solid rgba(0,255,255,0.2);
+
+  box-shadow:
+    0 0 30px rgba(0,255,255,0.2);
+
+  text-shadow:
+    0 0 10px #00e5ff,
+    0 0 20px #9d4dff;
 }

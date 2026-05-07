@@ -1,29 +1,7 @@
-const peuCommunItems = [
-  {
-    name: "Commun",
-    chance: 60,
-    bonus: 1,
-    rarity: "commun",
-    variants: [
-      { name: "Commun A", image: "./card/commun_a.png" },
-      { name: "Commun B", image: "./card/commun_b.png" },
-      { name: "Commun C", image: "./card/commun_c.png" }
-    ]
-  },
-  {
-    name: "Peu Commun",
-    chance: 30,
-    bonus: 2,
-    rarity: "peucommun",
-    variants: [
-      { name: "Peu Commun A", image: "./card/peucommun_a.png" },
-      { name: "Peu Commun B", image: "./card/peucommun_b.png" },
-      { name: "Peu Commun C", image: "./card/peucommun_c.png" }
-    ]
-  },
+const exotiqueItems = [
   {
     name: "Rare",
-    chance: 8,
+    chance: 60,
     bonus: 3,
     rarity: "rare",
     variants: [
@@ -34,7 +12,7 @@ const peuCommunItems = [
   },
   {
     name: "Épique",
-    chance: 1.8,
+    chance: 25,
     bonus: 4,
     rarity: "epique",
     variants: [
@@ -45,7 +23,7 @@ const peuCommunItems = [
   },
   {
     name: "Légendaire",
-    chance: 0.2,
+    chance: 14.9,
     bonus: 5,
     rarity: "legendary",
     variants: [
@@ -53,10 +31,21 @@ const peuCommunItems = [
       { name: "Légendaire B", image: "./card/legendaire_b.png" },
       { name: "Légendaire C", image: "./card/legendaire_c.png" }
     ]
+  },
+  {
+    name: "Exotique",
+    chance: 0.1,
+    bonus: 10,
+    rarity: "exotic",
+    variants: [
+      { name: "Exotique A", image: "./card/exotique_a.png" },
+      { name: "Exotique B", image: "./card/exotique_b.png" },
+      { name: "Exotique C", image: "./card/exotique_c.png" }
+    ]
   }
 ];
 
-const packCost = 250;
+const packCost = 1000;
 const packContainer = document.getElementById('packContainer');
 const buyPackBtn = document.getElementById('buyPackBtn');
 const goBackBtn = document.getElementById('goBackBtn');
@@ -68,7 +57,7 @@ let currentCardIndex = 0;
 function chooseItem() {
   const roll = Math.random() * 100;
   let sum = 0;
-  for (const item of peuCommunItems) {
+  for (const item of exotiqueItems) {
     sum += item.chance;
     if (roll < sum) {
       const variant = item.variants[Math.floor(Math.random() * item.variants.length)];
@@ -81,7 +70,7 @@ function chooseItem() {
     }
   }
   // Par défaut
-  const defaultItem = peuCommunItems[0];
+  const defaultItem = exotiqueItems[0];
   const defaultVariant = defaultItem.variants[0];
   return {
     name: defaultVariant.name,
@@ -233,7 +222,7 @@ buyPackBtn.addEventListener('click', () => {
 });
 
 goBackBtn.addEventListener('click', () => {
-  window.location.href = './gacha.html';
+  window.location.href = './gacha_rio.html';
 });
 
 // Affiche points au chargement

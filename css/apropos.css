@@ -1,120 +1,290 @@
+/* =======================================================
+   BASE
+======================================================= */
+
 body {
   font-family: 'Orbitron', sans-serif;
-  background: radial-gradient(circle at center, #0a0a0a, #000000 80%);
-  color: #00f0ff;
-  text-align: center;
+
   margin: 0;
-  padding: 40px 20px;
   min-height: 100vh;
+
+  overflow: hidden;
+
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  overflow: auto;
+
+  padding: 40px 20px;
+
+  background:
+    radial-gradient(circle at top, rgba(140, 0, 255, 0.15), transparent 40%),
+    radial-gradient(circle at bottom, rgba(0, 200, 255, 0.12), transparent 40%),
+    linear-gradient(135deg, #050510, #090916 45%, #020205);
+
+  color: #d8f6ff;
+
   position: relative;
+
+  text-align: center;
 }
+
+/* =======================================================
+   CYBER GRID
+======================================================= */
 
 body::before {
   content: "";
+
   position: fixed;
-  top: 0; left: 0; right: 0; bottom: 0;
-  background:
-    repeating-linear-gradient(
-      45deg,
-      rgba(0, 240, 255, 0.05),
-      rgba(0, 240, 255, 0.05) 2px,
-      transparent 2px,
-      transparent 10px
-    ),
-    repeating-linear-gradient(
-      -45deg,
-      rgba(0, 240, 255, 0.05),
-      rgba(0, 240, 255, 0.05) 2px,
-      transparent 2px,
-      transparent 10px
-    );
-  z-index: 0;
+  inset: 0;
+
+  background-image:
+    linear-gradient(rgba(0,255,255,0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,255,255,0.05) 1px, transparent 1px);
+
+  background-size: 40px 40px;
+
+  mask-image: radial-gradient(circle at center, black 30%, transparent 90%);
+
   pointer-events: none;
-  mix-blend-mode: screen;
+
+  animation: gridMove 12s linear infinite;
 }
 
-/* Contenu au-dessus */
-body > * {
-  position: relative;
-  z-index: 1;
+@keyframes gridMove {
+  from {
+    transform: translateY(0px);
+  }
+
+  to {
+    transform: translateY(40px);
+  }
 }
+
+/* =======================================================
+   AMBIENT GLOW
+======================================================= */
+
+body::after {
+  content: "";
+
+  position: fixed;
+
+  width: 700px;
+  height: 700px;
+
+  top: 50%;
+  left: 50%;
+
+  transform: translate(-50%, -50%);
+
+  background:
+    radial-gradient(
+      circle,
+      rgba(0,255,255,0.08),
+      rgba(157,77,255,0.06),
+      transparent 70%
+    );
+
+  filter: blur(60px);
+
+  pointer-events: none;
+}
+
+/* =======================================================
+   TITLE
+======================================================= */
 
 h1 {
-  font-weight: 900;
-  font-size: 4rem;
-  letter-spacing: 0.15em;
-  color: #00f0ff;
+  font-size: 4.5rem;
+
   text-transform: uppercase;
+  letter-spacing: 0.2em;
+
+  margin-bottom: 30px;
+
+  background: linear-gradient(
+    90deg,
+    #00e5ff,
+    #9d4dff,
+    #00e5ff
+  );
+
+  background-size: 300%;
+
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+
+  animation: glowText 6s linear infinite;
+
   text-shadow:
-    0 0 5px #00f0ff,
-    0 0 10px #00f0ff,
-    0 0 20px #00e0ff,
-    0 0 30px #00d0ff,
-    0 0 40px #00c0ff;
-  margin-bottom: 60px;
+    0 0 12px rgba(0,255,255,0.45),
+    0 0 25px rgba(157,77,255,0.35);
 }
+
+@keyframes glowText {
+  0% {
+    background-position: 0%;
+  }
+
+  100% {
+    background-position: 300%;
+  }
+}
+
+/* =======================================================
+   TEXT
+======================================================= */
 
 p {
-  font-size: 1.2rem;
-  line-height: 1.8;
-  max-width: 600px;
+  max-width: 700px;
+
   margin-bottom: 30px;
-  color: #ccf9ff;
+
+  padding: 0 10px;
+
+  font-size: 1.15rem;
+  line-height: 1.9;
+
+  color: #d7f7ff;
+
+  text-shadow:
+    0 0 10px rgba(0,255,255,0.12);
 }
+
+/* =======================================================
+   INFO TEXT
+======================================================= */
 
 .info {
-  margin-top: 20px;
+  margin-top: 15px;
+
+  padding: 12px 22px;
+
+  border-radius: 16px;
+
+  background: rgba(255,255,255,0.04);
+
+  border: 1px solid rgba(0,255,255,0.12);
+
+  backdrop-filter: blur(10px);
+
   font-size: 1rem;
-  opacity: 0.8;
+
+  color: rgba(220,250,255,0.8);
+
   user-select: none;
+
+  box-shadow:
+    0 0 15px rgba(0,255,255,0.08);
 }
+
+/* =======================================================
+   BUTTONS
+======================================================= */
 
 button {
+  position: relative;
+  overflow: hidden;
+
   margin-top: 30px;
-  padding: 15px 40px;
-  font-size: 1.5rem;
+
+  min-width: 240px;
+
+  padding: 16px 42px;
+
+  border-radius: 18px;
+
+  border: 1px solid rgba(0,255,255,0.25);
+
+  background: rgba(255,255,255,0.05);
+
+  backdrop-filter: blur(12px);
+
+  color: #dffcff;
+
+  font-size: 1.2rem;
   font-weight: 700;
-  color: #00f0ff;
-  background: linear-gradient(145deg, #0a2a5f, #003080);
-  border: 2px solid #00f0ff;
-  border-radius: 12px;
-  cursor: pointer;
-  box-shadow:
-    0 0 6px #00bfff,
-    inset 0 0 8px #0077cc;
-  transition: all 0.3s ease;
-  text-transform: uppercase;
+
   letter-spacing: 0.12em;
-  user-select: none;
-  outline: none;
-  min-width: 220px;
+  text-transform: uppercase;
+
+  cursor: pointer;
+
+  transition: 0.35s ease;
+
+  box-shadow:
+    0 0 18px rgba(0,255,255,0.08),
+    inset 0 0 12px rgba(255,255,255,0.03);
 }
+
+/* Shine effect */
+
+button::before {
+  content: "";
+
+  position: absolute;
+  top: 0;
+  left: -130%;
+
+  width: 80%;
+  height: 100%;
+
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255,255,255,0.18),
+    transparent
+  );
+
+  transform: skewX(-20deg);
+
+  transition: 0.8s;
+}
+
+button:hover::before {
+  left: 150%;
+}
+
+/* Hover */
 
 button:hover {
-  background: linear-gradient(145deg, #005eff, #00ffff);
-  color: white;
+  transform: translateY(-4px) scale(1.02);
+
+  background: rgba(0,255,255,0.08);
+
+  border-color: #00e5ff;
+
   box-shadow:
-    0 0 12px #00ffff,
-    0 0 30px #00ffff,
-    inset 0 0 20px #00ffff;
-  transform: translateY(-3px);
+    0 0 20px rgba(0,229,255,0.45),
+    0 0 60px rgba(157,77,255,0.18);
 }
 
+/* Click */
+
 button:active {
-  transform: translateY(1px);
-  box-shadow:
-    0 0 6px #00c6ff,
-    inset 0 0 10px #00c6ff;
+  transform: scale(0.97);
 }
+
+/* =======================================================
+   IMAGES
+======================================================= */
 
 img {
   vertical-align: middle;
-  margin-left: 8px;
-  width: 45px;
+
+  margin-left: 10px;
+
+  width: 48px;
   height: auto;
+
+  filter:
+    drop-shadow(0 0 8px rgba(0,255,255,0.4));
+
+  transition: 0.3s ease;
+}
+
+img:hover {
+  transform: scale(1.08);
 }

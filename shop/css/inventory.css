@@ -1,279 +1,606 @@
-/* ------------------ Fond futuriste ------------------ */
+/* =======================================================
+   BASE
+======================================================= */
+
 body {
   font-family: 'Orbitron', sans-serif;
-  background: radial-gradient(circle at center, #0a0a0a, #000000 80%);
-  color: #00f0ff;
+
   margin: 0;
-  padding: 40px 20px;
-  text-align: center;
   min-height: 100vh;
-  position: relative;
+
+  overflow-x: hidden;
+
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
   align-items: center;
+
+  padding: 40px 20px;
+
+  background:
+    radial-gradient(circle at top, rgba(140, 0, 255, 0.15), transparent 40%),
+    radial-gradient(circle at bottom, rgba(0, 200, 255, 0.12), transparent 40%),
+    linear-gradient(135deg, #050510, #090916 45%, #020205);
+
+  color: #d8f6ff;
+
+  position: relative;
 }
+
+/* =======================================================
+   GRID
+======================================================= */
 
 body::before {
   content: "";
+
   position: fixed;
-  top: 0; left: 0; right: 0; bottom: 0;
-  background:
-    repeating-linear-gradient(
-      45deg,
-      rgba(0, 240, 255, 0.05),
-      rgba(0, 240, 255, 0.05) 2px,
-      transparent 2px,
-      transparent 10px
-    ),
-    repeating-linear-gradient(
-      -45deg,
-      rgba(0, 240, 255, 0.05),
-      rgba(0, 240, 255, 0.05) 2px,
-      transparent 2px,
-      transparent 10px
-    );
-  z-index: 0;
+  inset: 0;
+
+  background-image:
+    linear-gradient(rgba(0,255,255,0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,255,255,0.05) 1px, transparent 1px);
+
+  background-size: 40px 40px;
+
+  animation: gridMove 12s linear infinite;
+
+  mask-image: radial-gradient(circle at center, black 30%, transparent 90%);
+
   pointer-events: none;
-  mix-blend-mode: screen;
 }
 
-body > * {
-  position: relative;
-  z-index: 1;
+@keyframes gridMove {
+  from {
+    transform: translateY(0px);
+  }
+
+  to {
+    transform: translateY(40px);
+  }
 }
 
-/* ------------------ Titre ------------------ */
+/* =======================================================
+   AMBIENT GLOW
+======================================================= */
+
+body::after {
+  content: "";
+
+  position: fixed;
+
+  width: 700px;
+  height: 700px;
+
+  top: 50%;
+  left: 50%;
+
+  transform: translate(-50%, -50%);
+
+  background:
+    radial-gradient(
+      circle,
+      rgba(0,255,255,0.08),
+      rgba(157,77,255,0.06),
+      transparent 70%
+    );
+
+  filter: blur(60px);
+
+  pointer-events: none;
+}
+
+/* =======================================================
+   TITLE
+======================================================= */
+
 h1 {
-  font-weight: 900;
-  font-size: 4rem;
-  letter-spacing: 0.15em;
-  color: #00f0ff;
+  font-size: 4.5rem;
+
   text-transform: uppercase;
+  letter-spacing: 0.2em;
+
+  margin-bottom: 30px;
+
+  background: linear-gradient(
+    90deg,
+    #00e5ff,
+    #9d4dff,
+    #00e5ff
+  );
+
+  background-size: 300%;
+
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+
+  animation: glowText 5s linear infinite;
+
   text-shadow:
-    0 0 5px #00f0ff,
-    0 0 10px #00f0ff,
-    0 0 20px #00e0ff,
-    0 0 30px #00d0ff,
-    0 0 40px #00c0ff;
-  margin-bottom: 40px;
+    0 0 10px rgba(0,255,255,0.4),
+    0 0 25px rgba(157,77,255,0.3);
 }
 
-/* ------------------ Points + Bonus ------------------ */
+@keyframes glowText {
+  0% {
+    background-position: 0%;
+  }
+
+  100% {
+    background-position: 300%;
+  }
+}
+
+/* =======================================================
+   POINTS + BONUS
+======================================================= */
+
 .points-display {
   font-size: 1.5rem;
-  margin-bottom: 10px;
+
+  margin-bottom: 12px;
+
+  padding: 14px 28px;
+
+  border-radius: 18px;
+
+  background: rgba(255,255,255,0.05);
+
+  border: 1px solid rgba(0,255,255,0.18);
+
+  backdrop-filter: blur(12px);
+
+  box-shadow:
+    0 0 20px rgba(0,255,255,0.12);
 }
 
 #bonusDisplay {
   font-size: 1.2rem;
-  margin-bottom: 25px;
+
+  margin-bottom: 30px;
+
   color: #00ff99;
+
+  text-shadow:
+    0 0 10px rgba(0,255,153,0.5);
 }
 
-/* ------------------ Grille d'inventaire ------------------ */
+/* =======================================================
+   INVENTORY GRID
+======================================================= */
+
 .inventory-grid {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 20px;
-  z-index: 1;
+
+  gap: 24px;
+
   position: relative;
-  max-width: 1200px;
+  z-index: 1;
+
+  max-width: 1400px;
 }
 
-/* ------------------ Carte individuelle ------------------ */
+/* =======================================================
+   INVENTORY CARD
+======================================================= */
+
 .item {
-  background: #111;
-  padding: 15px;
-  border-radius: 14px;
+  position: relative;
+  overflow: hidden;
+
+  width: 200px;
+
+  padding: 16px;
+
+  border-radius: 24px;
+
   text-align: center;
-  width: 180px;
-  box-shadow: 0 0 15px #00f0ff;
-  transition: transform 0.2s ease;
+
+  background: rgba(255,255,255,0.05);
+
+  border: 1px solid rgba(0,255,255,0.15);
+
+  backdrop-filter: blur(14px);
+
+  transition: 0.35s ease;
+
+  box-shadow:
+    0 0 18px rgba(0,255,255,0.08);
+}
+
+/* Shine */
+
+.item::before {
+  content: "";
+
+  position: absolute;
+  top: 0;
+  left: -130%;
+
+  width: 70%;
+  height: 100%;
+
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255,255,255,0.18),
+    transparent
+  );
+
+  transform: skewX(-25deg);
+
+  transition: 0.8s;
+}
+
+.item:hover::before {
+  left: 160%;
 }
 
 .item:hover {
-  transform: scale(1.05);
+  transform: translateY(-8px);
+
+  border-color: rgba(0,255,255,0.35);
+
+  box-shadow:
+    0 0 20px rgba(0,255,255,0.25),
+    0 0 60px rgba(157,77,255,0.15);
 }
+
+/* =======================================================
+   ITEM IMAGE
+======================================================= */
 
 .item img {
-  width: 128px;
-  height: 128px;
+  width: 140px;
+  height: 140px;
+
   object-fit: contain;
-  border-radius: 8px;
-  margin-bottom: 10px;
+
+  border-radius: 18px;
+
+  margin-bottom: 14px;
+
+  transition: 0.35s ease;
 }
+
+.item:hover img {
+  transform: scale(1.04);
+}
+
+/* =======================================================
+   ITEM TEXT
+======================================================= */
 
 .item p {
-  margin: 5px 0;
+  margin: 8px 0;
+
   font-weight: bold;
+
+  color: #dffcff;
+
+  letter-spacing: 0.05em;
 }
 
-/* ------------------ Boutons dans cartes ------------------ */
+/* =======================================================
+   CARD BUTTONS
+======================================================= */
+
 .item button {
-  background: linear-gradient(145deg, #0a2a5f, #003080);
-  border: 2px solid #00f0ff;
-  color: #00f0ff;
-  font-weight: bold;
-  padding: 6px 12px;
-  border-radius: 10px;
-  cursor: pointer;
-  margin: 4px;
-  transition: all 0.3s ease;
-  text-transform: uppercase;
+  position: relative;
+  overflow: hidden;
+
+  margin: 6px;
+
+  padding: 10px 14px;
+
+  border-radius: 14px;
+
+  border: 1px solid rgba(0,255,255,0.22);
+
+  background: rgba(255,255,255,0.05);
+
+  backdrop-filter: blur(10px);
+
+  color: #dffcff;
+
   font-size: 0.9rem;
-  letter-spacing: 0.05em;
-  user-select: none;
-  outline: none;
-  box-shadow: 0 0 6px #00bfff, inset 0 0 8px #0077cc;
+  font-weight: 700;
+
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+
+  cursor: pointer;
+
+  transition: 0.3s ease;
+
+  box-shadow:
+    0 0 14px rgba(0,255,255,0.08);
+}
+
+/* Shine */
+
+.item button::before {
+  content: "";
+
+  position: absolute;
+  top: 0;
+  left: -120%;
+
+  width: 80%;
+  height: 100%;
+
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255,255,255,0.16),
+    transparent
+  );
+
+  transform: skewX(-20deg);
+
+  transition: 0.7s;
+}
+
+.item button:hover::before {
+  left: 140%;
 }
 
 .item button:hover {
-  color: #fff;
-  background: linear-gradient(145deg, #005eff, #00ffff);
-  box-shadow: 0 0 12px #00ffff, inset 0 0 20px #00ffff;
-  transform: translateY(-2px);
+  transform: translateY(-3px);
+
+  background: rgba(0,255,255,0.08);
+
+  border-color: #00e5ff;
+
+  box-shadow:
+    0 0 18px rgba(0,229,255,0.4),
+    0 0 45px rgba(157,77,255,0.15);
 }
 
-.item button:active {
-  transform: translateY(1px);
-  box-shadow: 0 0 6px #00c6ff, inset 0 0 10px #00c6ff;
-}
+/* =======================================================
+   BACK BUTTON
+======================================================= */
 
-/* ------------------ Bouton Retour ------------------ */
 .back-btn {
   margin-top: 40px;
-  font-size: 1.2rem;
-  font-weight: bold;
-  color: #00f0ff;
-  background: linear-gradient(145deg, #0a2a5f, #003080);
-  border: 2px solid #00f0ff;
-  border-radius: 12px;
-  padding: 12px 25px;
-  cursor: pointer;
-  box-shadow: 0 0 8px #00bfff, inset 0 0 8px #0077cc;
-  transition: all 0.3s ease;
+
+  padding: 14px 28px;
+
+  border-radius: 18px;
+
+  border: 1px solid rgba(0,255,255,0.25);
+
+  background: rgba(255,255,255,0.05);
+
+  backdrop-filter: blur(12px);
+
+  color: #dffcff;
+
+  font-size: 1.1rem;
+  font-weight: 700;
+
   text-transform: uppercase;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.1em;
+
+  cursor: pointer;
+
+  transition: 0.3s ease;
+
+  box-shadow:
+    0 0 18px rgba(0,255,255,0.08);
 }
 
 .back-btn:hover {
-  background: linear-gradient(145deg, #005eff, #00ffff);
-  color: #fff;
-  box-shadow: 0 0 14px #00ffff, 0 0 25px #00ffff, inset 0 0 18px #00ffff;
-  transform: translateY(-2px);
+  transform: translateY(-4px);
+
+  background: rgba(0,255,255,0.08);
+
+  border-color: #00e5ff;
+
+  box-shadow:
+    0 0 18px rgba(0,229,255,0.45),
+    0 0 50px rgba(157,77,255,0.18);
 }
 
-.back-btn:active {
-  transform: translateY(1px);
-  box-shadow: 0 0 6px #00c6ff, inset 0 0 10px #00c6ff;
-}
+/* =======================================================
+   SELL ALL BUTTON
+======================================================= */
 
-/* ------------------ Bouton Tout vendre ------------------ */
 .sell-all-btn {
-  margin-top: 25px;
-  padding: 12px 25px;
-  font-weight: 700;
-  font-size: 1.2rem;
+  margin-top: 30px;
+
+  padding: 14px 30px;
+
+  border-radius: 18px;
+
+  border: 1px solid rgba(255,70,70,0.35);
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(255,40,40,0.12),
+      rgba(80,0,0,0.25)
+    );
+
+  backdrop-filter: blur(12px);
+
   color: #ffffff;
-  background: linear-gradient(145deg, #3a0000, #800000);
-  border: 2px solid #ff4444;
-  border-radius: 12px;
-  cursor: pointer;
-  box-shadow: 0 0 10px #ff4444, inset 0 0 8px #990000;
-  transition: all 0.3s ease;
+
+  font-size: 1.1rem;
+  font-weight: 700;
+
   text-transform: uppercase;
   letter-spacing: 0.1em;
+
+  cursor: pointer;
+
+  transition: 0.35s ease;
+
+  box-shadow:
+    0 0 20px rgba(255,70,70,0.16);
 }
 
 .sell-all-btn:hover {
-  background: linear-gradient(145deg, #cc0000, #ff4444);
-  color: #fff;
-  box-shadow: 0 0 14px #ff4444, 0 0 25px #ff4444, inset 0 0 18px #ff4444;
-  transform: translateY(-2px);
+  transform: translateY(-4px);
+
+  box-shadow:
+    0 0 25px rgba(255,70,70,0.45),
+    0 0 60px rgba(255,70,70,0.2);
 }
 
-.sell-all-btn:active {
-  transform: translateY(1px);
-  box-shadow: 0 0 6px #ff6666, inset 0 0 10px #ff6666;
-}
+/* =======================================================
+   MODAL
+======================================================= */
 
-/* -------- Modal Vente par Rareté -------- */
 .modal {
   position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.85);
+  inset: 0;
+
+  background: rgba(0,0,0,0.88);
+
   display: flex;
   justify-content: center;
   align-items: center;
+
   z-index: 999;
-  backdrop-filter: blur(5px);
+
+  backdrop-filter: blur(8px);
 }
 
 .modal.hidden {
   display: none;
 }
 
+/* =======================================================
+   MODAL CONTENT
+======================================================= */
+
 .modal-content {
-  background: #111;
-  padding: 30px 40px;
-  border-radius: 15px;
-  border: 2px solid #00f0ff;
-  box-shadow: 0 0 20px #00f0ff;
-  text-align: left;
-  min-width: 300px;
-  max-width: 90%;
+  width: 380px;
+
+  padding: 30px;
+
+  border-radius: 28px;
+
+  background: rgba(255,255,255,0.06);
+
+  border: 1px solid rgba(0,255,255,0.22);
+
+  backdrop-filter: blur(18px);
+
+  box-shadow:
+    0 0 25px rgba(0,255,255,0.18),
+    0 0 80px rgba(157,77,255,0.1);
 }
 
 .modal-content h2 {
-  color: #00f0ff;
-  margin-bottom: 20px;
-  font-size: 2rem;
   text-align: center;
-  text-shadow: 0 0 10px #00f0ff;
+
+  margin-bottom: 25px;
+
+  color: #00e5ff;
+
+  font-size: 2rem;
+
+  text-shadow:
+    0 0 12px rgba(0,229,255,0.7);
 }
+
+/* =======================================================
+   LABELS
+======================================================= */
 
 .modal-content label {
   display: block;
-  font-size: 1.2rem;
-  margin-bottom: 10px;
+
+  margin-bottom: 14px;
+
+  font-size: 1.1rem;
+
   color: #ffffff;
 }
 
 .modal-content input[type="checkbox"] {
   transform: scale(1.3);
+
   margin-right: 10px;
 }
+
+/* =======================================================
+   MODAL BUTTONS
+======================================================= */
 
 .modal-buttons {
   display: flex;
   justify-content: space-between;
-  margin-top: 20px;
+
+  gap: 14px;
+
+  margin-top: 24px;
 }
 
-.sell-confirm, .sell-cancel {
-  font-weight: bold;
-  padding: 10px 20px;
-  border-radius: 10px;
-  border: 2px solid #00f0ff;
-  background: linear-gradient(145deg, #0a2a5f, #003080);
-  color: #00f0ff;
+/* =======================================================
+   CONFIRM / CANCEL
+======================================================= */
+
+.sell-confirm,
+.sell-cancel {
+  flex: 1;
+
+  padding: 12px;
+
+  border-radius: 16px;
+
+  border: none;
+
+  font-weight: 700;
+
   cursor: pointer;
-  transition: all 0.3s ease;
+
+  transition: 0.3s ease;
+}
+
+/* Confirm */
+
+.sell-confirm {
+  background:
+    linear-gradient(
+      145deg,
+      rgba(0,255,180,0.18),
+      rgba(0,100,80,0.25)
+    );
+
+  border: 1px solid rgba(0,255,180,0.3);
+
+  color: #dffcff;
 }
 
 .sell-confirm:hover {
-  background: linear-gradient(145deg, #00aa88, #00ffcc);
-  color: #000;
-  box-shadow: 0 0 12px #00fff7;
+  transform: translateY(-3px);
+
+  box-shadow:
+    0 0 20px rgba(0,255,180,0.4);
+}
+
+/* Cancel */
+
+.sell-cancel {
+  background:
+    linear-gradient(
+      145deg,
+      rgba(255,50,50,0.16),
+      rgba(100,0,0,0.25)
+    );
+
+  border: 1px solid rgba(255,70,70,0.3);
+
+  color: white;
 }
 
 .sell-cancel:hover {
-  background: linear-gradient(145deg, #880000, #ff4444);
-  color: white;
-  box-shadow: 0 0 12px #ff4444;
+  transform: translateY(-3px);
+
+  box-shadow:
+    0 0 20px rgba(255,70,70,0.4);
 }
