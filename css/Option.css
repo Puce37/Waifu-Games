@@ -369,38 +369,3 @@ input[type="checkbox"]:checked::before {
     0 0 24px rgba(0,255,180,0.45),
     0 0 60px rgba(0,255,180,0.18);
 }
-
-/* =======================================================
-   SCROLLBAR
-======================================================= */
-
-::-webkit-scrollbar {
-  width: 10px;
-}
-
-::-webkit-scrollbar-track {
-  background: rgba(0,0,0,0.4);
-}
-
-::-webkit-scrollbar-thumb {
-  border-radius: 20px;
-
-  background:
-    linear-gradient(
-      180deg,
-      #00e5ff,
-      #9d4dff
-    );
-
-  box-shadow:
-    0 0 10px rgba(0,229,255,0.4);
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background:
-    linear-gradient(
-      180deg,
-      #00ffff,
-      #c06cff
-    );
-}
