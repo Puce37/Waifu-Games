@@ -132,32 +132,6 @@ h2 {
 }
 
 /* =======================================================
-   POINTS DISPLAY
-======================================================= */
-
-#pointsDisplay {
-  padding: 14px 30px;
-
-  margin-bottom: 30px;
-
-  border-radius: 18px;
-
-  background: rgba(255,255,255,0.04);
-
-  border: 1px solid rgba(0,255,255,0.2);
-
-  backdrop-filter: blur(10px);
-
-  font-size: 1.4rem;
-  letter-spacing: 0.08em;
-
-  box-shadow:
-    0 0 15px rgba(0,255,255,0.12);
-
-  color: #dffcff;
-}
-
-/* =======================================================
    BUTTONS
 ======================================================= */
 

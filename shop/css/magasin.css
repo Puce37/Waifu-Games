@@ -123,29 +123,6 @@ h1 {
 }
 
 /* =======================================================
-   POINTS DISPLAY
-======================================================= */
-
-.points-display {
-  margin-bottom: 40px;
-
-  padding: 14px 30px;
-
-  border-radius: 18px;
-
-  background: rgba(255,255,255,0.05);
-
-  border: 1px solid rgba(0,255,255,0.2);
-
-  backdrop-filter: blur(12px);
-
-  font-size: 1.3rem;
-
-  box-shadow:
-    0 0 18px rgba(0,255,255,0.12);
-}
-
-/* =======================================================
    CHARACTER SELECT
 ======================================================= */
 
@@ -228,10 +205,10 @@ h1 {
 }
 
 /* =======================================================
-   RIO CARD
+   Gacha CARD
 ======================================================= */
 
-.rio-card {
+.gacha-card {
   border: 1px solid rgba(255,70,70,0.4);
 
   color: #ff4a4a;
@@ -244,33 +221,10 @@ h1 {
     0 0 20px rgba(255,70,70,0.18);
 }
 
-.rio-card:hover {
+.gacha-card:hover {
   box-shadow:
     0 0 25px rgba(255,70,70,0.45),
     0 0 60px rgba(255,70,70,0.2);
-}
-
-/* =======================================================
-   KASUMI CARD
-======================================================= */
-
-.kasumi-card {
-  border: 1px solid rgba(0,220,200,0.4);
-
-  color: #00d5c3;
-
-  text-shadow:
-    0 0 10px rgba(0,220,200,0.8),
-    0 0 25px rgba(0,220,200,0.4);
-
-  box-shadow:
-    0 0 20px rgba(0,220,200,0.18);
-}
-
-.kasumi-card:hover {
-  box-shadow:
-    0 0 25px rgba(0,220,200,0.45),
-    0 0 60px rgba(0,220,200,0.2);
 }
 
 /* =======================================================
@@ -462,10 +416,10 @@ button:active {
 }
 
 /* =======================================================
-   RIO CARD
+   Gacha CARD
 ======================================================= */
 
-.gacha-card-rio {
+.gacha-container {
   position: relative;
   overflow: hidden;
 
@@ -497,7 +451,7 @@ button:active {
     inset 0 0 25px rgba(255,70,70,0.06);
 }
 
-.gacha-card-rio:hover {
+.gacha-container:hover {
   transform: translateY(-10px) scale(1.02);
 
   box-shadow:
@@ -505,7 +459,7 @@ button:active {
     0 0 80px rgba(255,70,70,0.25);
 }
 
-.gacha-card-rio img {
+.gacha-container img {
   width: 100%;
   border-radius: 20px;
   margin-bottom: 16px;
@@ -513,11 +467,11 @@ button:active {
   transition: 0.35s ease;
 }
 
-.gacha-card-rio:hover img {
+.gacha-container:hover img {
   transform: scale(1.04);
 }
 
-.gacha-card-rio::before {
+.gacha-container::before {
   content: "";
 
   position: absolute;
@@ -539,112 +493,18 @@ button:active {
   transition: 0.9s;
 }
 
-.gacha-card-rio:hover::before {
+.gacha-container:hover::before {
   left: 160%;
 }
 
 /* =======================================================
-   RIO TEXT
+   Gacha Test
 ======================================================= */
 
-.rio {
+.gacha-card {
   color: #ff4a4a;
 
   text-shadow:
     0 0 10px rgba(255,74,74,0.9),
     0 0 30px rgba(255,74,74,0.5);
-}
-
-/* =======================================================
-   KASUMI CARD
-======================================================= */
-
-.gacha-card-kasumi {
-  position: relative;
-  overflow: hidden;
-
-  width: 340px;
-
-  padding: 20px;
-
-  border-radius: 28px;
-
-  background:
-    linear-gradient(
-      145deg,
-      rgba(0,220,200,0.08),
-      rgba(0,40,45,0.22)
-    );
-
-  border: 1px solid rgba(0,220,200,0.4);
-
-  backdrop-filter: blur(14px);
-
-  text-align: center;
-
-  cursor: pointer;
-
-  transition: 0.35s ease;
-
-  box-shadow:
-    0 0 20px rgba(0,220,200,0.18),
-    inset 0 0 25px rgba(0,220,200,0.05);
-}
-
-.gacha-card-kasumi:hover {
-  transform: translateY(-10px) scale(1.02);
-
-  box-shadow:
-    0 0 25px rgba(0,220,200,0.45),
-    0 0 80px rgba(0,220,200,0.22);
-}
-
-.gacha-card-kasumi img {
-  width: 100%;
-  border-radius: 20px;
-  margin-bottom: 16px;
-
-  transition: 0.35s ease;
-}
-
-.gacha-card-kasumi:hover img {
-  transform: scale(1.04);
-}
-
-.gacha-card-kasumi::before {
-  content: "";
-
-  position: absolute;
-  top: 0;
-  left: -130%;
-
-  width: 70%;
-  height: 100%;
-
-  background: linear-gradient(
-    90deg,
-    transparent,
-    rgba(255,255,255,0.18),
-    transparent
-  );
-
-  transform: skewX(-25deg);
-
-  transition: 0.9s;
-}
-
-.gacha-card-kasumi:hover::before {
-  left: 160%;
-}
-
-/* =======================================================
-   KASUMI TEXT
-======================================================= */
-
-.kasumi {
-  color: #00d5c3;
-
-  text-shadow:
-    0 0 10px rgba(0,213,195,0.9),
-    0 0 30px rgba(0,213,195,0.45);
 }

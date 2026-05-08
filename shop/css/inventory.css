@@ -131,27 +131,8 @@ h1 {
 }
 
 /* =======================================================
-   POINTS + BONUS
+   BONUS
 ======================================================= */
-
-.points-display {
-  font-size: 1.5rem;
-
-  margin-bottom: 12px;
-
-  padding: 14px 28px;
-
-  border-radius: 18px;
-
-  background: rgba(255,255,255,0.05);
-
-  border: 1px solid rgba(0,255,255,0.18);
-
-  backdrop-filter: blur(12px);
-
-  box-shadow:
-    0 0 20px rgba(0,255,255,0.12);
-}
 
 #bonusDisplay {
   font-size: 1.2rem;

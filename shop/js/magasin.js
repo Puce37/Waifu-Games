@@ -1,7 +1,3 @@
-const storeItems = [
-  <!-- { name: "A venir", image: "../Items/.png", price: 0 }, -->
-];
-
 function updateStore() {
   const container = document.getElementById("store");
   container.innerHTML = "";

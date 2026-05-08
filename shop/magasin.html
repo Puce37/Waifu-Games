@@ -5,7 +5,7 @@
 
     <title>Magasin - Cyber Luna</title>
 
-    <link rel="stylesheet" href="../point.css" />
+    <link rel="stylesheet" href="../css/point.css" />
 
     <link
       rel="shortcut icon"
@@ -18,7 +18,7 @@
       rel="stylesheet"
     />
 
-    <link rel="stylesheet" href="../css/magasin.css" />
+    <link rel="stylesheet" href="./css/magasin.css" />
   </head>
 
   <body>
@@ -30,7 +30,7 @@
     <h1>🛒 Magasin</h1>
 
     <h2>
-      Choisissez une collection de cartes
+      Débloquer de nouveaux personnages !
     </h2>
 
     <!-- =======================================================
@@ -45,64 +45,26 @@
          COLLECTIONS
     ======================================================== -->
 
-    <div class="gacha-container">
+    <div class="gacha-container" onclick="window.location.href='./gacha.html'">
 
       <!-- ======================
-           RIO
+           Gacha card
       ======================= -->
 
-      <div
-        class="gacha-card-rio"
-        onclick="window.location.href='./rio/gacha_rio.html'"
-      >
+      <div>
         <img
-          src="./rio/visuels/rio.jpg"
-          alt="Rio"
+          src="./visuels/gacha.jpg"
         />
-
-        <h2 class="rio">
-          Rio
+      </div>
+        <h2 class="Gacha">
+          Accéder au différents Gacha
         </h2>
 
-        <p class="rio">
-          🔥 Collection rouge cyber futuriste
+        <p class="Gacha">
+          🔥 Collection de Gacha d'anime en tout genre
         </p>
 
-        <p class="rio">
-          🎰 Accéder aux gachas Rio
-        </p>
       </div>
-
-      <!-- ======================
-           KASUMI
-      ======================= -->
-
-      <div
-        class="gacha-card-kasumi"
-        onclick="window.location.href='./Kasumi/gacha_kasumi.html'"
-      >
-        <img
-          src="./visuels/kasumi.png"
-          alt="Kasumi"
-        />
-
-        <h2 class="kasumi">
-          Kasumi
-        </h2>
-
-        <p class="kasumi">
-          💠 Collection bleu canard holographique
-        </p>
-
-        <p class="kasumi">
-          🎰 Accéder aux gachas Kasumi
-        </p>
-      </div>
-
-    </div>
-
-    <br />
-
     <!-- =======================================================
          STORE ITEMS
     ======================================================== -->
@@ -120,7 +82,7 @@
     </button>
 
     <script src="../point.js"></script>
-    <script src="../js/magasin.js"></script>
+    <script src="./js/magasin.js"></script>
 
   </body>
 </html>

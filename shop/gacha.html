@@ -3,8 +3,9 @@
   <head>
     <meta charset="UTF-8" />
     <title>Magasin</title>
-    <link rel="stylesheet" href="./css/rio_gacha.css" />
-    <link rel="shortcut icon" type="image/png" href="../../../Logo/logo.png" />
+    <link rel="stylesheet" href="./css/gacha.css" />
+    <link rel="stylesheet" href="../css/point.css" />
+    <link rel="shortcut icon" type="image/png" href="../Logo/logo.png" />
     <link
       href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap"
       rel="stylesheet"
@@ -14,12 +15,14 @@
     <h1>🎰 Paquets de cartes</h1>
     <h2>Seules les cartes cliquées seront ajoutées à l’inventaire.</h2>
 
-    <div id="pointsDisplay">Points : <span id="points">0</span></div>
+    <div class="points-display">
+      💠 Points : <span id="points">0</span>
+    </div>
 
     <div class="gacha-container">
       <div
         class="gacha-card1"
-        onclick="window.location.href = 'rio_peucommun.html'"
+        onclick="window.location.href = 'peucommun.html'"
       >
         <img src="./visuels/peucommun.png" alt="Gacha Peu-Commun" />
         <h2 class="peucommun">Peu-Commun</h2>
@@ -29,7 +32,7 @@
 
       <div
         class="gacha-card2"
-        onclick="window.location.href = 'rio_epique.html'"
+        onclick="window.location.href = 'epique.html'"
       >
         <img src="./visuels/epique.png" alt="Gacha Épique" />
         <h2 class="epique">Épique</h2>
@@ -39,7 +42,7 @@
 
       <div
         class="gacha-card3"
-        onclick="window.location.href = 'rio_exotique.html'"
+        onclick="window.location.href = 'exotique.html'"
       >
         <img src="./visuels/exotique.png" alt="Gacha Exotique" />
         <h2 class="exotique">Exotique</h2>
@@ -48,8 +51,7 @@
       </div>
     </div>
     <br />
-    <button onclick="window.location.href = '../magasin.html'">🔙 Retour</button>
-    <script src="../point.js"></script>
-    <script src="../../../js/gacha.js"></script>
+    <button onclick="window.location.href = './magasin.html'">🔙 Retour</button>
+    <script src="../js/point.js"></script>
   </body>
 </html>
